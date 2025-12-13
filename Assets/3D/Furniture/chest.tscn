@@ -1,0 +1,60 @@
+[gd_scene load_steps=8 format=4 uid="uid://bx6chqk5r8wao"]
+
+[ext_resource type="Script" uid="uid://cjdokt8pp5v4k" path="res://Assets/3D/Furniture/chest.gd" id="1_xt0u6"]
+[ext_resource type="Resource" uid="uid://iq0gmn8r5k3c" path="res://Systems/Loot/LootTables/chest1_loot.tres" id="2_1jufw"]
+[ext_resource type="AudioStream" uid="uid://j3x1tu5ppy0l" path="res://Assets/Audio/Furniture/Chest.wav" id="3_oja10"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1roqa"]
+resource_name = "light grey"
+cull_mode = 2
+albedo_color = Color(0.6012659, 0.6012659, 0.6012659, 1)
+roughness = 0.5
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_wob32"]
+_surfaces = [{
+"aabb": AABB(-0.21961325, 0, -0.21961325, 0.4392265, 0.4392265, 0.4392265),
+"format": 34896613377,
+"index_count": 36,
+"index_data": PackedByteArray("AAABAAIAAAADAAEABAACAAEAAwAEAAEABQAAAAIAAwAAAAUABAAGAAIABQACAAYAAwAHAAQAAwAFAAcABwAGAAQABwAFAAYA"),
+"name": "light grey",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("AAAAAP//AAAAAP//AAAAAAAA/////wAAAAAAAAAAAAD/////AAAAAP//AAD//wAA////////AAD//wAAAAAAAA==")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_531ho"]
+resource_name = "Tile_Cube_009"
+_surfaces = [{
+"aabb": AABB(-0.21961325, 0, -0.21961325, 0.4392265, 0.4392265, 0.4392265),
+"attribute_data": PackedByteArray("/1////+f/7//n////1//v/9f/7//n/9//5//v/9f/3//X/9//5//P/+f/3//X/8//1//P/+fAAD/n/8//18AAP8f/3//X/8//1//f/8f/z//n/9//9//P//f/3//n/8/"),
+"format": 34896613399,
+"index_count": 36,
+"index_data": PackedByteArray("AAABAAIAAAADAAEABAAFAAYABAAHAAUACAAJAAoACAALAAkADAANAA4ADAAPAA0AEAARABIAEAATABEAFAAVABYAFAAXABUA"),
+"material": SubResource("StandardMaterial3D_1roqa"),
+"name": "light grey",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 24,
+"vertex_data": PackedByteArray("AAAAAP//VNUAAP//AABU1QAA/////1TVAAAAAAAAVNUAAAAAAAD///////8AAP//AAD//wAA/////wAAAAD/////AAAAAFTV////////VNX/////AABU1f//AAD//1TV//8AAP///78AAP//////v/////////+/AAAAAP///78AAAAAAAD/v///AAD///+///8AAAAA/78AAAAA////v/////8AAP//AAD///////8AAP//AAD/////////////VNVU1VTVVNVU1VTVVNVU1f+//7//v/+//7//v/+//7+qKqoqqiqqKqoqqiqqKqoq/////////////////////wAA/38AAP9/AAD/fwAA/3//f/+//3//v/9//7//f/+/")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_wob32")
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_oja10"]
+points = PackedVector3Array(-0.21959999, 7.986263e-08, -0.21959992, 0.21958984, 0.43919998, 0.21959999, 0.21958984, 0.43919998, -0.21959999, 0.21958984, 0, 0.21959999, -0.21959999, 0.4391999, 0.21959992, 0.21958984, 0, -0.21959999, -0.21959999, 7.986263e-08, 0.21959992, -0.21959999, 0.4391999, -0.21959992)
+
+[node name="Chest" type="StaticBody3D"]
+script = ExtResource("1_xt0u6")
+loot_table = ExtResource("2_1jufw")
+open_sound = ExtResource("3_oja10")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("ArrayMesh_531ho")
+skeleton = NodePath("")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("ConvexPolygonShape3D_oja10")
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
