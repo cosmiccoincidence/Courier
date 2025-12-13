@@ -1,0 +1,36 @@
+[gd_scene load_steps=7 format=3 uid="uid://cy5ymqs8uk24x"]
+
+[ext_resource type="Script" uid="uid://55enjj10ko1b" path="res://Characters/NPCs/npc_hermit.gd" id="1_7k8w1"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_onrkg"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7xaro"]
+albedo_color = Color(0.4205762, 0.5160422, 1, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_i3pqv"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7k104"]
+albedo_color = Color(0.09411765, 0.9490196, 0.42745098, 1)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hqtel"]
+
+[node name="NPC_Trader" type="CharacterBody3D" groups=["npc"]]
+transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0, 0, 0)
+script = ExtResource("1_7k8w1")
+display_name = "Trader"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.812268, 0, 0, 0, 1, 0, 1.3003498, 0)
+mesh = SubResource("CapsuleMesh_onrkg")
+surface_material_override/0 = SubResource("StandardMaterial3D_7xaro")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="MeshInstance3D"]
+transform = Transform3D(0.23024231, 0, 0, 0, 0.27720964, 0, 0, 0, 0.62820095, 0, 0.60965717, -0.4491837)
+mesh = SubResource("BoxMesh_i3pqv")
+surface_material_override/0 = SubResource("StandardMaterial3D_7k104")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1.075, 0, 0, 0, 0.8759783, 0, 0, 0, 1.075, -2.8312206e-06, 1.3045897, -4.9829483e-05)
+shape = SubResource("CapsuleShape3D_hqtel")
+
+[node name="AudioVocal" type="AudioStreamPlayer3D" parent="."]

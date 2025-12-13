@@ -1,0 +1,46 @@
+[gd_scene load_steps=11 format=3 uid="uid://mahss0budjch"]
+
+[ext_resource type="Script" uid="uid://lsv7jhbm612m" path="res://Characters/Enemies/enemy1.gd" id="1_7k104"]
+[ext_resource type="AudioStream" uid="uid://cul4u25ut4wuc" path="res://Assets/Audio/Characters/Grunt.wav" id="2_w4uou"]
+[ext_resource type="AudioStream" uid="uid://bdlgag1sqx7dg" path="res://Assets/Audio/Characters/Attack.wav" id="3_7wccd"]
+[ext_resource type="AudioStream" uid="uid://bkikoslj3l0me" path="res://Assets/Audio/Characters/Hit.wav" id="4_cxc73"]
+[ext_resource type="Resource" uid="uid://nbf78muis7lt" path="res://Systems/Loot/LootTables/enemy1_loot.tres" id="5_7wccd"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_onrkg"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7xaro"]
+albedo_color = Color(1, 0.22745098, 0.22745098, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_i3pqv"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7k104"]
+albedo_color = Color(1, 0.22745098, 0.22745098, 1)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hqtel"]
+
+[node name="Enemy1" type="CharacterBody3D" groups=["enemy"]]
+transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0, 0, 0)
+script = ExtResource("1_7k104")
+grunt_sfx = ExtResource("2_w4uou")
+attack_sfx = ExtResource("3_7wccd")
+hit_sfx = ExtResource("4_cxc73")
+loot_table = ExtResource("5_7wccd")
+display_name = "Enemy1"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.812268, 0, 0, 0, 1, 0, 1.3003498, 0)
+mesh = SubResource("CapsuleMesh_onrkg")
+surface_material_override/0 = SubResource("StandardMaterial3D_7xaro")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="MeshInstance3D"]
+transform = Transform3D(0.23024231, 0, 0, 0, 0.27720964, 0, 0, 0, 0.62820095, 0, 0.60965717, -0.4491837)
+mesh = SubResource("BoxMesh_i3pqv")
+surface_material_override/0 = SubResource("StandardMaterial3D_7k104")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1.075, 0, 0, 0, 0.8759783, 0, 0, 0, 1.075, -2.8312206e-06, 1.3045897, -4.9829483e-05)
+shape = SubResource("CapsuleShape3D_hqtel")
+
+[node name="AudioVocal" type="AudioStreamPlayer3D" parent="."]
+
+[node name="AudioCombat" type="AudioStreamPlayer3D" parent="."]

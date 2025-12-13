@@ -1,0 +1,52 @@
+[gd_scene load_steps=7 format=3 uid="uid://iybeooe5kged"]
+
+[ext_resource type="Script" uid="uid://b4eat4m65wc6b" path="res://Characters/Player/player.gd" id="1_ktn2o"]
+[ext_resource type="Script" uid="uid://bf4skbn13wfik" path="res://Systems/camera_zoom.gd" id="2_ax08x"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_onrkg"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_i3pqv"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hqtel"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_4flbx"]
+
+[node name="Player" type="CharacterBody3D" groups=["player"]]
+transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0, 0, 0)
+script = ExtResource("1_ktn2o")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.812268, 0, 0, 0, 1, 0, 1.3003498, 0)
+mesh = SubResource("CapsuleMesh_onrkg")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="MeshInstance3D"]
+transform = Transform3D(0.23024231, 0, 0, 0, 0.27720964, 0, 0, 0, 0.62820095, 0, 0.60965717, -0.4491837)
+mesh = SubResource("BoxMesh_i3pqv")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1.075, 0, 0, 0, 0.8759783, 0, 0, 0, 1.075, -2.8312206e-06, 1.3045897, -4.9829483e-05)
+shape = SubResource("CapsuleShape3D_hqtel")
+
+[node name="Area3D" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 1.3596594, 0)
+shape = SubResource("SphereShape3D_4flbx")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1.25, 0, 0, 0, 0.46295196, 1.1611096, 0, -1.1611096, 0.46295196, 0, 111.9668, 47.861755)
+projection = 1
+current = true
+fov = 40.0
+size = 20.0
+script = ExtResource("2_ax08x")
+
+[node name="AudioListener3D" type="AudioListener3D" parent="."]
+current = true
+
+[node name="AudioVocal" type="AudioStreamPlayer3D" parent="."]
+
+[node name="AudioCombat" type="AudioStreamPlayer3D" parent="."]
+
+[connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
+[connection signal="body_exited" from="Area3D" to="." method="_on_area_3d_body_exited"]
