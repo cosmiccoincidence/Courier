@@ -110,6 +110,15 @@ func _ready():
 		# Panel should pass mouse events to children
 		panel.mouse_filter = Control.MOUSE_FILTER_PASS
 	
+	# Make the EquipmentPanel transparent too
+	var equipment_panel = $EquipmentPanel
+	if equipment_panel:
+		var equip_transparent_style = StyleBoxFlat.new()
+		equip_transparent_style.bg_color = Color(0, 0, 0, 0)  # Fully transparent
+		equipment_panel.add_theme_stylebox_override("panel", equip_transparent_style)
+		# Panel should pass mouse events to children
+		equipment_panel.mouse_filter = Control.MOUSE_FILTER_PASS
+	
 	# Load slot scene directly
 	var slot_scene = load(SLOT_SCENE_PATH)
 	
