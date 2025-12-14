@@ -196,11 +196,23 @@ func clear():
 
 func get_total_weight() -> float:
 	var total: float = 0.0
+	
+	# Add weight from inventory items
 	for item in items:
 		if item != null and item.has("weight"):
 			var item_weight = item.weight
 			var count = item.get("stack_count", 1)
 			total += item_weight * count
+	
+	# Add weight from equipped items
+	if has_node("/root/Equipment"):
+		var equipped_items = Equipment.get_items()
+		for item in equipped_items:
+			if item != null and item.has("weight"):
+				var item_weight = item.weight
+				var count = item.get("stack_count", 1)
+				total += item_weight * count
+	
 	return total
 
 func get_total_value() -> int:
