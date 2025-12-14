@@ -224,8 +224,8 @@ func _process(delta):
 	else:
 		debug_key_pressed["slash"] = false
 	
-	# If system disabled OR passive map, skip updates
-	if debug_disabled or is_passive_mode:
+	# If system disabled, skip updates
+	if debug_disabled:
 		return
 	
 	# If no map generator, try to find it
@@ -245,14 +245,21 @@ func _process(delta):
 	# Check if map was freed or changed
 	if not is_instance_valid(map_generator):
 		reset_fog()
+		is_passive_mode = false  # Reset passive mode
 		return
 	
 	# Check if the map instance changed
 	var current_map_id = map_generator.get_instance_id()
 	if last_map_instance_id != -1 and last_map_instance_id != current_map_id:
 		reset_fog()
+		is_passive_mode = false  # Reset passive mode
 		last_map_instance_id = current_map_id
+		find_map()  # Re-find map to update passive mode
 		create_fog_tiles()
+		return
+	
+	# If passive map, skip fog updates
+	if is_passive_mode:
 		return
 	
 	update_timer += delta

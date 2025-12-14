@@ -88,16 +88,10 @@ func _process(_delta):
 	else:
 		debug_slash_pressed = false
 	
-	# If system disabled OR passive map, hide cone and skip updates
-	if debug_disabled or is_passive_mode:
-		cone_mesh.visible = false
-		return
-	else:
-		cone_mesh.visible = true
-	
 	# Check if map was freed (level transition)
 	if map_generator and not is_instance_valid(map_generator):
 		map_generator = null
+		is_passive_mode = false  # Reset passive mode on map change
 	
 	# If no map, keep trying to find it
 	if not map_generator:
@@ -105,6 +99,13 @@ func _process(_delta):
 		if not map_generator:
 			# No map yet, skip this frame
 			return
+	
+	# If system disabled OR passive map, hide cone and skip updates
+	if debug_disabled or is_passive_mode:
+		cone_mesh.visible = false
+		return
+	else:
+		cone_mesh.visible = true
 	
 	# Update cone geometry every frame
 	update_cone_geometry()

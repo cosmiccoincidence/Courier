@@ -63,10 +63,15 @@ func _process(delta):
 		is_initialized = false
 		map_generator = null
 		is_passive_mode = false  # Reset passive mode
+		find_map()  # Try to find new map immediately
 		return
 	
 	# Skip updates on passive maps - all entities always visible
 	if is_passive_mode:
+		# But we should still make sure entities are visible on first frame
+		# This ensures entities show up when first loading a passive map
+		if update_timer == 0.0:
+			show_all_entities()
 		return
 	
 	update_timer += delta
@@ -121,3 +126,16 @@ func find_entities(node: Node, entities: Array):
 	
 	for child in node.get_children():
 		find_entities(child, entities)
+
+func show_all_entities():
+	"""Show all entities - used for passive maps"""
+	var world = get_tree().get_first_node_in_group("world")
+	if not world:
+		return
+	
+	var entities = []
+	find_entities(world, entities)
+	
+	for entity in entities:
+		if is_instance_valid(entity) and entity is Node3D:
+			entity.visible = true
