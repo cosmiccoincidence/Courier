@@ -6,7 +6,7 @@ class_name Chest
 @export var open_sound: AudioStream
 
 @onready var audio_player: AudioStreamPlayer3D = $AudioStreamPlayer3D
-@onready var mesh_instance: MeshInstance3D = $MeshInstance3D
+@onready var mesh_instance: MeshInstance3D = $Chest
 @onready var collision_shape: CollisionShape3D = $CollisionShape3D
 
 var is_open := false

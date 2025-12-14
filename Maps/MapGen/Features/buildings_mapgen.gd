@@ -14,8 +14,7 @@ var road_tiles: Array
 var grass_tile_id: int
 var interior_wall_tile_id: int
 var exterior_wall_tile_id: int
-var interior_floor_tile_id: int  # Special floor for inside buildings
-var interior_door_tile_id: int  # Special floor for building doorways
+var interior_floor_tile_id: int  # NEW: Special floor for inside buildings
 
 # ============================================================================
 # SETTINGS
@@ -46,6 +45,7 @@ var building_zone_buffer: int = 25
 # ============================================================================
 
 var placed_buildings: Array = []
+var furniture_placer: FurniturePlacer = null  # NEW: Furniture placement helper
 
 # ============================================================================
 # SETUP
@@ -58,12 +58,18 @@ func setup(generator: CoreMapGen):
 	grass_tile_id = generator.grass_tile_id
 	interior_wall_tile_id = generator.interior_wall_tile_id
 	exterior_wall_tile_id = generator.exterior_wall_tile_id
-	interior_floor_tile_id = generator.interior_floor_tile_id
-	interior_door_tile_id = generator.interior_door_tile_id
+	interior_floor_tile_id = generator.interior_floor_tile_id  # NEW: Get interior floor tile
 	
 	# Get road tiles from roads generator
 	if generator is Act1MapGen:
 		road_tiles = generator.roads_generator.road_tiles
+	
+	# Setup furniture placer
+	furniture_placer = FurniturePlacer.new()
+	furniture_placer.setup(map_generator, map_generator.get_parent())
+	
+	# Set furniture scenes
+	furniture_placer.set_furniture_scene("chest", preload("res://Assets/3D/Furniture/chest.tscn"))
 
 # ============================================================================
 # GENERATION
@@ -183,7 +189,8 @@ func place_building(start: Vector3i, width: int, length: int):
 			"start": start,
 			"width": width,
 			"length": length,
-			"used_walls": []
+			"used_walls": [],
+			"door_pos": Vector3i(-999, 0, -999)  # NEW: Track door position
 		}]
 	}
 	
@@ -203,6 +210,12 @@ func place_building(start: Vector3i, width: int, length: int):
 			break
 	
 	place_exterior_door(building_data)
+	
+	# NEW: Place furniture in all rooms (pass door position for each room)
+	if furniture_placer:
+		for room in building_data.rooms:
+			furniture_placer.place_furniture_in_room(room.start, room.width, room.length, room.door_pos)
+	
 	placed_buildings.append(building_data)
 
 func place_room_walls_and_floor(start: Vector3i, width: int, length: int):
@@ -241,7 +254,7 @@ func try_place_additional_room(building_data: Dictionary) -> bool:
 				place_room_walls_and_floor(new_room.start, new_room.width, new_room.length)
 				
 				var opposite_wall = get_opposite_wall(wall_side)
-				add_room_door(new_room.start, new_room.width, new_room.length, opposite_wall)
+				var door_position = add_room_door(new_room.start, new_room.width, new_room.length, opposite_wall)
 				
 				room.used_walls.append(wall_side)
 				
@@ -249,7 +262,8 @@ func try_place_additional_room(building_data: Dictionary) -> bool:
 					"start": new_room.start,
 					"width": new_room.width,
 					"length": new_room.length,
-					"used_walls": [opposite_wall]
+					"used_walls": [opposite_wall],
+					"door_pos": door_position  # NEW: Track door position for furniture placement
 				})
 				
 				return true
@@ -336,9 +350,12 @@ func place_exterior_door(building_data: Dictionary):
 		return
 	
 	var chosen = available_walls[randi() % available_walls.size()]
-	add_room_door(chosen.room.start, chosen.room.width, chosen.room.length, chosen.wall_side)
+	var door_position = add_room_door(chosen.room.start, chosen.room.width, chosen.room.length, chosen.wall_side)
 	
-	print("    Placed exterior door on wall ", chosen.wall_side)
+	# Store door position in the room data
+	chosen.room.door_pos = door_position
+	
+	print("    Placed exterior door on wall ", chosen.wall_side, " at ", door_position)
 
 func add_room_door(start: Vector3i, width: int, length: int, wall_side: int) -> Vector3i:
 	var door_pos = Vector3i.ZERO
@@ -350,7 +367,7 @@ func add_room_door(start: Vector3i, width: int, length: int, wall_side: int) -> 
 		3: door_pos = Vector3i(start.x + width - 1, 0, start.z + length / 2)
 	
 	# Place floor tile for doorway (so you can walk through)
-	map_generator.set_cell_item(door_pos, interior_door_tile_id)
+	map_generator.set_cell_item(door_pos, interior_floor_tile_id)
 	return door_pos
 
 func get_opposite_wall(wall_side: int) -> int:
