@@ -17,11 +17,18 @@ const ENCUMBERED_ROTATION_MULT: float = 0.75  # 75% rotation speed
 @onready var cam: Camera3D = $Camera3D
 @onready var hud: CanvasLayer = get_node("/root/World/UI/HUD")
 
+# Stats
+@export var stat_strength := 5
+@export var stat_dexterity := 5
+
+
 @export var rotation_speed := 5.0  # higher = faster turning
 @export var sprint_multiplier := 3.0  # speed multiplier when sprinting
 @export var sprint_stamina_cost: float = 1.5  # Stamina consumption per second while sprinting
-@export var health_regen_rate: float = 1.0  # How much health per interval
-@export var health_regen_interval: float = 10.0  # Seconds between regen
+@export var stamina_regen: float = 1.0  # How much stamina per interval
+@export var stamina_regen_interval: float = 0.5  # Seconds between stamina regen
+@export var health_regen: float = 1.0  # How much health per interval
+@export var health_regen_interval: float = 10.0  # Seconds between health regen
 @export var zoom_min := 20.0
 @export var zoom_max := 30.0  # Normal max zoom
 @export var zoom_speed := 10.0
@@ -42,6 +49,7 @@ var zoom_current := 30.0
 var is_sprinting: bool = false
 var stamina_regen_delay: float = 1.0 # delay in seconds to start regen after sprint has stopped
 var time_since_sprint_stopped: float = 0.0
+var time_since_last_stamina_regen: float = 0.0
 var time_since_last_health_regen: float = 0.0
 
 # Camera follow settings
@@ -150,7 +158,7 @@ func _physics_process(delta):
 	if current_health < max_health:
 		time_since_last_health_regen += delta
 		if time_since_last_health_regen >= health_regen_interval:
-			current_health = min(max_health, current_health + int(health_regen_rate))
+			current_health = min(max_health, current_health + int(health_regen))
 			time_since_last_health_regen = 0.0
 			if hud:
 				hud.update_health(current_health, max_health)
@@ -176,9 +184,18 @@ func _physics_process(delta):
 	# Regenerate stamina after delay
 	if not is_sprinting and time_since_sprint_stopped >= stamina_regen_delay:
 		if current_stamina < max_stamina:
-			current_stamina = min(max_stamina, current_stamina + 3 * delta)
-			if hud:
-				hud.update_stamina(current_stamina, max_stamina)
+			time_since_last_stamina_regen += delta
+		
+			# Only regenerate when interval is reached
+			if time_since_last_stamina_regen >= stamina_regen_interval:
+				current_stamina = min(max_stamina, current_stamina + stamina_regen)
+				time_since_last_stamina_regen = 0.0  # Reset the interval timer
+			
+				if hud:
+					hud.update_stamina(current_stamina, max_stamina)
+	else:
+		# Reset regen timer when sprinting or during delay
+		time_since_last_stamina_regen = 0.0
 	
 	# Gravity
 	if not is_on_floor():

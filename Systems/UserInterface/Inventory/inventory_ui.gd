@@ -261,12 +261,29 @@ func _setup_stats_panel():
 	stats_panel.add_child(vbox)
 	
 	# Create title label
-	var title = Label.new()
-	title.text = "Player Stats"
-	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title.add_theme_font_size_override("font_size", 16)
-	title.add_theme_color_override("font_color", Color.GOLD)
+	var title = RichTextLabel.new()
+	title.bbcode_enabled = true
+	title.text = "[center][color=gold][u]Player Stats[/u][/color][/center]"
+	title.fit_content = true  # Makes it resize to fit the content
+	title.scroll_active = false  # Disables scrolling
+	title.add_theme_font_size_override("normal_font_size", 18)
 	vbox.add_child(title)
+	
+	# Create strength label
+	var str_label = Label.new()
+	str_label.name = "StrengthLabel"
+	str_label.text = "Strength: 0"
+	str_label.add_theme_font_size_override("font_size", 16)
+	str_label.add_theme_color_override("font_color", Color.GRAY)
+	vbox.add_child(str_label)
+	
+	# Create dexterity label
+	var dex_label = Label.new()
+	dex_label.name = "DexterityLabel"
+	dex_label.text = "Dexterity: 0"
+	dex_label.add_theme_font_size_override("font_size", 16)
+	dex_label.add_theme_color_override("font_color", Color.GRAY)
+	vbox.add_child(dex_label)
 	
 	# Create max health label
 	var health_label = Label.new()
@@ -275,12 +292,26 @@ func _setup_stats_panel():
 	health_label.add_theme_font_size_override("font_size", 14)
 	vbox.add_child(health_label)
 	
+	# Create health regen label
+	var health_regen_label = Label.new()
+	health_regen_label.name = "HealthRegenLabel"
+	health_regen_label.text = "Health Regeneration: 0"
+	health_regen_label.add_theme_font_size_override("font_size", 14)
+	vbox.add_child(health_regen_label)
+	
 	# Create max stamina label
 	var stamina_label = Label.new()
 	stamina_label.name = "MaxStaminaLabel"
 	stamina_label.text = "Max Stamina: 0"
 	stamina_label.add_theme_font_size_override("font_size", 14)
 	vbox.add_child(stamina_label)
+	
+	# Create stamina regen label
+	var stamina_regen_label = Label.new()
+	stamina_regen_label.name = "StaminaRegenLabel"
+	stamina_regen_label.text = "Stamina Regeneration: 0"
+	stamina_regen_label.add_theme_font_size_override("font_size", 14)
+	vbox.add_child(stamina_regen_label)
 
 func _update_stats_display():
 	"""Update the stats panel with current player stats"""
@@ -291,15 +322,35 @@ func _update_stats_display():
 	if not vbox:
 		return
 	
+	# Update strength
+	var str_label = vbox.get_node_or_null("StrengthLabel")
+	if str_label:
+		str_label.text = "Strength: %d" % player_ref.stat_strength
+	
+	# Update dexterity
+	var dex_label = vbox.get_node_or_null("DexterityLabel")
+	if dex_label:
+		dex_label.text = "Dexterity: %d" % player_ref.stat_dexterity
+	
 	# Update max health
 	var health_label = vbox.get_node_or_null("MaxHealthLabel")
 	if health_label:
 		health_label.text = "Max Health: %d" % player_ref.max_health
 	
+	# Update health regen
+	var health_regen_label = vbox.get_node_or_null("HealthRegenLabel")
+	if health_regen_label:
+		health_regen_label.text = "Health Regeneration: %d every %ds" % [player_ref.health_regen, player_ref.health_regen_interval]
+	
 	# Update max stamina (no decimal)
 	var stamina_label = vbox.get_node_or_null("MaxStaminaLabel")
 	if stamina_label:
 		stamina_label.text = "Max Stamina: %d" % int(player_ref.max_stamina)
+	
+	# Update stamina regen
+	var stamina_regen_label = vbox.get_node_or_null("StaminaRegenLabel")
+	if stamina_regen_label:
+		stamina_regen_label.text = "Stamina Regeneration: %d every %.1fs" % [player_ref.stamina_regen, player_ref.stamina_regen_interval]
 
 func _setup_equipment_grid():
 	"""Set up the equipment grid with gaps"""
