@@ -93,8 +93,36 @@ func _input(event):
 						var is_equipment = dragged_slot.get_meta("is_equipment_slot", false)
 						
 						if is_equipment:
-							# Drop from equipment - need to remove from Equipment system
-							# For now, just remove it (you can add world drop logic later)
+							# Drop from equipment - get item first, then spawn in world
+							var item = Equipment.get_item_at_slot(slot_idx)
+							if item:
+								# Spawn in world using Inventory's drop logic
+								# Get player position and spawn slightly above ground
+								if Inventory.player_ref:
+									var forward = -Inventory.player_ref.global_transform.basis.z
+									var drop_position = Inventory.player_ref.global_position + forward * 1 + Vector3(0, 0.3, 0)
+									
+									# Actually spawn the item in the world if we have a scene reference
+									if item.has("scene") and item.scene:
+										var item_instance = item.scene.instantiate()
+										
+										if item_instance is Node3D:
+											get_tree().current_scene.add_child(item_instance)
+											item_instance.global_position = drop_position
+											
+											# Set stack count if item is stackable
+											if item.get("stackable", false) and item.get("stack_count", 1) > 1:
+												if item_instance.has_method("set"):
+													item_instance.set("stack_count", item.stack_count)
+												if item_instance.has_method("update_label_text"):
+													item_instance.update_label_text()
+											
+											# Mark as just spawned
+											if item_instance.has_method("set"):
+												item_instance.set("just_spawned", true)
+												item_instance.set("spawn_timer", 0.0)
+							
+							# Remove from equipment
 							Equipment.remove_item_at_slot(slot_idx)
 						else:
 							# Drop from inventory
