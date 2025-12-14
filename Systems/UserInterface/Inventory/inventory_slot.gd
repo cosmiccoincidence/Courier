@@ -7,7 +7,8 @@ var tooltip_manager: Control = null  # Reference to tooltip manager
 
 # Drag and drop state (shared across all slots)
 static var dragged_item_data = null  # Item being dragged
-static var dragged_from_slot: int = -1  # Which slot it came from
+static var dragged_from_slot_index: int = -1  # Which slot index it came from
+static var dragged_from_slot: Panel = null  # Reference to the actual slot
 static var drag_preview: Control = null  # Visual preview following mouse
 
 @onready var icon: TextureRect = $TextureRect
@@ -155,7 +156,8 @@ func _start_drag():
 	
 	# Store drag state
 	dragged_item_data = item_data
-	dragged_from_slot = slot_index
+	dragged_from_slot_index = slot_index
+	dragged_from_slot = self  # Store reference to this slot
 	
 	# Create visual preview
 	_create_drag_preview()
@@ -165,17 +167,48 @@ func _start_drag():
 
 func _drop_on_slot():
 	"""Drop the dragged item on this slot"""
-	if dragged_item_data == null:
+	if dragged_item_data == null or not dragged_from_slot:
 		return
 	
-	# Restore original slot's appearance
-	var original_slot = _get_slot_by_index(dragged_from_slot)
-	if original_slot:
-		original_slot.modulate = Color(1, 1, 1, 1)
+	# Check if both slots are from the same grid type
+	var original_is_equipment = dragged_from_slot.get_meta("is_equipment_slot", false)
+	var target_is_equipment = get_meta("is_equipment_slot", false)
 	
-	# Swap items between slots
-	if dragged_from_slot != slot_index:
-		Inventory.swap_items(dragged_from_slot, slot_index)
+	# Restore original slot's appearance
+	dragged_from_slot.modulate = Color(1, 1, 1, 1)
+	
+	# Handle swapping based on grid types
+	if dragged_from_slot_index == slot_index and original_is_equipment == target_is_equipment:
+		# Same slot - do nothing
+		_end_drag()
+		return
+	
+	if original_is_equipment and target_is_equipment:
+		# Equipment to Equipment - swap in equipment system
+		Equipment.swap_items(dragged_from_slot_index, slot_index)
+	elif not original_is_equipment and not target_is_equipment:
+		# Inventory to Inventory - swap in inventory system
+		Inventory.swap_items(dragged_from_slot_index, slot_index)
+	elif not original_is_equipment and target_is_equipment:
+		# Inventory to Equipment - move item
+		var item_from_inventory = Inventory.get_item_at_slot(dragged_from_slot_index)
+		var item_from_equipment = Equipment.get_item_at_slot(slot_index)
+		
+		# Set items in new locations
+		Equipment.set_item_at_slot(slot_index, item_from_inventory)
+		Inventory.items[dragged_from_slot_index] = item_from_equipment
+		Inventory.inventory_changed.emit()
+		Inventory._update_weight_signals()
+	elif original_is_equipment and not target_is_equipment:
+		# Equipment to Inventory - move item
+		var item_from_equipment = Equipment.get_item_at_slot(dragged_from_slot_index)
+		var item_from_inventory = Inventory.get_item_at_slot(slot_index)
+		
+		# Set items in new locations
+		Inventory.items[slot_index] = item_from_equipment
+		Equipment.set_item_at_slot(dragged_from_slot_index, item_from_inventory)
+		Inventory.inventory_changed.emit()
+		Inventory._update_weight_signals()
 	
 	# Clean up drag state
 	_end_drag()
@@ -206,7 +239,8 @@ func _create_drag_preview():
 static func _end_drag():
 	"""Clean up drag state"""
 	dragged_item_data = null
-	dragged_from_slot = -1
+	dragged_from_slot_index = -1
+	dragged_from_slot = null
 	
 	if drag_preview:
 		drag_preview.queue_free()
@@ -214,10 +248,9 @@ static func _end_drag():
 
 static func _get_slot_by_index(index: int) -> Panel:
 	"""Helper to get a slot by its index"""
-	# This assumes slots are children of a GridContainer
-	var slots = []
-	# Find all inventory slot instances
-	for node in Engine.get_main_loop().root.get_tree().get_nodes_in_group("inventory_slots"):
-		if node.slot_index == index:
-			return node
+	# Search both inventory and equipment slots
+	for group in ["inventory_slots", "equipment_slots"]:
+		for node in Engine.get_main_loop().root.get_tree().get_nodes_in_group(group):
+			if node.slot_index == index:
+				return node
 	return null

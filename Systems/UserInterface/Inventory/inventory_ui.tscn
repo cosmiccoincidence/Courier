@@ -9,15 +9,34 @@ anchors_preset = 0
 mouse_filter = 1
 script = ExtResource("1_sp84r")
 
+[node name="EquipmentPanel" type="Panel" parent="."]
+layout_mode = 0
+offset_left = 6.0
+offset_top = 5.0
+offset_right = 46.0
+offset_bottom = 45.0
+
+[node name="EquipmentGrid" type="GridContainer" parent="EquipmentPanel"]
+layout_mode = 0
+offset_top = 40.0
+offset_bottom = 40.0
+
+[node name="CharacterNameLabel" type="Label" parent="EquipmentPanel"]
+layout_mode = 0
+offset_right = 159.0
+offset_bottom = 28.0
+theme_override_font_sizes/font_size = 20
+text = "Character Name"
+
 [node name="InventoryPanel" type="Panel" parent="."]
 layout_mode = 0
 offset_left = 6.0
-offset_top = 479.0
+offset_top = 427.0
 offset_right = 46.0
-offset_bottom = 519.0
+offset_bottom = 467.0
 mouse_filter = 1
 
-[node name="GridContainer" type="GridContainer" parent="InventoryPanel"]
+[node name="InventoryGrid" type="GridContainer" parent="InventoryPanel"]
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
@@ -26,7 +45,7 @@ offset_bottom = 40.0
 layout_mode = 0
 offset_top = -26.0
 offset_right = 132.0
-offset_bottom = 8.0
+offset_bottom = -3.0
 text = "Weight: 0.0 / 10.0"
 horizontal_alignment = 2
 
@@ -39,25 +58,19 @@ offset_bottom = 8.0
 theme_override_colors/font_color = Color(1, 0.8666667, 0.33333334, 1)
 text = "Gold: 0"
 
-[node name="StatsPanel" type="Panel" parent="InventoryPanel"]
+[node name="StatsPanel" type="Panel" parent="."]
 layout_mode = 0
-offset_top = -474.0
-offset_right = 268.0
-offset_bottom = -26.0
-
-[node name="EquipmentPanel" type="Panel" parent="InventoryPanel"]
-layout_mode = 0
-offset_left = 274.0
-offset_top = -474.0
-offset_right = 540.0
-offset_bottom = -26.0
+offset_left = 279.0
+offset_top = 5.0
+offset_right = 548.0
+offset_bottom = 387.0
 
 [node name="SlotTooltip" type="Control" parent="."]
 anchors_preset = 0
-offset_left = 6.0
-offset_top = 479.0
-offset_right = 46.0
-offset_bottom = 519.0
+offset_left = -98.0
+offset_top = 427.0
+offset_right = -58.0
+offset_bottom = 467.0
 mouse_filter = 1
 script = ExtResource("2_o2au4")
 
