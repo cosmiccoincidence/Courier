@@ -74,7 +74,9 @@ func place_furniture_in_room(room_start: Vector3i, room_width: int, room_length:
 	
 	for i in range(furniture_count):
 		var grid_pos = interior_positions[i]
-		var furniture_type = get_random_furniture_type()
+		
+		# Only spawn non-door furniture (chests, tables, etc)
+		var furniture_type = get_random_non_door_furniture_type()
 		
 		print("  [Furniture] Selected type: ", furniture_type)
 		
@@ -83,8 +85,33 @@ func place_furniture_in_room(room_start: Vector3i, room_width: int, room_length:
 		else:
 			print("  [Furniture] ERROR: No scene for furniture type: ", furniture_type)
 
+func place_door_at_position(door_pos: Vector3i, wall_side: int):
+	"""Place a door furniture at the specified position with correct rotation"""
+	if not furniture_scenes.has("door") or not furniture_scenes["door"]:
+		print("  [Furniture] No door scene registered - skipping door placement")
+		return
+	
+	# Calculate rotation based on wall side (cardinal directions only)
+	var rotation_y = 0.0
+	match wall_side:
+		0:  # Top wall (facing down/south)
+			rotation_y = 0.0
+		1:  # Bottom wall (facing up/north)
+			rotation_y = PI  # 180 degrees
+		2:  # Left wall (facing right/east)
+			rotation_y = PI / 2  # 90 degrees
+		3:  # Right wall (facing left/west)
+			rotation_y = -PI / 2  # 270 degrees (or -90)
+	
+	spawn_furniture_with_rotation(door_pos, "door", rotation_y)
+	print("  [Furniture] Placed door at ", door_pos, " (wall side: ", wall_side, ", rotation: ", rad_to_deg(rotation_y), "°)")
+
 func spawn_furniture(grid_pos: Vector3i, furniture_type: String):
-	"""Spawn a furniture instance at the given grid position"""
+	"""Spawn a furniture instance at the given grid position with random rotation"""
+	spawn_furniture_with_rotation(grid_pos, furniture_type, randf() * TAU)
+
+func spawn_furniture_with_rotation(grid_pos: Vector3i, furniture_type: String, rotation_y: float):
+	"""Spawn a furniture instance at the given grid position with specific rotation"""
 	var scene = furniture_scenes[furniture_type]
 	if not scene:
 		print("  [Furniture] ERROR: No scene found for type: ", furniture_type)
@@ -103,12 +130,19 @@ func spawn_furniture(grid_pos: Vector3i, furniture_type: String):
 		print("  [Furniture] ERROR: Failed to instantiate scene!")
 		return
 	
+	print("  [Furniture] Instantiated: ", furniture_instance.name, " (Type: ", furniture_instance.get_class(), ")")
+	
+	# Debug: Print all children
+	print("  [Furniture] Children of ", furniture_instance.name, ":")
+	for child in furniture_instance.get_children():
+		print("    - ", child.name, " (", child.get_class(), ")")
+	
 	if furniture_instance is Node3D:
 		print("  [Furniture] Instantiated Node3D: ", furniture_instance.name)
 		
 		# Set position BEFORE adding to tree (this works fine)
 		furniture_instance.position = world_pos
-		furniture_instance.rotation.y = randf() * TAU
+		furniture_instance.rotation.y = rotation_y
 		
 		# Add to world
 		world_node.add_child(furniture_instance)
@@ -117,6 +151,21 @@ func spawn_furniture(grid_pos: Vector3i, furniture_type: String):
 		print("  [Furniture] Final position: ", furniture_instance.global_position)
 	else:
 		print("  [Furniture] ERROR: Instantiated scene is not a Node3D! Type: ", furniture_instance.get_class())
+
+func get_random_non_door_furniture_type() -> String:
+	"""Get a random furniture type from available scenes, excluding doors"""
+	var available = []
+	for type in furniture_scenes.keys():
+		if furniture_scenes[type] and type != "door":  # Exclude doors
+			available.append(type)
+	
+	print("  [Furniture] Available non-door furniture types: ", available)
+	
+	if available.size() == 0:
+		print("  [Furniture] ERROR: No non-door furniture scenes registered!")
+		return ""
+	
+	return available[randi() % available.size()]
 
 func get_random_furniture_type() -> String:
 	"""Get a random furniture type from available scenes"""

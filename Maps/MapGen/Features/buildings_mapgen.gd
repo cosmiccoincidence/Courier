@@ -110,17 +110,17 @@ func generate():
 
 func find_valid_building_position(width: int, length: int) -> Vector3i:
 	var used_cells = map_generator.get_used_cells()
-	var grass_tiles = []
+	var grass_tiles_list = []
 	
 	for cell in used_cells:
 		if map_generator.get_cell_item(cell) == grass_tile_id:
-			grass_tiles.append(cell)
+			grass_tiles_list.append(cell)
 	
 	for attempt in range(20):
-		if grass_tiles.size() == 0:
+		if grass_tiles_list.size() == 0:
 			break
 		
-		var test_pos = grass_tiles[randi() % grass_tiles.size()]
+		var test_pos = grass_tiles_list[randi() % grass_tiles_list.size()]
 		
 		if is_valid_building_area(test_pos, width, length):
 			return test_pos
@@ -193,7 +193,7 @@ func place_building(start: Vector3i, width: int, length: int):
 			"width": width,
 			"length": length,
 			"used_walls": [],
-			"door_pos": Vector3i(-999, 0, -999)  # NEW: Track door position
+			"door_pos": Vector3i(-999, 0, -999)
 		}]
 	}
 	
@@ -214,7 +214,7 @@ func place_building(start: Vector3i, width: int, length: int):
 	
 	place_exterior_door(building_data)
 	
-	# NEW: Place furniture in all rooms (pass door position for each room)
+	# Place furniture in all rooms
 	if furniture_placer:
 		for room in building_data.rooms:
 			furniture_placer.place_furniture_in_room(room.start, room.width, room.length, room.door_pos)
@@ -273,7 +273,7 @@ func try_place_additional_room(building_data: Dictionary) -> bool:
 					"width": new_room.width,
 					"length": new_room.length,
 					"used_walls": [opposite_wall],
-					"door_pos": door_position  # NEW: Track door position for furniture placement
+					"door_pos": door_position
 				})
 				
 				return true
@@ -376,8 +376,13 @@ func add_room_door(start: Vector3i, width: int, length: int, wall_side: int) -> 
 		2: door_pos = Vector3i(start.x, 0, start.z + length / 2)
 		3: door_pos = Vector3i(start.x + width - 1, 0, start.z + length / 2)
 	
-	# Place floor tile for doorway (so you can walk through)
+	# Place door floor tile for doorway (so you can walk through)
 	map_generator.set_cell_item(door_pos, door_floor_tile_id)
+	
+	# Place door furniture at this position with correct rotation
+	if furniture_placer:
+		furniture_placer.place_door_at_position(door_pos, wall_side)
+	
 	return door_pos
 
 func calculate_door_on_wall(start: Vector3i, width: int, length: int, wall_side: int) -> Vector3i:

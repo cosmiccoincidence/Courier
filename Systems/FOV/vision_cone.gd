@@ -288,9 +288,8 @@ func is_wall_tile(tile_id: int) -> bool:
 	var interior_floor_id = map_generator.get("interior_floor_tile_id")
 	var door_floor_id = map_generator.get("door_tile_id")
 	var grass_id = map_generator.get("grass_tile_id")
-	var road_id = map_generator.get("road_tile_id")
-	var stone_road_id = map_generator.get("stone_road_tile_id")  # For generated maps
-	var path_id = map_generator.get("path_tile_id")
+	var dirt_road_id = map_generator.get("dirt_road_tile_id")
+	var stone_road_id = map_generator.get("stone_road_tile_id")
 	var entrance_id = map_generator.get("entrance_tile_id")
 	var exit_id = map_generator.get("exit_tile_id")
 	
@@ -308,11 +307,9 @@ func is_wall_tile(tile_id: int) -> bool:
 		is_walkable = true
 	if grass_id != null and tile_id == grass_id:
 		is_walkable = true
-	if road_id != null and tile_id == road_id:
+	if dirt_road_id != null and tile_id == dirt_road_id:
 		is_walkable = true
 	if stone_road_id != null and tile_id == stone_road_id:
-		is_walkable = true
-	if path_id != null and tile_id == path_id:
 		is_walkable = true
 	if entrance_id != null and tile_id == entrance_id:
 		is_walkable = true
