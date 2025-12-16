@@ -49,8 +49,9 @@ points = PackedVector3Array(-0.21959999, 7.986263e-08, -0.21959992, 0.21958984, 
 script = ExtResource("1_xt0u6")
 loot_table = ExtResource("2_1jufw")
 open_sound = ExtResource("3_oja10")
+interaction_range = 1.0
 
-[node name="Chest" type="MeshInstance3D" parent="."]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("ArrayMesh_iru5d")
 skeleton = NodePath("")
 

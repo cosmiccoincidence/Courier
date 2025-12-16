@@ -70,9 +70,24 @@ func setup(generator: CoreMapGen):
 	furniture_placer = FurniturePlacer.new()
 	furniture_placer.setup(map_generator, map_generator.get_parent())
 	
-	# Set furniture scenes
-	furniture_placer.set_furniture_scene("door", preload("res://Assets/3D/Furniture/door.tscn"))
-	furniture_placer.set_furniture_scene("chest", preload("res://Assets/3D/Furniture/chest.tscn"))
+	# Create and register furniture configs
+	var door_config = FurnitureSpawnConfig.new()
+	door_config.furniture_scene = preload("res://Assets/3D/Furniture/door.tscn")
+	door_config.furniture_type = "door"
+	door_config.spawn_chance = 1.0  # Always spawn doors
+	door_config.fixed_rotation = true  # Doors use wall-based rotation
+	door_config.requires_interior = true
+	furniture_placer.register_furniture_config(door_config)
+	
+	var chest_config = FurnitureSpawnConfig.new()
+	chest_config.furniture_scene = preload("res://Assets/3D/Furniture/chest.tscn")
+	chest_config.furniture_type = "chest"
+	chest_config.spawn_chance = 0.5  # 50% chance per room
+	chest_config.min_per_area = 0
+	chest_config.max_per_area = 1
+	chest_config.min_distance_from_door = 2
+	chest_config.requires_interior = true
+	furniture_placer.register_furniture_config(chest_config)
 
 # ============================================================================
 # GENERATION
@@ -214,10 +229,10 @@ func place_building(start: Vector3i, width: int, length: int):
 	
 	place_exterior_door(building_data)
 	
-	# Place furniture in all rooms
+	# Place furniture in all rooms (only chests, doors are placed separately)
 	if furniture_placer:
 		for room in building_data.rooms:
-			furniture_placer.place_furniture_in_room(room.start, room.width, room.length, room.door_pos)
+			furniture_placer.place_furniture_in_room(room.start, room.width, room.length, room.door_pos, ["chest"])
 	
 	placed_buildings.append(building_data)
 

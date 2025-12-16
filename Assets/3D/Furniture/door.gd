@@ -1,16 +1,20 @@
-extends StaticBody3D
+extends BaseFurniture
 class_name Door
-
-@export var interaction_range := 2.0
 
 var collision_shape: CollisionShape3D = null
 var is_open := false
-var player: CharacterBody3D = null
-var can_interact := true
 
 func _ready():
-	# Add to "door" group so vision cone can find us
+	# Call parent _ready first
+	super._ready()
+	
+	# Add to "door" group so vision cone and fog can find us
 	add_to_group("door")
+	
+	# Door-specific settings (override defaults)
+	is_visual_obstruction = false  # Doors don't block vision when open
+	obstruction_radius = 0.5
+	interaction_range = 2.0
 	
 	# Try to get existing collision shape
 	collision_shape = get_node_or_null("CollisionShape3D")
@@ -23,19 +27,10 @@ func _ready():
 		var box_shape = BoxShape3D.new()
 		box_shape.size = Vector3(1, 2, 0.1)  # Door-sized collision
 		collision_shape.shape = box_shape
-	
-	player = get_tree().get_first_node_in_group("player")
 
 func _physics_process(_delta):
-	if not player or not can_interact:
-		return
-	
-	var distance = global_position.distance_to(player.global_position)
-	
-	if distance <= interaction_range:
-		# Check for interaction input
-		if Input.is_action_just_pressed("interact"):
-			toggle_door()
+	if check_interaction():
+		toggle_door()
 
 func toggle_door():
 	if not can_interact:

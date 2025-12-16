@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=4 uid="uid://bmtlt0x42s60v"]
 
-[ext_resource type="Script" uid="uid://ceuuk36q355nf" path="res://Assets/3D/Furniture/door.gd" id="1_yklbf"]
+[ext_resource type="Script" uid="uid://b7u48v3k0gssh" path="res://Assets/3D/Furniture/base_furniture.gd" id="1_yklbf"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tbb2s"]
 resource_name = "DarkGreen"

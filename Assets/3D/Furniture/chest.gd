@@ -1,22 +1,34 @@
-extends StaticBody3D
+extends BaseFurniture
 class_name Chest
 
 @export var loot_table: LootTable
-@export var interaction_range := 1.5
 @export var open_sound: AudioStream
 
-@onready var audio_player: AudioStreamPlayer3D = $AudioStreamPlayer3D
-@onready var mesh_instance: MeshInstance3D = $Chest
-@onready var collision_shape: CollisionShape3D = $CollisionShape3D
+# Don't use @onready since children might not exist
+var audio_player: AudioStreamPlayer3D = null
+var mesh_instance: MeshInstance3D = null
+var collision_shape: CollisionShape3D = null
 
 var is_open := false
-var player: CharacterBody3D = null
-var can_interact := true
 
 func _ready():
+	# Call parent _ready first
+	super._ready()
+	
+	# Chest-specific settings (override defaults)
+	is_visual_obstruction = true  # Chests block vision
+	obstruction_radius = 0.5
+	interaction_range = 1.5
+	
+	# Try to get existing nodes first
+	mesh_instance = get_node_or_null("MeshInstance3D")
+	collision_shape = get_node_or_null("CollisionShape3D")
+	audio_player = get_node_or_null("AudioStreamPlayer3D")
+	
 	# Create a basic chest mesh if none exists
 	if not mesh_instance:
 		mesh_instance = MeshInstance3D.new()
+		mesh_instance.name = "MeshInstance3D"
 		add_child(mesh_instance)
 		var box_mesh = BoxMesh.new()
 		box_mesh.size = Vector3(1, 0.8, 0.7)
@@ -25,6 +37,7 @@ func _ready():
 	
 	if not collision_shape:
 		collision_shape = CollisionShape3D.new()
+		collision_shape.name = "CollisionShape3D"
 		add_child(collision_shape)
 		var box_shape = BoxShape3D.new()
 		box_shape.size = Vector3(1, 0.8, 0.7)
@@ -33,20 +46,12 @@ func _ready():
 	
 	if not audio_player:
 		audio_player = AudioStreamPlayer3D.new()
+		audio_player.name = "AudioStreamPlayer3D"
 		add_child(audio_player)
-	
-	player = get_tree().get_first_node_in_group("player")
 
 func _physics_process(_delta):
-	if not player or not can_interact:
-		return
-	
-	var distance = global_position.distance_to(player.global_position)
-	
-	if distance <= interaction_range and not is_open:
-		# Check for interaction input (you may need to adjust this based on your input setup)
-		if Input.is_action_just_pressed("interact"):  # Make sure you have an "interact" action defined
-			open_chest()
+	if not is_open and check_interaction():
+		open_chest()
 
 func open_chest():
 	if is_open:
@@ -68,7 +73,6 @@ func open_chest():
 		LootSpawner.spawn_loot_from_table(loot_table, global_position, get_tree().current_scene)
 	
 	print("Chest opened!")
-	
 
 # Alternative method: Interact via Area3D detection
 func _on_area_entered(area: Area3D):
