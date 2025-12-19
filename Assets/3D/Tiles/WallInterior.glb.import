@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://cr52klanftcwo"
-path="res://.godot/imported/WallInterior.glb-7c6bdc0dfc5ffa6e776423767fc44b8b.scn"
+path="res://.godot/imported/WallInterior.glb-a0310fff4a711fde42584bf9d9b13269.scn"
 
 [deps]
 
-source_file="res://Assets/3D/Tiles/Interior Walls/WallInterior.glb"
-dest_files=["res://.godot/imported/WallInterior.glb-7c6bdc0dfc5ffa6e776423767fc44b8b.scn"]
+source_file="res://Assets/3D/Tiles/WallInterior.glb"
+dest_files=["res://.godot/imported/WallInterior.glb-a0310fff4a711fde42584bf9d9b13269.scn"]
 
 [params]
 
