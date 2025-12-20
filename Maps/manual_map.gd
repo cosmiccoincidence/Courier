@@ -46,7 +46,7 @@ func setup_wall_floor_manager():
 	wall_floor_manager = WallFloorManager.new()
 	wall_floor_manager.setup(self)
 	
-	wall_floor_manager.assign_floor_scene_for_tile(interior_floor_tile_id, "WallInteriorFloor", preload("res://Assets/3D/Tiles/WallInteriorFloor.tscn"))
+	wall_floor_manager.assign_floor_scene_for_tile(interior_floor_tile_id, "WallInteriorFloorWhole", preload("res://Assets/3D/Tiles/WallInteriorFloorWhole.tscn"))
 	wall_floor_manager.assign_floor_scene_for_tile(interior_floor_tile_id, "WallInteriorFloorE", preload("res://Assets/3D/Tiles/WallInteriorFloorE.tscn"))
 	wall_floor_manager.assign_floor_scene_for_tile(interior_floor_tile_id, "WallInteriorFloorW", preload("res://Assets/3D/Tiles/WallInteriorFloorW.tscn"))
 	wall_floor_manager.assign_floor_scene_for_tile(interior_floor_tile_id, "WallInteriorFloorS", preload("res://Assets/3D/Tiles/WallInteriorFloorS.tscn"))
@@ -56,7 +56,7 @@ func setup_wall_floor_manager():
 	wall_floor_manager.assign_floor_scene_for_tile(interior_floor_tile_id, "WallInteriorFloorSE", preload("res://Assets/3D/Tiles/WallInteriorFloorSE.tscn"))
 	wall_floor_manager.assign_floor_scene_for_tile(interior_floor_tile_id, "WallInteriorFloorThreeCorner", preload("res://Assets/3D/Tiles/WallInteriorFloorThreeCorner.tscn"))
 	
-	wall_floor_manager.assign_floor_scene_for_tile(grass_tile_id, "WallInteriorFloor", preload("res://Assets/3D/Tiles/WallInteriorFloor.tscn"))
+	wall_floor_manager.assign_floor_scene_for_tile(grass_tile_id, "WallInteriorFloorWhole", preload("res://Assets/3D/Tiles/WallInteriorFloorWhole.tscn"))
 	wall_floor_manager.assign_floor_scene_for_tile(grass_tile_id, "WallInteriorFloorE", preload("res://Assets/3D/Tiles/WallInteriorFloorE.tscn"))
 	wall_floor_manager.assign_floor_scene_for_tile(grass_tile_id, "WallInteriorFloorW", preload("res://Assets/3D/Tiles/WallInteriorFloorW.tscn"))
 	wall_floor_manager.assign_floor_scene_for_tile(grass_tile_id, "WallInteriorFloorS", preload("res://Assets/3D/Tiles/WallInteriorFloorS.tscn"))
@@ -78,14 +78,14 @@ func register_wall_tiles():
 	wall_floor_manager.register_wall_tile(
 		interior_wall_connector.o_tile_id,
 		WallFloorManager.WallShape.O,
-		["WallInteriorFloor"]
+		["WallInteriorFloorWhole"]
 	)
 	
 	# U shape - one connection
 	wall_floor_manager.register_wall_tile(
 		interior_wall_connector.u_tile_id,
 		WallFloorManager.WallShape.U,
-		["WallInteriorFloor"]
+		["WallInteriorFloorWhole"]
 	)
 	
 	# I shape - straight
