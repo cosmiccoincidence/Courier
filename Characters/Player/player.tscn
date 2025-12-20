@@ -39,6 +39,7 @@ transform = Transform3D(1, 0, 0, 0, 0.03953731, 0.9992181, 0, -0.9992181, 0.0395
 current = true
 fov = 40.0
 script = ExtResource("2_onrkg")
+zoom_min = 20.0
 
 [node name="AudioListener3D" type="AudioListener3D" parent="."]
 current = true

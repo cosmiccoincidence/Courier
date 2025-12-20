@@ -1,0 +1,47 @@
+[gd_scene load_steps=5 format=4 uid="uid://dsb2o0vuak4xi"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_70a5l"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_5cy2p"]
+_surfaces = [{
+"aabb": AABB(-0.5, 0, -0.5, 1, 1e-05, 1),
+"format": 34896613377,
+"index_count": 18,
+"index_data": PackedByteArray("AAABAAIAAAADAAEABAAAAAIABAACAAUABQACAAYABQAGAAcA"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("AAAAAP9/AAD/fwAAAAAAAP9/AAD/fwAAAAAAAAAAAAAAAAAA//8AAP9/AAD//wAA//8AAP9/AAD//wAA//8AAA==")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_61fuu"]
+resource_name = "Tile_Plane_023"
+_surfaces = [{
+"aabb": AABB(-0.5, 0, -0.5, 1, 1e-05, 1),
+"attribute_data": PackedByteArray("AAD/f/9/AAD/f/9/AAAAAAAA////f///////f/////8="),
+"format": 34896613399,
+"index_count": 18,
+"index_data": PackedByteArray("AAABAAIAAAADAAEABAAAAAIABAACAAUABQACAAYABQAGAAcA"),
+"material": SubResource("StandardMaterial3D_70a5l"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("AAAAAP9//7//fwAAAAD/v/9/AAD/f/+/AAAAAAAA/78AAAAA////v/9/AAD///+///8AAP9//7///wAA////v////3////9/////f////3////9/////f////3////9/")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_5cy2p")
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_yh5hu"]
+data = PackedVector3Array(-0.5, 0, 0, 0, 0, -0.5, 0, 0, 0, -0.5, 0, 0, -0.5, 0, -0.5, 0, 0, -0.5, -0.5, 0, 0.5, -0.5, 0, 0, 0, 0, 0, -0.5, 0, 0.5, 0, 0, 0, 0, 0, 0.5, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0, 0, 0.5, 0.5, 0, 0, 0.5, 0, 0.5)
+
+[node name="WallInteriorFloorThreeCorner" type="StaticBody3D"]
+
+[node name="WallInteriorFloorThreeQuarter" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+mesh = SubResource("ArrayMesh_61fuu")
+skeleton = NodePath("")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+shape = SubResource("ConcavePolygonShape3D_yh5hu")

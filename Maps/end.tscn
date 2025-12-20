@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://bno3h4db5oos6"]
 
-[ext_resource type="MeshLibrary" uid="uid://dsbedmleichpf" path="res://Assets/3D/Tiles/tile_library.tres" id="1_78qd2"]
+[ext_resource type="MeshLibrary" uid="uid://dycv0mgmu6mlo" path="res://Assets/3D/Tiles/tiles_library.tres" id="1_78qd2"]
 [ext_resource type="Script" uid="uid://dnfwdsx4pukaw" path="res://Maps/manual_map.gd" id="1_dkaby"]
 [ext_resource type="PackedScene" uid="uid://7jg1i280uwcy" path="res://Characters/NPCs/npc_hermit.tscn" id="2_dkaby"]
 [ext_resource type="Resource" uid="uid://cwn4875vg684d" path="res://Maps/MapGen/Connections/interior_wall_connector.tres" id="3_78qd2"]

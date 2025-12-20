@@ -1,6 +1,6 @@
 [gd_scene load_steps=9 format=3 uid="uid://bdatgtymbk87c"]
 
-[ext_resource type="MeshLibrary" uid="uid://dsbedmleichpf" path="res://Assets/3D/Tiles/tile_library.tres" id="1_gf0qf"]
+[ext_resource type="MeshLibrary" uid="uid://dycv0mgmu6mlo" path="res://Assets/3D/Tiles/tiles_library.tres" id="1_gf0qf"]
 [ext_resource type="Script" uid="uid://4bip1a0su263" path="res://Maps/MapGen/act1a_mapgen.gd" id="2_hlbiq"]
 [ext_resource type="Script" uid="uid://rc6qhmcd5qi6" path="res://Characters/Enemies/enemy_spawn_data.gd" id="3_gu1qp"]
 [ext_resource type="PackedScene" uid="uid://mahss0budjch" path="res://Characters/Enemies/enemy1.tscn" id="4_gf0qf"]
