@@ -19,10 +19,10 @@ interior_wall_connector = ExtResource("3_uoi22")
 metadata/_editor_floor_ = Vector3(0, 0, 0)
 
 [node name="NPC_Trader1" parent="." instance=ExtResource("2_1y4qr")]
-transform = Transform3D(-0.004502921, 0, -0.99998987, 0, 1, 0, 0.99998987, 0, -0.004502921, -5.054, 0.5, 6.017)
+transform = Transform3D(-0.0036023369, 0, -0.7999919, 0, 0.8, 0, 0.7999919, 0, -0.0036023369, -5.054, 0.5, 6.017)
 
 [node name="NPC_Trader2" parent="." instance=ExtResource("2_1y4qr")]
-transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -5.08, 0.5, 1.524)
+transform = Transform3D(-3.4969112e-08, 0, -0.8, 0, 0.8, 0, 0.8, 0, -3.4969112e-08, -5.08, 0.5, 1.524)
 
 [node name="NPC_Trader3" parent="." instance=ExtResource("2_1y4qr")]
-transform = Transform3D(-0.004502921, 0, -0.99998987, 0, 1, 0, 0.99998987, 0, -0.004502921, -5.054, 0.5, -3.022)
+transform = Transform3D(-0.0036023369, 0, -0.7999919, 0, 0.8, 0, 0.7999919, 0, -0.0036023369, -5.054, 0.5, -3.022)
