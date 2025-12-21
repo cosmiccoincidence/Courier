@@ -1973,6 +1973,7 @@ points = PackedVector3Array(0.099999994, 0.590909, 0.099999994, -0.099999994, 0.
 
 [node name="TileZoneEntry" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0)
+cast_shadow = 0
 mesh = SubResource("ArrayMesh_n7nym")
 skeleton = NodePath("")
 
@@ -1983,6 +1984,7 @@ shape = SubResource("ConvexPolygonShape3D_8l3uk")
 
 [node name="TileZoneExit" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 0)
+cast_shadow = 0
 mesh = SubResource("ArrayMesh_ch1lj")
 skeleton = NodePath("")
 
@@ -1999,6 +2001,7 @@ shape = SubResource("BoxShape3D_8t5cb")
 
 [node name="TileStoneRoad" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 0)
+cast_shadow = 0
 mesh = SubResource("ArrayMesh_3ehl2")
 skeleton = NodePath("")
 
@@ -2009,6 +2012,7 @@ shape = SubResource("ConvexPolygonShape3D_mjchx")
 
 [node name="TileDirtRoad" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, 0)
+cast_shadow = 0
 mesh = SubResource("ArrayMesh_vu0qx")
 skeleton = NodePath("")
 
@@ -2019,6 +2023,7 @@ shape = SubResource("ConvexPolygonShape3D_vq1pm")
 
 [node name="TileFlooringDoor" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 0, 0)
+cast_shadow = 0
 mesh = SubResource("ArrayMesh_7w54f")
 skeleton = NodePath("")
 
@@ -2029,6 +2034,7 @@ shape = SubResource("ConvexPolygonShape3D_s4fjx")
 
 [node name="TileFlooring" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, 0)
+cast_shadow = 0
 mesh = SubResource("ArrayMesh_x5o66")
 skeleton = NodePath("")
 
@@ -2039,6 +2045,7 @@ shape = SubResource("ConvexPolygonShape3D_d40ja")
 
 [node name="TileGrass" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 0)
+cast_shadow = 0
 mesh = SubResource("ArrayMesh_myvuy")
 skeleton = NodePath("")
 
@@ -2049,6 +2056,7 @@ shape = SubResource("ConvexPolygonShape3D_ngmw5")
 
 [node name="TileWater" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 0)
+cast_shadow = 0
 mesh = SubResource("ArrayMesh_h25ll")
 skeleton = NodePath("")
 

@@ -42,6 +42,7 @@ data = PackedVector3Array(-0.5, 0, 0, 0, 0, -0.5, 0, 0, 0, -0.5, 0, 0, -0.5, 0, 
 [node name="WallInteriorFloorThreeQuarter" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.49, 0)
 material_override = ExtResource("1_1qwxp")
+cast_shadow = 0
 mesh = SubResource("ArrayMesh_61fuu")
 skeleton = NodePath("")
 

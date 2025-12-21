@@ -42,6 +42,7 @@ points = PackedVector3Array(0.5038688, 0.003968254, 0.0038688183, -0.0038688183,
 [node name="WallInteriorFloorQuarter" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.49, 0)
 material_override = ExtResource("1_4ayl3")
+cast_shadow = 0
 mesh = SubResource("ArrayMesh_s33hc")
 skeleton = NodePath("")
 
