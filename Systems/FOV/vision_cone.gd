@@ -146,7 +146,7 @@ func update_cone_geometry():
 			
 			# If we hit a wall before max distance, create fog BEYOND it
 			if hit_dist < vision_radius - 0.5:
-				var push_distance = 0.5
+				var push_distance = 0.85
 				var wall_point_pushed = hit_pos + dir * push_distance
 				
 				var wall_point = Vector3(wall_point_pushed.x, 0.65, wall_point_pushed.y)

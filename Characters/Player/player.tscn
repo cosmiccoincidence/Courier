@@ -37,7 +37,8 @@ shape = SubResource("SphereShape3D_4flbx")
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.03953731, 0.9992181, 0, -0.9992181, 0.03953731, 0, 121.0958, 0.5)
 current = true
-fov = 40.0
+fov = 10.0
+far = 800.0
 script = ExtResource("2_onrkg")
 zoom_min = 20.0
 

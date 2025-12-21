@@ -29,9 +29,9 @@ const ENCUMBERED_ROTATION_MULT: float = 0.75  # 75% rotation speed
 @export var stamina_regen_interval: float = 0.5  # Seconds between stamina regen
 @export var health_regen: float = 1.0  # How much health per interval
 @export var health_regen_interval: float = 10.0  # Seconds between health regen
-@export var zoom_min := 2
-@export var zoom_max := 30
-@export var zoom_speed := 10.0
+@export var zoom_min := 50
+@export var zoom_max := 100  # Normal max zoom
+@export var zoom_speed := 15.0
 @export var zoom_smooth := 8.0
 @export var max_health := 10
 @export var max_stamina := 10
@@ -44,8 +44,8 @@ var is_dying: bool = false
 var is_encumbered: bool = false
 var current_health: int
 var current_stamina: float
-var zoom_target := 30.0
-var zoom_current := 30.0
+var zoom_target := 75
+var zoom_current := 75
 var is_sprinting: bool = false
 var stamina_regen_delay: float = 1.0 # delay in seconds to start regen after sprint has stopped
 var time_since_sprint_stopped: float = 0.0

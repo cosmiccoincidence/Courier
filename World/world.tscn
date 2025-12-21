@@ -42,7 +42,14 @@ light_color = Color(1, 1, 0.78431374, 1)
 light_energy = 1.5
 light_specular = 0.5
 shadow_enabled = true
-shadow_opacity = 0.9
+shadow_normal_bias = 3.0
+shadow_opacity = 0.8
+shadow_blur = 2.0
+directional_shadow_split_1 = 0.2
+directional_shadow_split_2 = 0.5
+directional_shadow_fade_start = 0.6
+directional_shadow_max_distance = 300.0
+directional_shadow_pancake_size = 0.0
 
 [node name="Moon" type="DirectionalLight3D" parent="SunMoonOrigin"]
 transform = Transform3D(1, 0, 0, 0, 0.25881907, -0.9659258, 0, 0.9659258, 0.25881907, 0, -3, 0)
@@ -51,8 +58,14 @@ light_color = Color(0.7058824, 0.7058824, 1, 1)
 light_energy = 0.5
 light_specular = 0.5
 shadow_enabled = true
-shadow_opacity = 0.7
+shadow_normal_bias = 3.0
+shadow_opacity = 0.65
 shadow_blur = 2.0
+directional_shadow_split_1 = 0.2
+directional_shadow_split_2 = 0.5
+directional_shadow_fade_start = 0.6
+directional_shadow_max_distance = 300.0
+directional_shadow_pancake_size = 0.0
 
 [node name="BlackScreen" type="CanvasLayer" parent="."]
 
