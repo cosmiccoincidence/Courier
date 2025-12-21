@@ -75,14 +75,6 @@ func create_floor_mesh(mesh_name: String, world_pos: Vector3, rotation: float, g
 	var neighbor_positions = get_neighbor_positions_for_mesh(mesh_name, grid_pos, rotation, shape)
 	var tile_to_match = get_most_common_tile(neighbor_positions, grid_pos)  # Pass grid_pos for directional weighting
 	
-	# Debug only FloorThreeCorner
-	if mesh_name == "FloorThreeCorner":
-		print("[DEBUG ThreeCorner] at ", grid_pos, " checked: ", neighbor_positions)
-		for pos in neighbor_positions:
-			var tile_at_pos = gridmap.get_cell_item(pos)
-			print("  -> ", pos, " has tile ", tile_at_pos)
-		print("  Final tile_to_match: ", tile_to_match)
-	
 	# Fallback: if no valid floor tile found, use interior floor (tile 5) as default
 	if tile_to_match == -1:
 		tile_to_match = 5  # Interior floor tile ID
@@ -94,8 +86,6 @@ func create_floor_mesh(mesh_name: String, world_pos: Vector3, rotation: float, g
 			scene_to_use = floor_scenes_by_tile[tile_to_match][mesh_name]
 	
 	if not scene_to_use:
-		if mesh_name == "FloorThreeCorner":
-			print("[DEBUG ThreeCorner] NO SCENE for tile ", tile_to_match, "! Available: ", floor_scenes_by_tile.keys())
 		return null
 	
 	# Instantiate the scene

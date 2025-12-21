@@ -9,11 +9,6 @@ static func apply_interior_wall_connections(map_generator: GridMap, wall_connect
 		print("[WallConnector] No wall connector provided, skipping")
 		return
 	
-	print("[WallConnector] ========================================")
-	print("[WallConnector] Applying advanced wall connections to interior walls...")
-	print("[WallConnector] Original wall tile ID: ", interior_wall_tile_id)
-	print("[WallConnector] Buildings to process: ", placed_buildings.size())
-	
 	# Get all interior wall positions from placed buildings
 	var wall_positions = []
 	for building in placed_buildings:
@@ -29,11 +24,8 @@ static func apply_interior_wall_connections(map_generator: GridMap, wall_connect
 						if tile_id == interior_wall_tile_id:
 							wall_positions.append(pos)
 	
-	print("[WallConnector] Found ", wall_positions.size(), " wall tiles to update")
-	
 	# IMPORTANT: Gather ALL adjacency data BEFORE replacing tiles
 	# Otherwise tiles we replace will break adjacency checks for later tiles
-	print("[WallConnector] Phase 1: Analyzing adjacency for all walls...")
 	var wall_data = []
 	
 	for i in range(wall_positions.size()):
@@ -49,78 +41,21 @@ static func apply_interior_wall_connections(map_generator: GridMap, wall_connect
 			"adjacency": adjacency_map
 		})
 	
-	print("[WallConnector] Phase 2: Applying ", wall_data.size(), " wall tile changes...")
-	
 	# Now apply all the changes
 	var walls_updated = 0
-	var shape_counts = {}
 	
 	for i in range(wall_data.size()):
 		var data = wall_data[i]
-		
-		# Debug first 10 walls with detailed info
-		if i < 10:
-			print("\n[WallConnector] === Wall #", i, " at ", data.pos, " ===")
-			
-			# Show cardinal neighbors
-			var north = data.adjacency.get(AdjacencyShapeResolver.Direction.NORTH, false)
-			var south = data.adjacency.get(AdjacencyShapeResolver.Direction.SOUTH, false)
-			var east = data.adjacency.get(AdjacencyShapeResolver.Direction.EAST, false)
-			var west = data.adjacency.get(AdjacencyShapeResolver.Direction.WEST, false)
-			
-			print("  Cardinals: N=", north, " S=", south, " E=", east, " W=", west)
-			
-			# Show what tiles are actually there
-			print("  Actual tile IDs at time of check:")
-			print("    North: ", map_generator.get_cell_item(data.pos + Vector3i(0, 0, -1)))
-			print("    South: ", map_generator.get_cell_item(data.pos + Vector3i(0, 0, 1)))
-			print("    East: ", map_generator.get_cell_item(data.pos + Vector3i(1, 0, 0)))
-			print("    West: ", map_generator.get_cell_item(data.pos + Vector3i(-1, 0, 0)))
-			print("    Target wall ID: ", interior_wall_tile_id)
-			
-			# Show diagonal neighbors
-			var ne = data.adjacency.get(AdjacencyShapeResolver.Direction.NORTH_EAST, false)
-			var se = data.adjacency.get(AdjacencyShapeResolver.Direction.SOUTH_EAST, false)
-			var sw = data.adjacency.get(AdjacencyShapeResolver.Direction.SOUTH_WEST, false)
-			var nw = data.adjacency.get(AdjacencyShapeResolver.Direction.NORTH_WEST, false)
-			
-			print("  Diagonals: NE=", ne, " SE=", se, " SW=", sw, " NW=", nw)
-			print("  Shape determined: ", data.shape)
-			print("  New tile ID: ", data.tile_id)
-			print("  Rotation: ", data.rotation, "°")
 		
 		if data.tile_id != -1:
 			# Get orientation from rotation
 			var orientation = get_orientation_from_rotation(data.rotation)
 			
-			# BEFORE placement - check current Y
-			var world_pos_before = map_generator.map_to_local(data.pos)
-			
 			# Replace the tile with the appropriate variation
 			map_generator.set_cell_item(data.pos, data.tile_id, orientation)
-			
-			# AFTER placement - check if Y changed
-			var world_pos_after = map_generator.map_to_local(data.pos)
-			
-			if i < 10:
-				print("  Applied orientation: ", orientation, " for rotation ", data.rotation, "°")
-				print("  World pos before: ", world_pos_before)
-				print("  World pos after: ", world_pos_after)
-				if abs(world_pos_before.y - world_pos_after.y) > 0.1:
-					print("  ⚠️ WARNING: Y position changed!")
-			
 			walls_updated += 1
-			
-			# Count shapes
-			var shape_name = str(data.shape)
-			shape_counts[shape_name] = shape_counts.get(shape_name, 0) + 1
 	
-	print("[WallConnector] ========================================")
 	print("[WallConnector] Updated ", walls_updated, " interior wall tiles")
-	print("[WallConnector] Shape distribution:")
-	for shape in shape_counts.keys():
-		print("  - ", shape, ": ", shape_counts[shape])
-	print("[WallConnector] ========================================")
 
 ## Get adjacency map for a tile position
 static func get_adjacency_map(map_generator: GridMap, pos: Vector3i, target_tile_id: int) -> Dictionary:
