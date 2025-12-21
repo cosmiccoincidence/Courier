@@ -34,13 +34,17 @@ shape = SubResource("CapsuleShape3D_hqtel")
 transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 1.3596594, 0)
 shape = SubResource("SphereShape3D_4flbx")
 
-[node name="Camera3D" type="Camera3D" parent="."]
+[node name="Camera3D(Top-Down" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.03953731, 0.9992181, 0, -0.9992181, 0.03953731, 0, 121.0958, 0.5)
 current = true
 fov = 10.0
 far = 800.0
 script = ExtResource("2_onrkg")
-zoom_min = 20.0
+
+[node name="Camera3D(Perspective)" type="Camera3D" parent="."]
+transform = Transform3D(1.25, 0, 0, 0, 0.47048068, 1.1580794, 0, -1.1580794, 0.47048068, 0, 121.0958, 72.72221)
+fov = 20.0
+far = 800.0
 
 [node name="AudioListener3D" type="AudioListener3D" parent="."]
 current = true
@@ -51,7 +55,7 @@ current = true
 
 [node name="HoverTooltipManager" type="Node" parent="." node_paths=PackedStringArray("camera") groups=["tooltip_manager"]]
 script = ExtResource("3_cue0d")
-camera = NodePath("../Camera3D")
+camera = NodePath("../Camera3D(Top-Down")
 tooltip_delay = 0.0
 
 [connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
