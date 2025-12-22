@@ -12,6 +12,7 @@ class_name ManualMap
 @export var interior_floor_tile_id: int = 5
 @export var door_tile_id: int = 27
 @export var door_floor_tile_id: int = 4
+@export var water_tile_id: int = 7
 @export var is_passive_map: bool = false  # Disable fog/vision for towns
 
 # Advanced wall connections
@@ -22,28 +23,28 @@ class_name ManualMap
 @export_subgroup("Floor Types")
 
 @export var grass_quarter: int = 0
-@export var grass_threequarter: int = 1
-@export var grass_half: int = 2
+@export var grass_half: int = 1
+@export var grass_threequarter: int = 2
 @export var grass_whole: int = 3
 
 @export var interior_floor_quarter: int = 4
-@export var interior_floor_threequarter: int = 5
-@export var interior_floor_half: int = 6
+@export var interior_floor_half: int = 5
+@export var interior_floor_threequarter: int = 6
 @export var interior_floor_whole: int = 7
 
 @export var water_quarter: int = 8
-@export var water_threequarter: int = 9
-@export var water_half: int = 10
+@export var water_half: int = 9
+@export var water_threequarter: int = 10
 @export var water_whole: int = 11
 
 @export var stone_road_quarter: int = 12
-@export var stone_road_threequarter: int = 13
-@export var stone_road_half: int = 14
+@export var stone_road_half: int = 13
+@export var stone_road_threequarter: int = 14
 @export var stone_road_whole: int = 15
 
 @export var dirt_road_quarter: int = 16
-@export var dirt_road_threequarter: int = 17
-@export var dirt_road_half: int = 18
+@export var dirt_road_half: int = 17
+@export var dirt_road_threequarter: int = 18
 @export var dirt_road_whole: int = 19
 
 # Dual-Grid system
@@ -51,11 +52,18 @@ class_name ManualMap
 @export var enable_dual_grid_floors: bool = true
 @export var clear_simple_floors_after_processing: bool = true
 @export var floor_mesh_library: MeshLibrary  # Separate MeshLibrary for floor tiles
+@export var debug_dual_grid_floors: bool = false  # Enable debug output for troubleshooting
 
-@onready var floor_grid: GridMap = $FloorGridMap
+# FIXED: FloorGridMap is a sibling, not a child - use ../FloorGridMap
+@onready var floor_grid: GridMap = get_node("../FloorGridMap")
 
 var dual_grid_processor: DualGridFloor
 var exit_triggered: bool = false
+
+# Cached entry/exit positions (stored before clearing tiles)
+var cached_entrance_pos: Vector3 = Vector3.ZERO
+var cached_exit_pos: Vector3 = Vector3.ZERO
+var has_cached_positions: bool = false
 
 signal generation_complete
 signal player_reached_exit
@@ -94,18 +102,46 @@ func start_generation():
 	generation_complete.emit()
 
 
+func _cache_entry_exit_positions():
+	"""Cache entry and exit positions before tiles are cleared"""
+	var used_cells = get_used_cells()
+	
+	for cell_pos in used_cells:
+		var tile_id = get_cell_item(cell_pos)
+		
+		if tile_id == entrance_tile_id:
+			cached_entrance_pos = map_to_local(cell_pos)
+			print("[ManualMap] Cached entrance position: ", cached_entrance_pos)
+		elif tile_id == exit_tile_id:
+			cached_exit_pos = map_to_local(cell_pos)
+			print("[ManualMap] Cached exit position: ", cached_exit_pos)
+	
+	has_cached_positions = true
+
+
 func setup_and_process_dual_grid_floors():
 	"""Set up and process the dual-grid floor system"""
 	print("[ManualMap] Setting up dual-grid floor system...")
 	
+	# IMPORTANT: Store entry/exit positions BEFORE clearing tiles
+	_cache_entry_exit_positions()
+	
 	# Create the processor
 	dual_grid_processor = DualGridFloor.new(self, floor_grid)
 	
+	# Enable debug mode if requested
+	if debug_dual_grid_floors:
+		dual_grid_processor.enable_debug_mode()
+	
 	# Map primary grid tile IDs to floor type names
-	dual_grid_processor.map_tile_to_type(interior_floor_tile_id, "interior_floor")
-	dual_grid_processor.map_tile_to_type(grass_tile_id, "grass")
-	dual_grid_processor.map_tile_to_type(stone_road_tile_id, "stone_road")
-	dual_grid_processor.map_tile_to_type(dirt_road_tile_id, "dirt_road")
+	# Entry/exit zones should use stone road floor tiles
+	dual_grid_processor.map_tile_to_type(entrance_tile_id, "stone_road")  # 0 -> stone_road
+	dual_grid_processor.map_tile_to_type(exit_tile_id, "stone_road")      # 1 -> stone_road
+	dual_grid_processor.map_tile_to_type(stone_road_tile_id, "stone_road") # 2 -> stone_road
+	dual_grid_processor.map_tile_to_type(dirt_road_tile_id, "dirt_road")   # 3 -> dirt_road
+	dual_grid_processor.map_tile_to_type(interior_floor_tile_id, "interior_floor") # 5 -> interior_floor
+	dual_grid_processor.map_tile_to_type(grass_tile_id, "grass")           # 6 -> grass
+	dual_grid_processor.map_tile_to_type(water_tile_id, "water")           # 7 -> water
 	
 	# Register floor types with their tile IDs from the floor grid MeshLibrary
 	dual_grid_processor.register_floor_type("interior_floor", {
@@ -134,6 +170,13 @@ func setup_and_process_dual_grid_floors():
 		"half": dirt_road_half,
 		"threequarter": dirt_road_threequarter,
 		"quarter": dirt_road_quarter
+	})
+	
+	dual_grid_processor.register_floor_type("water", {
+		"whole": water_whole,
+		"half": water_half,
+		"threequarter": water_threequarter,
+		"quarter": water_quarter
 	})
 	
 	# Process the dual-grid floors
@@ -250,29 +293,44 @@ func get_orientation_from_rotation(rotation_degrees: float) -> int:
 
 
 func setup_exit_detection():
-	var used_cells = get_used_cells()
+	# Use cached exit position if available (after dual-grid processing clears tiles)
+	if has_cached_positions and cached_exit_pos != Vector3.ZERO:
+		_create_exit_detector_at_position(cached_exit_pos)
+		print("[ManualMap] Created exit detector at cached position: ", cached_exit_pos)
+		return
 	
+	# Fallback: search for exit tiles (for maps without dual-grid)
+	var used_cells = get_used_cells()
 	var exit_count = 0
+	
 	for cell in used_cells:
 		if get_cell_item(cell) == exit_tile_id:
 			exit_count += 1
-			var exit_area = Area3D.new()
-			exit_area.name = "ExitDetector_" + str(cell)
-			exit_area.monitoring = true  # Make sure it's enabled
-			
-			var collision_shape = CollisionShape3D.new()
-			var box_shape = BoxShape3D.new()
-			box_shape.size = Vector3(1, 2, 1)
-			collision_shape.shape = box_shape
-			
-			exit_area.add_child(collision_shape)
-			add_child(exit_area)
-			
 			var world_pos = map_to_local(cell)
-			world_pos.y = 1
-			exit_area.global_position = world_pos
-			
-			exit_area.body_entered.connect(_on_exit_area_entered)
+			_create_exit_detector_at_position(world_pos)
+	
+	if exit_count == 0:
+		push_warning("[ManualMap] No exit zone found!")
+
+
+func _create_exit_detector_at_position(world_pos: Vector3):
+	"""Create an exit detector Area3D at the specified world position"""
+	var exit_area = Area3D.new()
+	exit_area.name = "ExitDetector_" + str(world_pos)
+	exit_area.monitoring = true
+	
+	var collision_shape = CollisionShape3D.new()
+	var box_shape = BoxShape3D.new()
+	box_shape.size = Vector3(1, 2, 1)
+	collision_shape.shape = box_shape
+	
+	exit_area.add_child(collision_shape)
+	add_child(exit_area)
+	
+	world_pos.y = 1
+	exit_area.global_position = world_pos
+	
+	exit_area.body_entered.connect(_on_exit_area_entered)
 
 
 func _on_exit_area_entered(body: Node3D):
@@ -286,6 +344,14 @@ func _on_exit_area_entered(body: Node3D):
 
 
 func get_entrance_zone_spawn_position() -> Vector3:
+	# Use cached position if available (after dual-grid processing clears tiles)
+	if has_cached_positions and cached_entrance_pos != Vector3.ZERO:
+		var spawn_pos = cached_entrance_pos
+		spawn_pos.y = 0.1  # player spawn height
+		print("Spawning at cached entrance: ", spawn_pos)
+		return spawn_pos
+	
+	# Fallback: search for entrance tiles (for maps without dual-grid)
 	var used_cells = get_used_cells()
 	var entrance_tiles = []
 	
@@ -295,11 +361,12 @@ func get_entrance_zone_spawn_position() -> Vector3:
 			entrance_tiles.append(cell)
 	
 	if entrance_tiles.size() == 0:
+		push_warning("[ManualMap] No entrance zone found!")
 		return Vector3.ZERO
 	
 	var spawn_tile = entrance_tiles[randi() % entrance_tiles.size()]
 	var world_pos = map_to_local(spawn_tile)
-	world_pos.y = 0.1 # player spawn height
+	world_pos.y = 0.1  # player spawn height
 	
 	print("Spawning at: ", world_pos)
 	return world_pos

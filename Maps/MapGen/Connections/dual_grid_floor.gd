@@ -23,6 +23,12 @@ var floor_y_level: int = 0
 # Base Y level for floor grid (we'll stack additional meshes at +1, +2, +3)
 var floor_grid_base_y: int = 0
 
+# Container for additional mesh instances (layers beyond base Y)
+var mesh_container: Node3D
+
+# Debug mode for troubleshooting gaps and rotations
+var debug_gaps: bool = false
+
 
 func _init(p_primary_grid: GridMap, p_floor_grid: GridMap):
 	primary_grid = p_primary_grid
@@ -41,9 +47,24 @@ func map_tile_to_type(tile_id: int, type_name: String) -> void:
 	tile_id_to_type[tile_id] = type_name
 
 
+## Enable debug output for troubleshooting gaps and rotations
+func enable_debug_mode() -> void:
+	debug_gaps = true
+	print("[DualGridFloor] Debug mode ENABLED")
+
+
 ## Main processing function - call this after primary map generation is complete
 func process_dual_grid_floors() -> void:
 	print("[DualGridFloor] Starting dual-grid floor processing...")
+	
+	# Create mesh container NOW (after floor_grid has been positioned)
+	if mesh_container == null:
+		mesh_container = Node3D.new()
+		mesh_container.name = "DualGridFloorMeshes"
+		floor_grid.add_child(mesh_container)
+		print("[DualGridFloor] Created mesh container as child of floor_grid")
+		print("[DualGridFloor] floor_grid position: %s" % floor_grid.position)
+		print("[DualGridFloor] mesh_container global position: %s" % mesh_container.global_position)
 	
 	# Get bounds of the primary gridmap
 	var used_cells = primary_grid.get_used_cells()
@@ -146,27 +167,41 @@ func _place_floor_meshes(grid_x: int, grid_z: int, y_level: int, tile_type: Stri
 	var tile_set = floor_tile_sets[tile_type]
 	var quad_count = quadrants.size()
 	
+	if debug_gaps:
+		print("[DualGridFloor] Placing %s at (%d,%d) Y=%d, quadrants=%s, count=%d" % [tile_type, grid_x, grid_z, y_level, quadrants, quad_count])
+	
 	match quad_count:
 		4:
 			# All 4 quadrants - use whole tile
+			if debug_gaps:
+				print("  → Using WHOLE tile")
 			_place_tile(grid_x, grid_z, y_level, tile_set["whole"], 0)
 		
 		3:
 			# 3 quadrants - use threequarter tile
+			if debug_gaps:
+				print("  → Using THREEQUARTER tile")
 			_place_threequarter_tile(grid_x, grid_z, y_level, quadrants, tile_set)
 		
 		2:
 			# 2 quadrants - check if adjacent or diagonal
 			if _are_quadrants_adjacent(quadrants):
+				if debug_gaps:
+					print("  → Using HALF tile (adjacent)")
 				_place_half_tile(grid_x, grid_z, y_level, quadrants, tile_set)
 			else:
-				# Diagonal - use 2 quarter tiles on SAME y-level but different positions
-				# This is a special case - we need to place both quarters
-				_place_diagonal_quarters(grid_x, grid_z, y_level, quadrants, tile_set)
+				if debug_gaps:
+					print("  → Using 2 QUARTER tiles (diagonal)")
+				# Diagonal - use 2 quarter tiles
+				# For mesh instances, we need to place them at different positions
+				for quad in quadrants:
+					_place_quarter_tile_at_quadrant(grid_x, grid_z, y_level, quad, tile_set)
 		
 		1:
-			# Single quadrant - use quarter tile
-			_place_quarter_tile(grid_x, grid_z, y_level, quadrants[0], tile_set)
+			# Single quadrant - use quarter tile at specific quadrant position
+			if debug_gaps:
+				print("  → Using QUARTER tile")
+			_place_quarter_tile_at_quadrant(grid_x, grid_z, y_level, quadrants[0], tile_set)
 
 
 ## Check if two quadrants are adjacent
@@ -198,12 +233,21 @@ func _are_quadrants_adjacent(quadrants: Array) -> bool:
 
 ## Place a whole tile
 func _place_tile(grid_x: int, grid_z: int, y_level: int, tile_id: int, rotation: int) -> void:
-	floor_grid.set_cell_item(Vector3i(grid_x, y_level, grid_z), tile_id, rotation)
+	if y_level == floor_grid_base_y:
+		# First layer - use GridMap directly
+		floor_grid.set_cell_item(Vector3i(grid_x, y_level, grid_z), tile_id, rotation)
+		if debug_gaps:
+			print("[DualGridFloor] GridMap tile at (%d, %d) Y=%d, tile_id=%d, rotation=%d" % [grid_x, grid_z, y_level, tile_id, rotation])
+	else:
+		# Additional layers - use MeshInstance3D with Y-offset
+		_place_mesh_instance(grid_x, grid_z, y_level, tile_id, rotation)
 
 
 ## Place a half tile with appropriate rotation
 func _place_half_tile(grid_x: int, grid_z: int, y_level: int, quadrants: Array, tile_set: Dictionary) -> void:
 	var rotation = _get_half_tile_rotation(quadrants)
+	if debug_gaps:
+		print("[DualGridFloor] Half tile at (%d, %d) Y=%d, quadrants=%s, rotation=%d" % [grid_x, grid_z, y_level, quadrants, rotation])
 	_place_tile(grid_x, grid_z, y_level, tile_set["half"], rotation)
 
 
@@ -212,45 +256,59 @@ func _get_half_tile_rotation(quadrants: Array) -> int:
 	var q1 = quadrants[0]
 	var q2 = quadrants[1]
 	
-	# Assuming half tile is modeled to cover top two quadrants by default (0, 1)
-	# Godot GridMap orientations for Y-axis rotation:
-	# 0 = 0°, 16 = 90°, 10 = 180°, 22 = 270°
+	# Quadrant layout:
+	# 0 1
+	# 2 3
 	
-	if (q1 == 0 and q2 == 1) or (q1 == 1 and q2 == 0):
-		return 0  # Top horizontal
+	# Vertical half tiles - swapping left/right
+	if (q1 == 0 and q2 == 2) or (q1 == 2 and q2 == 0):
+		return 16   # Left vertical - 90°
 	elif (q1 == 1 and q2 == 3) or (q1 == 3 and q2 == 1):
-		return 16  # Right vertical (90°)
+		return 22   # Right vertical - 270°
+	
+	# Horizontal half tiles
+	elif (q1 == 0 and q2 == 1) or (q1 == 1 and q2 == 0):
+		return 0  # Top horizontal
 	elif (q1 == 2 and q2 == 3) or (q1 == 3 and q2 == 2):
-		return 10  # Bottom horizontal (180°)
-	elif (q1 == 0 and q2 == 2) or (q1 == 2 and q2 == 0):
-		return 22  # Left vertical (270°)
+		return 10  # Bottom horizontal
 	
 	return 0
 
 
 ## Place two diagonal quarter tiles
-## These go on the SAME y-level since they don't overlap spatially
+## For mesh instances, these go at their specific quadrant positions
 func _place_diagonal_quarters(grid_x: int, grid_z: int, y_level: int, quadrants: Array, tile_set: Dictionary) -> void:
-	# For diagonal quadrants, we can actually place both on the same Y-level
-	# because they occupy different physical quadrants of the cell
 	for quad in quadrants:
-		_place_quarter_tile(grid_x, grid_z, y_level, quad, tile_set)
+		_place_quarter_tile_at_quadrant(grid_x, grid_z, y_level, quad, tile_set)
 
 
-## Place a quarter tile with appropriate rotation
+## Place a quarter tile with appropriate rotation (old method for GridMap)
 func _place_quarter_tile(grid_x: int, grid_z: int, y_level: int, quadrant: int, tile_set: Dictionary) -> void:
 	var rotation = _get_quarter_tile_rotation(quadrant)
 	_place_tile(grid_x, grid_z, y_level, tile_set["quarter"], rotation)
 
 
+## Place a quarter tile at a specific quadrant position (for mesh instances)
+func _place_quarter_tile_at_quadrant(grid_x: int, grid_z: int, y_level: int, quadrant: int, tile_set: Dictionary) -> void:
+	var rotation = _get_quarter_tile_rotation(quadrant)
+	
+	if y_level == floor_grid_base_y:
+		# First layer - use GridMap with GridMap orientation values
+		_place_tile(grid_x, grid_z, y_level, tile_set["quarter"], rotation)
+	else:
+		# Additional layers - use MeshInstance3D with direct quadrant-to-degrees conversion
+		_place_mesh_instance_for_quadrant(grid_x, grid_z, y_level, tile_set["quarter"], quadrant)
+
+
 ## Get rotation for quarter tile based on which quadrant it covers
 func _get_quarter_tile_rotation(quadrant: int) -> int:
-	# Assuming quarter tile is modeled to cover top-left quadrant (0) by default
+	# Testing reverse rotation mapping
+	# Godot GridMap orientations might map differently
 	match quadrant:
-		0: return 0   # Top-left
-		1: return 16  # Top-right (90°)
-		2: return 22  # Bottom-left (270°)
-		3: return 10  # Bottom-right (180°)
+		0: return 0   # Top-left - keep as is
+		1: return 22  # Top-right - trying 270° instead of 90°
+		2: return 16  # Bottom-left - trying 90° instead of 270°
+		3: return 10  # Bottom-right - keep 180°
 	return 0
 
 
@@ -294,12 +352,206 @@ func clear_primary_grid_floors() -> void:
 	var cleared_count = 0
 	
 	for cell in used_cells:
-		if cell.y != floor_y_level:
-			continue
-			
 		var tile_id = primary_grid.get_cell_item(cell)
+		
+		# Clear ALL floor tiles including entry/exit zones (0, 1)
+		# The dual-grid floor system has already replaced them with proper floor meshes
 		if tile_id_to_type.has(tile_id):
 			primary_grid.set_cell_item(cell, GridMap.INVALID_CELL_ITEM)
 			cleared_count += 1
 	
 	print("[DualGridFloor] Cleared ", cleared_count, " floor tiles from primary grid")
+
+
+## Place a MeshInstance for a specific quadrant (Y>0 layers)
+func _place_mesh_instance_for_quadrant(grid_x: int, grid_z: int, y_level: int, tile_id: int, quadrant: int) -> void:
+	if debug_gaps:
+		print("[DualGridFloor] Creating MeshInstance at (%d, %d) Y-level=%d, tile_id=%d, quadrant=%d" % [grid_x, grid_z, y_level, tile_id, quadrant])
+	
+	# Get the mesh from the MeshLibrary
+	var mesh_lib = floor_grid.mesh_library
+	if not mesh_lib or tile_id < 0 or tile_id >= mesh_lib.get_item_list().size():
+		push_warning("[DualGridFloor] Invalid tile_id %d for mesh instance" % tile_id)
+		return
+	
+	var mesh = mesh_lib.get_item_mesh(tile_id)
+	if not mesh:
+		push_warning("[DualGridFloor] No mesh found for tile_id %d" % tile_id)
+		return
+	
+	# Create MeshInstance3D
+	var mesh_instance = MeshInstance3D.new()
+	mesh_instance.mesh = mesh
+	
+	# Position the mesh
+	# mesh_container is a child of floor_grid, so positions are in floor_grid's local space
+	# GridMap cells are simply at their grid coordinates in this space
+	var local_pos = Vector3(
+		grid_x * floor_grid.cell_size.x,
+		0.5,
+		grid_z * floor_grid.cell_size.z
+	)
+	mesh_instance.position = local_pos
+	
+	if debug_gaps:
+		print("[DualGridFloor]   MeshInstance local pos: %s (grid cell: %d, %d)" % [local_pos, grid_x, grid_z])
+	
+	# Apply rotation using GridMap's basis system
+	# Instead of converting to degrees, get the actual basis GridMap would use
+	# GridMap orientations: 0, 10, 16, 22
+	var gridmap_orientation = 0
+	match quadrant:
+		0: gridmap_orientation = 0
+		1: gridmap_orientation = 22
+		2: gridmap_orientation = 16
+		3: gridmap_orientation = 10
+	
+	# Get the basis from GridMap's mesh library
+	var basis = floor_grid.mesh_library.get_item_mesh_transform(tile_id).basis
+	var orientation_basis = Basis()
+	
+	# Apply GridMap's orientation to the basis
+	# GridMap uses orthogonal basis indices
+	match gridmap_orientation:
+		0:  # No rotation
+			orientation_basis = Basis()
+		10: # 180° rotation
+			orientation_basis = Basis(Vector3.DOWN, Vector3.BACK, Vector3.LEFT)
+		16: # 90° rotation (one direction)
+			orientation_basis = Basis(Vector3.BACK, Vector3.UP, Vector3.LEFT)
+		22: # 270° rotation (other direction)
+			orientation_basis = Basis(Vector3.FORWARD, Vector3.UP, Vector3.RIGHT)
+	
+	mesh_instance.basis = orientation_basis
+	
+	if debug_gaps:
+		print("[DualGridFloor]   MeshInstance using GridMap orientation: %d (quadrant %d)" % [gridmap_orientation, quadrant])
+	
+	# Add to container
+	mesh_container.add_child(mesh_instance)
+
+
+## Place a mesh instance for additional layers (Y > 0)
+## This allows us to offset the mesh down so it renders at the same height as Y=0 tiles
+func _place_mesh_instance(grid_x: int, grid_z: int, y_level: int, tile_id: int, rotation: int) -> void:
+	if debug_gaps:
+		print("[DualGridFloor] Creating MeshInstance at (%d, %d) Y-level=%d, tile_id=%d" % [grid_x, grid_z, y_level, tile_id])
+	
+	# Get the mesh from the MeshLibrary
+	var mesh_lib = floor_grid.mesh_library
+	if not mesh_lib or tile_id < 0 or tile_id >= mesh_lib.get_item_list().size():
+		push_warning("[DualGridFloor] Invalid tile_id %d for mesh instance" % tile_id)
+		return
+	
+	var mesh = mesh_lib.get_item_mesh(tile_id)
+	if not mesh:
+		push_warning("[DualGridFloor] No mesh found for tile_id %d" % tile_id)
+		return
+	
+	# Create MeshInstance3D
+	var mesh_instance = MeshInstance3D.new()
+	mesh_instance.mesh = mesh
+	
+	# Position the mesh
+	# MeshInstances are parented to mesh_container which is a child of floor_grid
+	# So positions are relative to floor_grid (which is already offset by 0.5, 0, 0.5)
+	# We just need grid coordinates * cell_size
+	var local_pos = Vector3(
+		grid_x * floor_grid.cell_size.x,
+		0.5,  # Match GridMap's internal Y offset
+		grid_z * floor_grid.cell_size.z
+	)
+	mesh_instance.position = local_pos
+	
+	if debug_gaps:
+		var global_pos = mesh_container.global_position + local_pos
+		print("[DualGridFloor]   MeshInstance local pos: %s, global pos: %s" % [local_pos, global_pos])
+	
+	# Apply rotation
+	# MeshInstances need different rotation than GridMap orientations
+	var rotation_y = _get_meshinstance_rotation_degrees(rotation)
+	mesh_instance.rotation_degrees.y = rotation_y
+	
+	if debug_gaps:
+		print("[DualGridFloor]   MeshInstance rotation: %s degrees" % rotation_y)
+	
+	# Add to container
+	mesh_container.add_child(mesh_instance)
+
+
+
+## Convert GridMap orientation to rotation degrees for MeshInstances
+func _get_meshinstance_rotation_degrees(gridmap_orientation: int) -> float:
+	# MeshInstances rotate differently than GridMap
+	# Based on testing, these are the correct degree values:
+	match gridmap_orientation:
+		0: return 0.0    # Quadrant 0
+		22: return 270.0 # Quadrant 1 - was 90, needs to be 270
+		16: return 90.0  # Quadrant 2 - was 270, needs to be 90
+		10: return 180.0 # Quadrant 3
+		_: return 0.0
+
+
+## Convert GridMap orientation to rotation degrees
+func _get_rotation_degrees_from_orientation(orientation: int) -> float:
+	# GridMap orientations produce these visual rotations:
+	# 0 → 0° visual rotation
+	# 10 → 180° visual rotation  
+	# 16 → 270° visual rotation (or -90°)
+	# 22 → 90° visual rotation (or -270°)
+	match orientation:
+		0: return 0.0
+		10: return 180.0
+		16: return 270.0  
+		22: return 90.0
+		_: return 0.0
+
+
+## Get the offset for a specific quadrant within a cell
+## Quadrants: 0=TL, 1=TR, 2=BL, 3=BR
+func _get_quadrant_offset(quadrant: int) -> Vector3:
+	var half_cell_x = floor_grid.cell_size.x * 0.25
+	var half_cell_z = floor_grid.cell_size.z * 0.25
+	
+	match quadrant:
+		0: return Vector3(-half_cell_x, 0, -half_cell_z)  # Top-left
+		1: return Vector3(half_cell_x, 0, -half_cell_z)   # Top-right
+		2: return Vector3(-half_cell_x, 0, half_cell_z)   # Bottom-left
+		3: return Vector3(half_cell_x, 0, half_cell_z)    # Bottom-right
+	
+	return Vector3.ZERO
+
+
+## Place a mesh instance with a quadrant offset for quarter tiles
+func _place_mesh_instance_with_offset(grid_x: int, grid_z: int, y_level: int, tile_id: int, rotation: int, offset: Vector3) -> void:
+	if debug_gaps:
+		print("[DualGridFloor] Creating MeshInstance WITH OFFSET at (%d, %d) Y-level=%d, tile_id=%d, offset=%s" % [grid_x, grid_z, y_level, tile_id, offset])
+	
+	# Get the mesh from the MeshLibrary
+	var mesh_lib = floor_grid.mesh_library
+	if not mesh_lib or tile_id < 0 or tile_id >= mesh_lib.get_item_list().size():
+		push_warning("[DualGridFloor] Invalid tile_id %d for mesh instance" % tile_id)
+		return
+	
+	var mesh = mesh_lib.get_item_mesh(tile_id)
+	if not mesh:
+		push_warning("[DualGridFloor] No mesh found for tile_id %d" % tile_id)
+		return
+	
+	# Create MeshInstance3D
+	var mesh_instance = MeshInstance3D.new()
+	mesh_instance.mesh = mesh
+	
+	# Position with quadrant offset - GridMap internally offsets cells by +0.5 in Y
+	mesh_instance.position = Vector3(
+		grid_x * floor_grid.cell_size.x + offset.x,
+		0.5,  # Match GridMap's internal Y offset
+		grid_z * floor_grid.cell_size.z + offset.z
+	)
+	
+	# Apply rotation
+	var rotation_y = _get_rotation_degrees_from_orientation(rotation)
+	mesh_instance.rotation_degrees.y = rotation_y
+	
+	# Add to container
+	mesh_container.add_child(mesh_instance)

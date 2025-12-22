@@ -17,12 +17,14 @@ var current_map: Node3D = null
 var current_level_index: int = 0
 var level_sequence: Array[PackedScene] = []
 
+
 func _ready():
 	# Set up level sequence
 	level_sequence = [starting_map, level_1a, level_1b, level_1c, town_1, ending_map]
 	
 	if starting_map:
 		load_map(starting_map)
+
 
 func load_map(map_scene: PackedScene) -> void:
 	# Fade to black first
@@ -47,7 +49,8 @@ func load_map(map_scene: PackedScene) -> void:
 	
 	await get_tree().process_frame
 	
-	var map_gen = current_map.get_node("GridMap")
+	# Find the map generator - could be named differently depending on map type
+	var map_gen = find_map_generator(current_map)
 	
 	if map_gen and map_gen.has_method("start_generation"):
 		map_gen.player_reached_exit.connect(_on_player_reached_exit)
@@ -76,11 +79,52 @@ func load_map(map_scene: PackedScene) -> void:
 	# Finally fade back in
 	await fade_rect.fade_in_wait()
 
+
+func find_map_generator(map_root: Node) -> Node:
+	"""
+	Find the map generator node in the loaded map scene.
+	Searches for nodes with generation capability in this priority:
+	1. Direct child named "GridMap" (for generated maps)
+	2. Direct child that is a ManualMap
+	3. Direct child named "PrimaryGridMap" (for dual-grid manual maps)
+	4. Any GridMap child
+	"""
+	
+	# Try common names first
+	if map_root.has_node("GridMap"):
+		return map_root.get_node("GridMap")
+	
+	if map_root.has_node("PrimaryGridMap"):
+		return map_root.get_node("PrimaryGridMap")
+	
+	# Search for ManualMap or any GridMap
+	for child in map_root.get_children():
+		# Check if it's a ManualMap
+		if child is ManualMap:
+			print("GameManager: Found ManualMap: ", child.name)
+			return child
+		
+		# Check if it's a GridMap with generation capabilities
+		if child is GridMap and child.has_method("start_generation"):
+			print("GameManager: Found GridMap with generation: ", child.name)
+			return child
+	
+	# Fallback: just find any GridMap
+	for child in map_root.get_children():
+		if child is GridMap:
+			print("GameManager: Found GridMap (fallback): ", child.name)
+			return child
+	
+	push_warning("GameManager: No map generator found in ", map_root.name)
+	return null
+
+
 func _on_player_reached_exit():
 	current_level_index += 1
 	
 	if current_level_index < level_sequence.size():
 		load_map(level_sequence[current_level_index])
+
 
 func clear_level_entities():
 	var world = get_parent()
