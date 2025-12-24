@@ -182,18 +182,18 @@ func _get_floor_type_for_quadrant(x: int, y: int, z: int, quadrant: int):
 	if found_types.is_empty():
 		return null
 	
-	# For each quadrant, prefer the floor type that's on the side it faces
-	# Quadrant 0 (top-left): prefer left (-x) or up (-z) neighbor
-	# Quadrant 1 (top-right): prefer right (+x) or up (-z) neighbor  
-	# Quadrant 2 (bottom-left): prefer left (-x) or down (+z) neighbor
-	# Quadrant 3 (bottom-right): prefer right (+x) or down (+z) neighbor
+	# For each quadrant, check the OPPOSITE direction (inward to room, not outward)
+	# Quadrant 0 (top-left): look RIGHT (+x) and DOWN (+z) instead of left/up
+	# Quadrant 1 (top-right): look LEFT (-x) and DOWN (+z) instead of right/up
+	# Quadrant 2 (bottom-left): look RIGHT (+x) and UP (-z) instead of left/down
+	# Quadrant 3 (bottom-right): look LEFT (-x) and UP (-z) instead of right/down
 	
 	var preferred_positions = []
 	match quadrant:
-		0: preferred_positions = [Vector3i(x - 1, y, z), Vector3i(x, y, z - 1)]
-		1: preferred_positions = [Vector3i(x + 1, y, z), Vector3i(x, y, z - 1)]
-		2: preferred_positions = [Vector3i(x - 1, y, z), Vector3i(x, y, z + 1)]
-		3: preferred_positions = [Vector3i(x + 1, y, z), Vector3i(x, y, z + 1)]
+		0: preferred_positions = [Vector3i(x + 1, y, z), Vector3i(x, y, z + 1)]
+		1: preferred_positions = [Vector3i(x - 1, y, z), Vector3i(x, y, z + 1)]
+		2: preferred_positions = [Vector3i(x + 1, y, z), Vector3i(x, y, z - 1)]
+		3: preferred_positions = [Vector3i(x - 1, y, z), Vector3i(x, y, z - 1)]
 	
 	# Check preferred neighbors first
 	for pref_pos in preferred_positions:
