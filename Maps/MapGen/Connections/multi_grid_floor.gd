@@ -169,42 +169,57 @@ func _get_floor_type_for_quadrant(x: int, y: int, z: int, quadrant: int):
 		# This is a floor tile, return its type
 		return floor_type
 	
+	# This is a wall - add debug
+	print("[Wall] Cell (%d,%d) quadrant %d is a wall (ID %d)" % [x, z, quadrant, tile_id])
+	
 	# This is NOT a floor tile (wall, door, etc)
-	# Each quadrant should look at its adjacent neighbors (cardinal directions)
-	# Quadrant layout: 0=TL, 1=TR, 2=BL, 3=BR
+	# Check all 4 cardinal neighbors to find floor tiles
+	var neighbor_positions = [
+		Vector3i(x - 1, y, z),  # Left
+		Vector3i(x + 1, y, z),  # Right
+		Vector3i(x, y, z - 1),  # Up
+		Vector3i(x, y, z + 1)   # Down
+	]
 	
-	var check_positions = []
-	match quadrant:
-		0:  # Top-left - check left and up neighbors
-			check_positions = [
-				Vector3i(x - 1, y, z),  # Left
-				Vector3i(x, y, z - 1)   # Up
-			]
-		1:  # Top-right - check right and up neighbors
-			check_positions = [
-				Vector3i(x + 1, y, z),  # Right
-				Vector3i(x, y, z - 1)   # Up
-			]
-		2:  # Bottom-left - check left and down neighbors
-			check_positions = [
-				Vector3i(x - 1, y, z),  # Left
-				Vector3i(x, y, z + 1)   # Down
-			]
-		3:  # Bottom-right - check right and down neighbors
-			check_positions = [
-				Vector3i(x + 1, y, z),  # Right
-				Vector3i(x, y, z + 1)   # Down
-			]
-	
-	# Check both neighbors, return the first valid floor type found
-	for check_pos in check_positions:
+	var found_types = []
+	for check_pos in neighbor_positions:
 		var neighbor_id = primary_grid.get_cell_item(check_pos)
 		if neighbor_id != GridMap.INVALID_CELL_ITEM:
 			var neighbor_type = tile_id_to_type.get(neighbor_id)
+			if neighbor_type != null and not found_types.has(neighbor_type):
+				found_types.append(neighbor_type)
+	
+	# If we found floor types, decide which to use based on quadrant
+	if found_types.is_empty():
+		return null
+	
+	# For each quadrant, prefer the floor type that's on the side it faces
+	# Quadrant 0 (top-left): prefer left (-x) or up (-z) neighbor
+	# Quadrant 1 (top-right): prefer right (+x) or up (-z) neighbor  
+	# Quadrant 2 (bottom-left): prefer left (-x) or down (+z) neighbor
+	# Quadrant 3 (bottom-right): prefer right (+x) or down (+z) neighbor
+	
+	var preferred_positions = []
+	match quadrant:
+		0: preferred_positions = [Vector3i(x - 1, y, z), Vector3i(x, y, z - 1)]
+		1: preferred_positions = [Vector3i(x + 1, y, z), Vector3i(x, y, z - 1)]
+		2: preferred_positions = [Vector3i(x - 1, y, z), Vector3i(x, y, z + 1)]
+		3: preferred_positions = [Vector3i(x + 1, y, z), Vector3i(x, y, z + 1)]
+	
+	# Check preferred neighbors first
+	for pref_pos in preferred_positions:
+		var neighbor_id = primary_grid.get_cell_item(pref_pos)
+		if neighbor_id != GridMap.INVALID_CELL_ITEM:
+			var neighbor_type = tile_id_to_type.get(neighbor_id)
 			if neighbor_type != null:
+				print("  → Using %s from preferred neighbor (%d,%d)" % [neighbor_type, pref_pos.x, pref_pos.z])
 				return neighbor_type
 	
-	# No valid neighbor floor found
+	# Fallback: return first found type
+	if not found_types.is_empty():
+		print("  → Fallback to %s" % found_types[0])
+		return found_types[0]
+	
 	return null
 
 
