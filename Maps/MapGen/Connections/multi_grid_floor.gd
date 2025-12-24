@@ -166,14 +166,8 @@ func _get_floor_type_for_quadrant(x: int, y: int, z: int, quadrant: int):
 		# This is a floor tile, return its type
 		return floor_type
 	
-	# Check if this is a door tile (also acts like a wall)
-	var is_door = door_tile_ids.has(tile_id)
-	
-	# This is a wall or door - add debug
-	if is_door:
-		print("[Door] Cell (%d,%d) quadrant %d is a door (ID %d)" % [x, z, quadrant, tile_id])
-	else:
-		print("[Wall] Cell (%d,%d) quadrant %d is a wall (ID %d)" % [x, z, quadrant, tile_id])
+	# This is a wall or door tile (not a floor)
+	# Check neighbors to determine floor type
 	
 	# For each quadrant, check OPPOSITE directions (into the room)
 	# Q0 (top-left): look RIGHT and DOWN (away from top-left edge)
@@ -203,7 +197,6 @@ func _get_floor_type_for_quadrant(x: int, y: int, z: int, quadrant: int):
 		if neighbor_id != GridMap.INVALID_CELL_ITEM:
 			var neighbor_type = tile_id_to_type.get(neighbor_id)
 			if neighbor_type != null:
-				print("  → Using %s from cardinal" % neighbor_type)
 				return neighbor_type
 	
 	# If both cardinals are walls, check diagonal
@@ -211,7 +204,6 @@ func _get_floor_type_for_quadrant(x: int, y: int, z: int, quadrant: int):
 	if diagonal_id != GridMap.INVALID_CELL_ITEM:
 		var diagonal_type = tile_id_to_type.get(diagonal_id)
 		if diagonal_type != null:
-			print("  → Using %s from diagonal (corner)" % diagonal_type)
 			return diagonal_type
 	
 	return null

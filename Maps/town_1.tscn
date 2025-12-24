@@ -1,13 +1,14 @@
-[gd_scene load_steps=5 format=3 uid="uid://de1e8ihkli4jp"]
+[gd_scene load_steps=6 format=3 uid="uid://de1e8ihkli4jp"]
 
 [ext_resource type="MeshLibrary" uid="uid://dycv0mgmu6mlo" path="res://Assets/3D/Tiles/tiles_library.tres" id="1_uoi22"]
 [ext_resource type="Script" uid="uid://dnfwdsx4pukaw" path="res://Maps/manual_map.gd" id="2_0aufl"]
 [ext_resource type="PackedScene" uid="uid://cy5ymqs8uk24x" path="res://Characters/NPCs/npc_trader.tscn" id="2_1y4qr"]
 [ext_resource type="Resource" uid="uid://cwn4875vg684d" path="res://Maps/MapGen/Connections/interior_wall_connector.tres" id="3_uoi22"]
+[ext_resource type="MeshLibrary" uid="uid://drskghn0p7pwn" path="res://Assets/3D/Tiles/Floors/floor_library.tres" id="4_pd2th"]
 
 [node name="Town1" type="Node3D"]
 
-[node name="GridMap" type="GridMap" parent="."]
+[node name="PrimaryGridMap" type="GridMap" parent="."]
 mesh_library = ExtResource("1_uoi22")
 cell_size = Vector3(1, 1, 1)
 data = {
@@ -17,6 +18,26 @@ script = ExtResource("2_0aufl")
 is_passive_map = true
 interior_wall_connector = ExtResource("3_uoi22")
 metadata/_editor_floor_ = Vector3(0, 0, 0)
+
+[node name="FloorGridMap1" type="GridMap" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0, 0.5)
+mesh_library = ExtResource("4_pd2th")
+cell_size = Vector3(1, 1, 1)
+
+[node name="FloorGridMap2" type="GridMap" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0, 0.5)
+mesh_library = ExtResource("4_pd2th")
+cell_size = Vector3(1, 1, 1)
+
+[node name="FloorGridMap3" type="GridMap" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0, 0.5)
+mesh_library = ExtResource("4_pd2th")
+cell_size = Vector3(1, 1, 1)
+
+[node name="FloorGridMap4" type="GridMap" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0, 0.5)
+mesh_library = ExtResource("4_pd2th")
+cell_size = Vector3(1, 1, 1)
 
 [node name="NPC_Trader1" parent="." instance=ExtResource("2_1y4qr")]
 transform = Transform3D(-0.0036023369, 0, -0.7999919, 0, 0.8, 0, 0.7999919, 0, -0.0036023369, -5.054, 0.5, 6.017)

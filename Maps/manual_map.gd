@@ -5,6 +5,7 @@ class_name ManualMap
 @export var entrance_tile_id: int = 0
 @export var exit_tile_id: int = 1
 @export var grass_tile_id: int = 6
+@export var water_tile_id: int = 7
 @export var stone_road_tile_id: int = 2
 @export var dirt_road_tile_id: int = 3
 @export var interior_wall_tile_id: int = 8
@@ -12,7 +13,6 @@ class_name ManualMap
 @export var interior_floor_tile_id: int = 5
 @export var door_tile_id: int = 27
 @export var door_floor_tile_id: int = 4
-@export var water_tile_id: int = 7
 @export var is_passive_map: bool = false  # Disable fog/vision for towns
 
 # Advanced wall connections

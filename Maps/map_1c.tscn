@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://dkyaty4hl4h2d"]
+[gd_scene load_steps=10 format=3 uid="uid://dkyaty4hl4h2d"]
 
 [ext_resource type="MeshLibrary" uid="uid://dycv0mgmu6mlo" path="res://Assets/3D/Tiles/tiles_library.tres" id="1_e4sih"]
 [ext_resource type="Script" uid="uid://4bip1a0su263" path="res://Maps/MapGen/act1a_mapgen.gd" id="2_aeucc"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://mahss0budjch" path="res://Characters/Enemies/enemy1.tscn" id="4_e4sih"]
 [ext_resource type="PackedScene" uid="uid://ddi31cpnmidio" path="res://Characters/Enemies/enemy2.tscn" id="5_mblgw"]
 [ext_resource type="Resource" uid="uid://cwn4875vg684d" path="res://Maps/MapGen/Connections/interior_wall_connector.tres" id="6_e4sih"]
+[ext_resource type="MeshLibrary" uid="uid://drskghn0p7pwn" path="res://Assets/3D/Tiles/Floors/floor_library.tres" id="7_mblgw"]
 
 [sub_resource type="Resource" id="Resource_gb54u"]
 script = ExtResource("3_xknly")
@@ -20,10 +21,30 @@ metadata/_custom_type_script = "uid://rc6qhmcd5qi6"
 
 [node name="Map1c" type="Node3D"]
 
-[node name="GridMap" type="GridMap" parent="."]
+[node name="PrimaryGridMap" type="GridMap" parent="."]
 mesh_library = ExtResource("1_e4sih")
 cell_size = Vector3(1, 1, 1)
 script = ExtResource("2_aeucc")
 enemy_spawn_list = Array[ExtResource("3_xknly")]([SubResource("Resource_gb54u"), SubResource("Resource_8i1ca")])
 interior_wall_connector = ExtResource("6_e4sih")
 metadata/_editor_floor_ = Vector3(0, 3, 0)
+
+[node name="FloorGridMap1" type="GridMap" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0, 0.5)
+mesh_library = ExtResource("7_mblgw")
+cell_size = Vector3(1, 1, 1)
+
+[node name="FloorGridMap2" type="GridMap" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0, 0.5)
+mesh_library = ExtResource("7_mblgw")
+cell_size = Vector3(1, 1, 1)
+
+[node name="FloorGridMap3" type="GridMap" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0, 0.5)
+mesh_library = ExtResource("7_mblgw")
+cell_size = Vector3(1, 1, 1)
+
+[node name="FloorGridMap4" type="GridMap" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0, 0.5)
+mesh_library = ExtResource("7_mblgw")
+cell_size = Vector3(1, 1, 1)

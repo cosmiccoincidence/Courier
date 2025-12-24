@@ -26,6 +26,7 @@ var active_chunks: Dictionary = {}
 @export var entrance_tile_id: int = 0
 @export var exit_tile_id: int = 1
 @export var grass_tile_id: int = 6
+@export var water_tile_id: int = 7
 @export var stone_road_tile_id: int = 2
 @export var dirt_road_tile_id: int = 3
 @export var interior_wall_tile_id: int = 8
@@ -33,6 +34,48 @@ var active_chunks: Dictionary = {}
 @export var interior_floor_tile_id: int = 5
 @export var door_tile_id: int = 27
 @export var door_floor_tile_id: int = 4
+
+# Floor Grid Tile IDs - for dual-grid floor meshes
+@export_group("Dual-Grid Floor Tiles")
+@export_subgroup("Floor Types")
+
+@export var grass_quarter: int = 0
+@export var grass_half: int = 1
+@export var grass_threequarter: int = 2
+@export var grass_whole: int = 3
+
+@export var interior_floor_quarter: int = 4
+@export var interior_floor_half: int = 5
+@export var interior_floor_threequarter: int = 6
+@export var interior_floor_whole: int = 7
+
+@export var water_quarter: int = 8
+@export var water_half: int = 9
+@export var water_threequarter: int = 10
+@export var water_whole: int = 11
+
+@export var stone_road_quarter: int = 12
+@export var stone_road_half: int = 13
+@export var stone_road_threequarter: int = 14
+@export var stone_road_whole: int = 15
+
+@export var dirt_road_quarter: int = 16
+@export var dirt_road_half: int = 17
+@export var dirt_road_threequarter: int = 18
+@export var dirt_road_whole: int = 19
+
+# Dual-Grid system
+@export_subgroup("Dual-Grid Settings")
+@export var enable_multi_grid_floors: bool = true
+@export var floor_mesh_library: MeshLibrary  # Separate MeshLibrary for floor tiles
+
+# Floor grids for dual-grid system (need 4 for multi-layer support)
+@onready var floor_grid_1: GridMap = $"../FloorGridMap1"
+@onready var floor_grid_2: GridMap = $"../FloorGridMap2"
+@onready var floor_grid_3: GridMap = $"../FloorGridMap3"
+@onready var floor_grid_4: GridMap = $"../FloorGridMap4"
+
+var multi_grid_processor: MultiGridFloor
 
 # Generation settings
 @export var use_seed: bool = false
@@ -64,6 +107,11 @@ var is_generating: bool = false
 var entrance_zone_tiles: Array = []
 var exit_zone_tiles: Array = []
 
+# Cached entry/exit positions (stored before clearing tiles)
+var cached_entrance_pos: Vector3 = Vector3.ZERO
+var cached_exit_pos: Vector3 = Vector3.ZERO
+var has_cached_positions: bool = false
+
 signal generation_started
 signal generation_complete
 signal player_reached_exit
@@ -71,18 +119,34 @@ signal player_reached_exit
 # Tile connections
 @export var interior_wall_connector: AdvancedWallConnector
 
-# Dual-Grid system
-@onready var primary_grid = $PrimaryGridMap
-@onready var floor_grid = $FloorGridMap
-
 # ============================================================================
 # MAIN GENERATION FLOW
 # ============================================================================
 
 func _ready():
-	# Offset the floor grid
-	floor_grid.position = Vector3(0.5, 0, 0.5)
-	pass
+	# Setup floor grids
+	setup_floor_grids()
+
+func setup_floor_grids():
+	"""Initialize floor grids with proper offset and collision settings"""
+	var floor_grids = [floor_grid_1, floor_grid_2, floor_grid_3, floor_grid_4]
+	
+	for i in range(floor_grids.size()):
+		var grid = floor_grids[i]
+		if grid:
+			# Offset for dual-grid system
+			grid.position = Vector3(0.5, 0, 0.5)
+			
+			# Assign floor MeshLibrary if provided
+			if floor_mesh_library:
+				grid.mesh_library = floor_mesh_library
+			
+			# Only enable collision on first grid
+			if i > 0:
+				grid.collision_layer = 0
+				grid.collision_mask = 0
+		else:
+			push_warning("[CoreMapGen] Floor grid %d not found!" % (i + 1))
 
 func start_generation():
 	generate_map()
@@ -169,8 +233,13 @@ func _generate_map_internal():
 	place_entrance_zone()
 	place_exit_zone()
 	
-	# PHASE 6+: FEATURES (handled by subclasses)
+	# PHASE 6: FEATURES (handled by subclasses)
 	generate_features()
+	
+	# PHASE 7: MULTI-GRID FLOOR PROCESSING
+	if enable_multi_grid_floors:
+		print("\n--- PHASE 9: Multi-Grid Floor Processing ---")
+		process_multi_grid_floors()
 	
 	print("\n=== Map Generation Complete ===")
 
@@ -179,6 +248,19 @@ func generate_features():
 	pass
 
 func validate_map() -> bool:
+	# After multi-grid processing, tiles are cleared, so check cached positions
+	if has_cached_positions:
+		var has_entrance = cached_entrance_pos != Vector3.ZERO
+		var has_exit = cached_exit_pos != Vector3.ZERO
+		
+		if not has_entrance:
+			print("Validation failed: No entrance zone found (cached)")
+		if not has_exit:
+			print("Validation failed: No exit zone found (cached)")
+		
+		return has_entrance and has_exit
+	
+	# Before multi-grid processing, check tiles directly
 	var has_entrance = false
 	var has_exit = false
 	var used_cells = get_used_cells()
@@ -675,32 +757,112 @@ func place_exit_zone():
 	print("Exit zone placed at ", center_floor, " - ", placed, " tiles")
 
 # ============================================================================
+# PHASE 7: MULTI-GRID FLOOR PROCESSING
+# ============================================================================
+
+func _cache_entry_exit_positions():
+	"""Store entry/exit positions before they get cleared by multi-grid processing"""
+	var used_cells = get_used_cells()
+	
+	for cell in used_cells:
+		var tile_id = get_cell_item(cell)
+		if tile_id == entrance_tile_id:
+			cached_entrance_pos = map_to_local(cell)
+			cached_entrance_pos.y = 0.5
+		elif tile_id == exit_tile_id:
+			cached_exit_pos = map_to_local(cell)
+			cached_exit_pos.y = 0.5
+	
+	has_cached_positions = true
+	print("[CoreMapGen] Cached entrance position: ", cached_entrance_pos)
+	print("[CoreMapGen] Cached exit position: ", cached_exit_pos)
+
+func process_multi_grid_floors():
+	"""Set up and process the multi-grid floor system"""
+	
+	# IMPORTANT: Cache entry/exit positions BEFORE clearing tiles
+	_cache_entry_exit_positions()
+	
+	# Create the processor with all 4 floor grids
+	var floor_grids = [floor_grid_1, floor_grid_2, floor_grid_3, floor_grid_4]
+	multi_grid_processor = MultiGridFloor.new(self, floor_grids)
+	
+	# Map primary grid tile IDs to floor type names
+	multi_grid_processor.map_tile_to_type(entrance_tile_id, "stone_road")
+	multi_grid_processor.map_tile_to_type(exit_tile_id, "stone_road")
+	multi_grid_processor.map_tile_to_type(stone_road_tile_id, "stone_road")
+	multi_grid_processor.map_tile_to_type(dirt_road_tile_id, "dirt_road")
+	multi_grid_processor.map_tile_to_type(interior_floor_tile_id, "interior_floor")
+	multi_grid_processor.map_tile_to_type(grass_tile_id, "grass")
+	multi_grid_processor.map_tile_to_type(water_tile_id, "water")
+	
+	# Register floor types with their tile IDs from the floor grid MeshLibrary
+	multi_grid_processor.register_floor_type("interior_floor", {
+		"whole": interior_floor_whole,
+		"half": interior_floor_half,
+		"threequarter": interior_floor_threequarter,
+		"quarter": interior_floor_quarter
+	})
+	
+	multi_grid_processor.register_floor_type("grass", {
+		"whole": grass_whole,
+		"half": grass_half,
+		"threequarter": grass_threequarter,
+		"quarter": grass_quarter
+	})
+	
+	multi_grid_processor.register_floor_type("stone_road", {
+		"whole": stone_road_whole,
+		"half": stone_road_half,
+		"threequarter": stone_road_threequarter,
+		"quarter": stone_road_quarter
+	})
+	
+	multi_grid_processor.register_floor_type("dirt_road", {
+		"whole": dirt_road_whole,
+		"half": dirt_road_half,
+		"threequarter": dirt_road_threequarter,
+		"quarter": dirt_road_quarter
+	})
+	
+	multi_grid_processor.register_floor_type("water", {
+		"whole": water_whole,
+		"half": water_half,
+		"threequarter": water_threequarter,
+		"quarter": water_quarter
+	})
+	
+	# Register door tiles (treated like walls but cleared after processing)
+	multi_grid_processor.register_door_tiles([door_floor_tile_id])
+	
+	# Process the multi-grid floors (this also clears primary grid automatically)
+	multi_grid_processor.process_multi_grid_floors()
+
+# ============================================================================
 # EXIT DETECTION
 # ============================================================================
 
 func setup_exit_detection():
-	var used_cells = get_used_cells()
+	"""Set up exit detection area - uses cached position after multi-grid processing"""
+	if not has_cached_positions:
+		push_warning("[CoreMapGen] Cannot setup exit detection - positions not cached")
+		return
 	
-	for cell in used_cells:
-		if get_cell_item(cell) == exit_tile_id:
-			var exit_area = Area3D.new()
-			exit_area.name = "ExitDetector_" + str(cell)
-			
-			var collision_shape = CollisionShape3D.new()
-			var box_shape = BoxShape3D.new()
-			box_shape.size = Vector3(1, 2, 1)
-			collision_shape.shape = box_shape
-			
-			exit_area.add_child(collision_shape)
-			add_child(exit_area)
-			
-			var world_pos = map_to_local(cell)
-			world_pos.y = 1
-			exit_area.global_position = world_pos
-			
-			exit_area.body_entered.connect(_on_exit_area_entered)
+	var exit_area = Area3D.new()
+	exit_area.name = "ExitDetector"
 	
-	print("Exit detection set up")
+	var collision_shape = CollisionShape3D.new()
+	var box_shape = BoxShape3D.new()
+	box_shape.size = Vector3(2, 2, 2)  # Larger area to cover the zone
+	collision_shape.shape = box_shape
+	
+	exit_area.add_child(collision_shape)
+	add_child(exit_area)
+	
+	exit_area.global_position = cached_exit_pos
+	exit_area.body_entered.connect(_on_exit_area_entered)
+	
+	print("[CoreMapGen] Created exit detector at cached position: ", cached_exit_pos)
 
 func _on_exit_area_entered(body: Node3D):
 	if exit_triggered:
@@ -716,6 +878,11 @@ func _on_exit_area_entered(body: Node3D):
 # ============================================================================
 
 func get_entrance_zone_spawn_position() -> Vector3:
+	"""Get spawn position at entrance - uses cached position after multi-grid processing"""
+	if has_cached_positions:
+		return cached_entrance_pos
+	
+	# Fallback: try to find entrance tiles (before multi-grid processing)
 	if entrance_zone_tiles.size() == 0:
 		return Vector3.ZERO
 	
