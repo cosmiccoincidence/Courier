@@ -9,6 +9,10 @@ class_name BaseItem
 @export var stackable: bool = false
 @export var max_stack_size: int = 99
 
+# NEW: Level-based system
+var item_level: int = 1  # Set by loot system when spawned
+var rolled_stats: Dictionary = {}  # Future: store randomized stats based on item_level
+
 var is_hovered: bool = false
 var label_3d: Label3D
 var collision_body: CollisionObject3D
@@ -190,10 +194,29 @@ func create_rounded_rect_texture() -> ImageTexture:
 
 func update_label_text():
 	if label_3d:
+		var display_text = item_name
+		
+		# Show stack count if stackable
 		if stackable and stack_count > 1:
-			label_3d.text = "%s (x%d)" % [item_name, stack_count]
-		else:
-			label_3d.text = item_name
+			display_text = "%s (x%d)" % [item_name, stack_count]
+		
+		label_3d.text = display_text
+
+# NEW: Method called by loot system to set the item level
+func set_item_level(level: int):
+	item_level = level
+	update_label_text()  # Update label to show level
+	
+	# FUTURE: Roll stats based on item_level
+	# roll_item_stats()
+
+# FUTURE: Roll randomized stats based on item_level
+func roll_item_stats():
+	# Example: Higher item_level = better stats
+	# rolled_stats["damage"] = base_damage + (item_level * damage_per_level) + randi_range(-variance, variance)
+	# rolled_stats["armor"] = base_armor + (item_level * armor_per_level)
+	# etc.
+	pass
 
 func pickup():
 	# Prevent duplicate pickups

@@ -20,6 +20,8 @@ config/icon="res://icon.svg"
 Inventory="*res://Systems/Inventory/inventory.gd"
 Equipment="*res://Systems/Inventory/equipment.gd"
 TimeManager="*res://Systems/time_manager.gd"
+LootManager="*res://Systems/Loot/loot_manager.tscn"
+DebugManager="*res://Systems/debug_manager.gd"
 
 [display]
 

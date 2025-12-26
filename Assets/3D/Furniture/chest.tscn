@@ -1,8 +1,4 @@
-[gd_scene load_steps=8 format=4 uid="uid://bx6chqk5r8wao"]
-
-[ext_resource type="Script" uid="uid://cjdokt8pp5v4k" path="res://Assets/3D/Furniture/chest.gd" id="1_xt0u6"]
-[ext_resource type="Resource" uid="uid://iq0gmn8r5k3c" path="res://Systems/Loot/LootTables/chest1_loot.tres" id="2_1jufw"]
-[ext_resource type="AudioStream" uid="uid://j3x1tu5ppy0l" path="res://Assets/Audio/Furniture/Chest.wav" id="3_oja10"]
+[gd_scene load_steps=5 format=4 uid="uid://bx6chqk5r8wao"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_s2fn0"]
 resource_name = "tan"
@@ -46,10 +42,6 @@ shadow_mesh = SubResource("ArrayMesh_bfgrq")
 points = PackedVector3Array(-0.21959999, 7.986263e-08, -0.21959992, 0.21958984, 0.43919998, 0.21959999, 0.21958984, 0.43919998, -0.21959999, 0.21958984, 0, 0.21959999, -0.21959999, 0.4391999, 0.21959992, 0.21958984, 0, -0.21959999, -0.21959999, 7.986263e-08, 0.21959992, -0.21959999, 0.4391999, -0.21959992)
 
 [node name="Chest" type="StaticBody3D"]
-script = ExtResource("1_xt0u6")
-loot_table = ExtResource("2_1jufw")
-open_sound = ExtResource("3_oja10")
-interaction_range = 1.0
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("ArrayMesh_iru5d")

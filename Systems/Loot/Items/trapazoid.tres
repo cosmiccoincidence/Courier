@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="LootItem" load_steps=4 format=3 uid="uid://clbg1kff2c5n8"]
+
+[ext_resource type="Texture2D" uid="uid://beb208oeohb52" path="res://Assets/2D/banana.png" id="1_5w624"]
+[ext_resource type="PackedScene" uid="uid://cfarmydfvqkvy" path="res://Assets/3D/Items/trapazoid.tscn" id="2_5w624"]
+[ext_resource type="Script" uid="uid://bm5i53gst3tyr" path="res://Systems/Loot/loot_item.gd" id="3_uaqsv"]
+
+[resource]
+script = ExtResource("3_uaqsv")
+item_name = "Trapazoid"
+item_scene = ExtResource("2_5w624")
+icon = ExtResource("1_5w624")
+item_type = "Belt"
+metadata/_custom_type_script = "uid://bm5i53gst3tyr"

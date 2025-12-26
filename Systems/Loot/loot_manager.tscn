@@ -1,0 +1,11 @@
+[gd_scene load_steps=6 format=3 uid="uid://dkb3oskv2sden"]
+
+[ext_resource type="Script" uid="uid://ckpflo6ik62pr" path="res://Systems/Loot/loot_manager.gd" id="1_wcyxs"]
+[ext_resource type="Script" uid="uid://bm5i53gst3tyr" path="res://Systems/Loot/loot_item.gd" id="2_uh1dr"]
+[ext_resource type="Resource" uid="uid://clbg1kff2c5n8" path="res://Systems/Loot/Items/trapazoid.tres" id="3_a12ws"]
+[ext_resource type="Resource" uid="uid://b07xe58k1piyx" path="res://Systems/Loot/Items/square.tres" id="4_3jylg"]
+[ext_resource type="Resource" uid="uid://bk4ktkd4n6xgs" path="res://Systems/Loot/Items/stick.tres" id="5_ew8vs"]
+
+[node name="LootManager" type="Node"]
+script = ExtResource("1_wcyxs")
+all_items = Array[ExtResource("2_uh1dr")]([ExtResource("3_a12ws"), ExtResource("4_3jylg"), ExtResource("5_ew8vs")])

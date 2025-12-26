@@ -4,7 +4,7 @@
 [ext_resource type="AudioStream" uid="uid://cul4u25ut4wuc" path="res://Assets/Audio/Characters/Grunt.wav" id="2_jprqx"]
 [ext_resource type="AudioStream" uid="uid://bdlgag1sqx7dg" path="res://Assets/Audio/Characters/Attack.wav" id="3_hcwkc"]
 [ext_resource type="AudioStream" uid="uid://bkikoslj3l0me" path="res://Assets/Audio/Characters/Hit.wav" id="4_usps0"]
-[ext_resource type="Resource" uid="uid://nbf78muis7lt" path="res://Systems/Loot/LootTables/enemy1_loot.tres" id="5_fg5na"]
+[ext_resource type="Resource" uid="uid://cko25xbv42m76" path="res://Systems/Loot/Enemies/enemy1.tres" id="5_onsks"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_onrkg"]
 
@@ -24,7 +24,8 @@ script = ExtResource("1_qmrig")
 grunt_sfx = ExtResource("2_jprqx")
 attack_sfx = ExtResource("3_hcwkc")
 hit_sfx = ExtResource("4_usps0")
-loot_table = ExtResource("5_fg5na")
+enemy_level = 3
+loot_profile = ExtResource("5_onsks")
 display_name = "Enemy2"
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]

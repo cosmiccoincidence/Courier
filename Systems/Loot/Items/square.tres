@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="LootItem" load_steps=4 format=3 uid="uid://b07xe58k1piyx"]
+
+[ext_resource type="Texture2D" uid="uid://beb208oeohb52" path="res://Assets/2D/banana.png" id="1_ana8c"]
+[ext_resource type="PackedScene" uid="uid://c7hd6lqn64rax" path="res://Assets/3D/Items/square.tscn" id="2_ana8c"]
+[ext_resource type="Script" uid="uid://bm5i53gst3tyr" path="res://Systems/Loot/loot_item.gd" id="3_bkecd"]
+
+[resource]
+script = ExtResource("3_bkecd")
+item_name = "Square"
+item_scene = ExtResource("2_ana8c")
+icon = ExtResource("1_ana8c")
+item_type = "Helmet"
+metadata/_custom_type_script = "uid://bm5i53gst3tyr"
