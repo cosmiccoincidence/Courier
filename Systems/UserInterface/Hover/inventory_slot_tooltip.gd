@@ -122,6 +122,11 @@ func show_tooltip(slot: Control, item_data: Dictionary):
 		name_text = "%s (x%d)" % [name_text, item_data.get("stack_count", 1)]
 	lines.append("[center][font_size=22][u][color=#%s]%s[/color][/u][/font_size][/center]" % [quality_hex, name_text])
 	
+	# Type - gray color
+	var item_type = item_data.get("item_type", "")
+	if item_type != "":
+		lines.append("[center][color=darkgray]Type: %s[/color][/center]" % item_type)
+	
 	# Item level - below name, white color
 	var item_level = item_data.get("item_level", 1)
 	lines.append("[center]Level: %d[/center]" % item_level)
@@ -129,12 +134,7 @@ func show_tooltip(slot: Control, item_data: Dictionary):
 	# Value - gold color
 	var value = item_data.get("value", 0)
 	lines.append("[center][color=gold]Value: %d[/color][/center]" % value)
-	
-	# Type - gray color
-	var item_type = item_data.get("item_type", "")
-	if item_type != "":
-		lines.append("[center][color=darkgray]Type: %s[/color][/center]" % item_type)
-	
+		
 	# Mass - gray color
 	var mass = item_data.get("mass", 0.0)
 	lines.append("[center][color=gray]Mass: %.1f[/color][/center]" % mass)

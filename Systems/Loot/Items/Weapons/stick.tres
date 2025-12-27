@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="LootItem" load_steps=4 format=3 uid="uid://d048ejvqg00fb"]
+
+[ext_resource type="Texture2D" uid="uid://beb208oeohb52" path="res://Assets/2D/banana.png" id="1_xitru"]
+[ext_resource type="PackedScene" uid="uid://byn6f4lsp4fd4" path="res://Assets/3D/Items/Weapons/stick.tscn" id="2_xitru"]
+[ext_resource type="Script" uid="uid://bm5i53gst3tyr" path="res://Systems/Loot/loot_item.gd" id="3_ujo1y"]
+
+[resource]
+script = ExtResource("3_ujo1y")
+item_name = "Stick"
+item_scene = ExtResource("2_xitru")
+icon = ExtResource("1_xitru")
+item_type = "Weapon"
+metadata/_custom_type_script = "uid://bm5i53gst3tyr"

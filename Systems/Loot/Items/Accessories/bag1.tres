@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="LootItem" load_steps=4 format=3 uid="uid://cbgf7kjn0sma7"]
+
+[ext_resource type="Texture2D" uid="uid://beb208oeohb52" path="res://Assets/2D/banana.png" id="1_5jfq3"]
+[ext_resource type="PackedScene" uid="uid://b35h8kpkpyxmo" path="res://Assets/3D/Items/Accessories/bag1.tscn" id="2_5jfq3"]
+[ext_resource type="Script" uid="uid://bm5i53gst3tyr" path="res://Systems/Loot/loot_item.gd" id="3_5wjbb"]
+
+[resource]
+script = ExtResource("3_5wjbb")
+item_name = "Bag1"
+item_scene = ExtResource("2_5jfq3")
+icon = ExtResource("1_5jfq3")
+item_type = "Bag"
+metadata/_custom_type_script = "uid://bm5i53gst3tyr"

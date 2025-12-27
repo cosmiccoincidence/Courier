@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="LootItem" load_steps=4 format=3 uid="uid://bduxigkymwi3w"]
+
+[ext_resource type="Texture2D" uid="uid://beb208oeohb52" path="res://Assets/2D/banana.png" id="1_6tour"]
+[ext_resource type="PackedScene" uid="uid://xfakf43f0d7y" path="res://Assets/3D/Items/Weapons/sword.tscn" id="2_6tour"]
+[ext_resource type="Script" uid="uid://bm5i53gst3tyr" path="res://Systems/Loot/loot_item.gd" id="3_wdcs1"]
+
+[resource]
+script = ExtResource("3_wdcs1")
+item_name = "Sword"
+item_scene = ExtResource("2_6tour")
+icon = ExtResource("1_6tour")
+item_type = "Weapon"
+metadata/_custom_type_script = "uid://bm5i53gst3tyr"

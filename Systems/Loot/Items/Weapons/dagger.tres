@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="LootItem" load_steps=4 format=3 uid="uid://2cqb7fquqfeb"]
+
+[ext_resource type="Texture2D" uid="uid://beb208oeohb52" path="res://Assets/2D/banana.png" id="1_f8wh2"]
+[ext_resource type="PackedScene" uid="uid://dv7mt0rqfiilq" path="res://Assets/3D/Items/Weapons/dagger.tscn" id="2_f8wh2"]
+[ext_resource type="Script" uid="uid://bm5i53gst3tyr" path="res://Systems/Loot/loot_item.gd" id="3_l4yd8"]
+
+[resource]
+script = ExtResource("3_l4yd8")
+item_name = "Dagger"
+item_scene = ExtResource("2_f8wh2")
+icon = ExtResource("1_f8wh2")
+item_type = "Weapon"
+metadata/_custom_type_script = "uid://bm5i53gst3tyr"

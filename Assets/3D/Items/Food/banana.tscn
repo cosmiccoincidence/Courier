@@ -1,0 +1,63 @@
+[gd_scene load_steps=7 format=4 uid="uid://woqrdy16j87n"]
+
+[ext_resource type="Script" uid="uid://bsi5m1q304kyn" path="res://Assets/3D/Items/base_item.gd" id="1_sqog5"]
+[ext_resource type="Texture2D" uid="uid://beb208oeohb52" path="res://Assets/2D/banana.png" id="2_hpdbq"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_u7vt1"]
+resource_name = "Coin.001"
+cull_mode = 2
+albedo_color = Color(0.90659255, 0.79041314, 0.0067784484, 1)
+roughness = 0.5
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_ngwvy"]
+_surfaces = [{
+"aabb": AABB(-0.16188994, -0.08545971, -0.16188994, 0.32377988, 0.17091942, 0.32377988),
+"format": 34896613377,
+"index_count": 36,
+"index_data": PackedByteArray("AAABAAIAAwAAAAIAAAAEAAEABAAAAAMABAAFAAEABAADAAYABAAGAAUAAwACAAcAAQAHAAIABgADAAcABQAHAAEABgAHAAUA"),
+"name": "Coin.001",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("AAAAAP//AAAAAP//AAAAAAAA/////wAA3kUAAJpQAAAAAAAAAAAAAP////8AAAAA//8AAAAAAADeRf//mlAAAA==")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_pamig"]
+resource_name = "Item_Cube_038"
+_surfaces = [{
+"aabb": AABB(-0.16188994, -0.08545971, -0.16188994, 0.32377988, 0.17091942, 0.32377988),
+"attribute_data": PackedByteArray("/1////+f/7//n////1//v/9f/7//n/9//5//v/9f/3//X/9//5//P/+f/3//X/8//1//P/+fAAD/n/8//18AAP8f/3//X/8//1//f/8f/z//n/9//5//P//f/3//3/8/"),
+"format": 34896613399,
+"index_count": 36,
+"index_data": PackedByteArray("AAABAAIAAAADAAEABAAFAAYABAAHAAUACAAJAAoACAALAAkADAANAA4ADAAPAA0AEAARABIAEAATABEAFAAVABYAFgAVABcA"),
+"material": SubResource("StandardMaterial3D_u7vt1"),
+"name": "Coin.001",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 24,
+"vertex_data": PackedByteArray("AAAAAP//VNUAAP//AABU1QAA/////1TVAAAAAAAAVNUAAAAAAAD///////8AAP//AAD//wAA/////wAAAAD/////AAAAAKzB3kX//5pQrMH/////AACswd5FAACaUKzB3kUAAJpQDc0AAP////8Nzd5F//+aUA3NAAAAAP//Dc0AAAAAAADXwt5FAACaUNzD//8AAAAA/78AAAAA//8Nzf////8AAP//3kX//5pQH+4AAP//AACx8AAA/////77eVNVU1VTVVNVU1VTVVNVU1f+//7//v/+//7//v/+//7/AEsASwBLAEsASwBLAEsAS1STVJNUk1STVJNUk1STVJEktWmlFMtxmAAD/f6xJKVv/f/+/0JEWt2iPSrhooMqv")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_ngwvy")
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_rau47"]
+points = PackedVector3Array(-0.16188994, -0.08545971, -0.16188994, -0.16188994, 0.085459724, -0.16188994, 0.16188994, -0.08545971, -0.16188994, -0.16188994, -0.08545971, 0.16188994, -0.16188994, 0.085459724, 0.16188994, 0.16188994, 0.085459724, -0.16188994)
+
+[node name="Banana" type="Node3D" groups=["item"]]
+script = ExtResource("1_sqog5")
+item_name = "Banana"
+item_icon = ExtResource("2_hpdbq")
+item_type = "Food"
+value = 3
+
+[node name="ItemBanana" type="MeshInstance3D" parent="."]
+mesh = SubResource("ArrayMesh_pamig")
+skeleton = NodePath("")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+shape = SubResource("ConvexPolygonShape3D_rau47")
+
+[connection signal="mouse_entered" from="StaticBody3D" to="." method="_on_static_body_3d_mouse_entered"]

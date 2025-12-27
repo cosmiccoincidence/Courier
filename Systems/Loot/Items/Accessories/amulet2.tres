@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="LootItem" load_steps=4 format=3 uid="uid://xsbnct28sisr"]
+
+[ext_resource type="Texture2D" uid="uid://beb208oeohb52" path="res://Assets/2D/banana.png" id="1_bbdlg"]
+[ext_resource type="PackedScene" uid="uid://cljtis245pmb" path="res://Assets/3D/Items/Accessories/amulet2.tscn" id="2_bbdlg"]
+[ext_resource type="Script" uid="uid://bm5i53gst3tyr" path="res://Systems/Loot/loot_item.gd" id="3_4xv82"]
+
+[resource]
+script = ExtResource("3_4xv82")
+item_name = "Amulet2"
+item_scene = ExtResource("2_bbdlg")
+icon = ExtResource("1_bbdlg")
+item_type = "Amulet"
+metadata/_custom_type_script = "uid://bm5i53gst3tyr"

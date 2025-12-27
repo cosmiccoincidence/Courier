@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="LootItem" load_steps=4 format=3 uid="uid://b27mw4ujsbe8n"]
+
+[ext_resource type="Texture2D" uid="uid://beb208oeohb52" path="res://Assets/2D/banana.png" id="1_hjkme"]
+[ext_resource type="PackedScene" uid="uid://dlr8pw0w1iu0h" path="res://Assets/3D/Items/Potions/potion_health.tscn" id="2_myjin"]
+[ext_resource type="Script" uid="uid://bm5i53gst3tyr" path="res://Systems/Loot/loot_item.gd" id="3_65c18"]
+
+[resource]
+script = ExtResource("3_65c18")
+item_name = "Health Potion"
+item_scene = ExtResource("2_myjin")
+icon = ExtResource("1_hjkme")
+item_type = "Potion"
+metadata/_custom_type_script = "uid://bm5i53gst3tyr"

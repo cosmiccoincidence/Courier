@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="LootItem" load_steps=4 format=3 uid="uid://13677q6xch8i"]
+
+[ext_resource type="Texture2D" uid="uid://beb208oeohb52" path="res://Assets/2D/banana.png" id="1_1kjkp"]
+[ext_resource type="PackedScene" uid="uid://bsxxur6vlypp" path="res://Assets/3D/Items/Weapons/shield_round2.tscn" id="2_1kjkp"]
+[ext_resource type="Script" uid="uid://bm5i53gst3tyr" path="res://Systems/Loot/loot_item.gd" id="3_lu8gm"]
+
+[resource]
+script = ExtResource("3_lu8gm")
+item_name = "Round Shield2"
+item_scene = ExtResource("2_1kjkp")
+icon = ExtResource("1_1kjkp")
+item_type = "Weapon"
+metadata/_custom_type_script = "uid://bm5i53gst3tyr"

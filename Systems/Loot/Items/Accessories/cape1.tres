@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="LootItem" load_steps=4 format=3 uid="uid://g2tcaujxclqc"]
+
+[ext_resource type="Texture2D" uid="uid://beb208oeohb52" path="res://Assets/2D/banana.png" id="1_wlrsp"]
+[ext_resource type="PackedScene" uid="uid://4a656rmh6vji" path="res://Assets/3D/Items/Accessories/cape1.tscn" id="2_wlrsp"]
+[ext_resource type="Script" uid="uid://bm5i53gst3tyr" path="res://Systems/Loot/loot_item.gd" id="3_o74oo"]
+
+[resource]
+script = ExtResource("3_o74oo")
+item_name = "Cape1"
+item_scene = ExtResource("2_wlrsp")
+icon = ExtResource("1_wlrsp")
+item_type = "Cape"
+metadata/_custom_type_script = "uid://bm5i53gst3tyr"

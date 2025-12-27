@@ -1,0 +1,63 @@
+[gd_scene load_steps=7 format=4 uid="uid://ks8phk0vvyig"]
+
+[ext_resource type="Script" uid="uid://bsi5m1q304kyn" path="res://Assets/3D/Items/base_item.gd" id="1_ksctg"]
+[ext_resource type="Texture2D" uid="uid://beb208oeohb52" path="res://Assets/2D/banana.png" id="2_4418t"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pxj6v"]
+resource_name = "red"
+cull_mode = 2
+albedo_color = Color(0.90635914, 0.19726497, 0.10942712, 1)
+roughness = 0.5
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_1t4tj"]
+_surfaces = [{
+"aabb": AABB(-0.23006977, -0.04452324, -0.099999994, 0.46013954, 0.08904648, 0.6190109),
+"format": 34359742465,
+"index_count": 60,
+"index_data": PackedByteArray("AAABAAIAAwACAAEABAADAAEAAAAEAAEABAAFAAMAAgAGAAAABAAHAAUABAAAAAcABQAIAAMAAwAIAAIABQAHAAgAAAAGAAkAAAAJAAcAAgAKAAYACAAKAAIACQAGAAoABwALAAgABwAJAAsACAALAAoACQAKAAsA"),
+"name": "red",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 12,
+"vertex_data": PackedByteArray("aZdrvgBeNr3MzMw9Vc9+vQBeNj3MzMy9aZdrvgBeNj3MzMw9Vc9+PQBeNj3MzMy9Vc9+vQBeNr3MzMy9Vc9+PQBeNr3MzMy9aZdrvgBeNr3m3QQ/aZdrPgBeNr3MzMw9aZdrPgBeNj3MzMw9aZdrPgBeNr3m3QQ/aZdrvgBeNj3m3QQ/aZdrPgBeNj3m3QQ/")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_ksctg"]
+resource_name = "Item_Cube_002"
+_surfaces = [{
+"aabb": AABB(-0.23006977, -0.04452324, -0.099999994, 0.46013954, 0.08904648, 0.6190109),
+"attribute_data": PackedByteArray("AADAPgAAgD8AACA/AABAPwAAID8AAIA/AADAPgAAQD8AAMA+AABAPwAAID8AAAA/AAAgPwAAQD8AAMA+AAAAPwAAwD4AAAA/AAAgPwAAgD4AACA/AAAAPwAAwD4AAIA+AAAgPwAAgD8AAMA+AACAPwAAwD4AAIA/AAAgPwAAgD8AAAA+AAAAPwAAwD4AAIA+AADAPgAAAD8AAAA+AACAPgAAwD4AAIA+AAAAPgAAgD4AACA/AAAAPwAAYD8AAIA+AABgPwAAAD8AACA/AACAPgAAYD8AAIA+AAAgPwAAgD4AAMA+AACAPgAAID8AAAAAAAAgPwAAgD4AAMA+AAAAAAAAwD4AAIA+AAAgPwAAgD4AACA/AACAPgAAwD4AAIA+"),
+"format": 34359742487,
+"index_count": 60,
+"index_data": PackedByteArray("AAABAAIAAAADAAEABAAFAAYABAAHAAUACAAJAAoACAALAAkADAANAA4ADAAPAA0AEAARABIAEAATABEAEwAUABEAEwAVABQAFgAXABgAFgAZABcAGQAaABcAGQAbABoAHAAdAB4AHAAfAB0AIAAhACIAIAAjACEA"),
+"material": SubResource("StandardMaterial3D_pxj6v"),
+"name": "red",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 36,
+"vertex_data": PackedByteArray("aZdrvgBeNr3MzMw9Vc9+vQBeNj3MzMy9aZdrvgBeNj3MzMw9Vc9+vQBeNr3MzMy9Vc9+vQBeNr3MzMy9Vc9+PQBeNj3MzMy9Vc9+vQBeNj3MzMy9Vc9+PQBeNr3MzMy9Vc9+PQBeNr3MzMy9aZdrPgBeNj3MzMw9Vc9+PQBeNj3MzMy9aZdrPgBeNr3MzMw9aZdrvgBeNj3MzMw9aZdrvgBeNr3m3QQ/aZdrvgBeNr3MzMw9aZdrvgBeNj3m3QQ/Vc9+vQBeNr3MzMy9aZdrPgBeNr3MzMw9Vc9+PQBeNr3MzMy9aZdrvgBeNr3MzMw9aZdrPgBeNr3m3QQ/aZdrvgBeNr3m3QQ/Vc9+PQBeNj3MzMy9aZdrvgBeNj3MzMw9Vc9+vQBeNj3MzMy9aZdrPgBeNj3MzMw9aZdrvgBeNj3m3QQ/aZdrPgBeNj3m3QQ/aZdrPgBeNr3m3QQ/aZdrvgBeNj3m3QQ/aZdrPgBeNj3m3QQ/aZdrvgBeNr3m3QQ/aZdrPgBeNr3MzMw9aZdrPgBeNj3m3QQ/aZdrPgBeNj3MzMw9aZdrPgBeNr3m3QQ/AABnuv9///8AAGe6/3///wAAZ7r/f///AABnuv9//////////3//////////f/////////9//////////3//////Z7r/f/////9nuv9//////2e6/3//////Z7r/f///AAD/f////78AAP9/////vwAA/3////+/AAD/f////7//fwAA////v/9/AAD///+//38AAP///7//fwAA////v/9/AAD///+//38AAP///7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///////+//3///////7//f/9//3////9//3//f////3//f/9/////f/9//3///////3////+/////f////7////9/////v////3////+/")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_1t4tj")
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_4418t"]
+points = PackedVector3Array(0.23006977, 0.04452324, 0.5190109, 0.23006977, -0.04452324, 0.5190109, 0.23006977, 0.04452324, 0.09995459, -0.23006977, 0.04452324, 0.5190109, -0.23006977, -0.04452324, 0.5190109, 0.23006977, -0.04452324, 0.09995459, 0.062201694, 0.04452324, -0.099999994, -0.23006977, 0.04452324, 0.09995459, -0.23006977, -0.04452324, 0.09995459, 0.062201694, -0.04452324, -0.099999994, -0.062246755, 0.04452324, -0.099999994, -0.062246755, -0.04452324, -0.099999994)
+
+[node name="Cape2" type="Node3D" groups=["item"]]
+script = ExtResource("1_ksctg")
+item_name = "Cape2"
+item_icon = ExtResource("2_4418t")
+item_type = "Cape"
+value = 30
+
+[node name="ItemCape2" type="MeshInstance3D" parent="."]
+mesh = SubResource("ArrayMesh_ksctg")
+skeleton = NodePath("")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+shape = SubResource("ConvexPolygonShape3D_4418t")
+
+[connection signal="mouse_entered" from="StaticBody3D" to="." method="_on_static_body_3d_mouse_entered"]

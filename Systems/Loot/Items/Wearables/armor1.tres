@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="LootItem" load_steps=4 format=3 uid="uid://bsq4fuptxlgiu"]
+
+[ext_resource type="Texture2D" uid="uid://beb208oeohb52" path="res://Assets/2D/banana.png" id="1_1w805"]
+[ext_resource type="PackedScene" uid="uid://bxifjs8cc57cs" path="res://Assets/3D/Items/Wearables/armor1.tscn" id="2_ddftp"]
+[ext_resource type="Script" uid="uid://bm5i53gst3tyr" path="res://Systems/Loot/loot_item.gd" id="3_6vkso"]
+
+[resource]
+script = ExtResource("3_6vkso")
+item_name = "Armor1"
+item_scene = ExtResource("2_ddftp")
+icon = ExtResource("1_1w805")
+item_type = "Armor"
+metadata/_custom_type_script = "uid://bm5i53gst3tyr"

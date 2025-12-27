@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="LootItem" load_steps=4 format=3 uid="uid://drxxuck4p60u5"]
+
+[ext_resource type="Texture2D" uid="uid://beb208oeohb52" path="res://Assets/2D/banana.png" id="1_ssh8a"]
+[ext_resource type="PackedScene" uid="uid://b06034wtx5unc" path="res://Assets/3D/Items/Weapons/shield_tower2.tscn" id="2_ssh8a"]
+[ext_resource type="Script" uid="uid://bm5i53gst3tyr" path="res://Systems/Loot/loot_item.gd" id="3_wfdkc"]
+
+[resource]
+script = ExtResource("3_wfdkc")
+item_name = "Tower Shield2"
+item_scene = ExtResource("2_ssh8a")
+icon = ExtResource("1_ssh8a")
+item_type = "Weapon"
+metadata/_custom_type_script = "uid://bm5i53gst3tyr"

@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="LootItem" load_steps=4 format=3 uid="uid://hja7s1qhl52h"]
+
+[ext_resource type="Texture2D" uid="uid://beb208oeohb52" path="res://Assets/2D/banana.png" id="1_dri5m"]
+[ext_resource type="PackedScene" uid="uid://p4ed03lyqvvi" path="res://Assets/3D/Items/Food/burger.tscn" id="2_dri5m"]
+[ext_resource type="Script" uid="uid://bm5i53gst3tyr" path="res://Systems/Loot/loot_item.gd" id="3_4ibmo"]
+
+[resource]
+script = ExtResource("3_4ibmo")
+item_name = "Burger"
+item_scene = ExtResource("2_dri5m")
+icon = ExtResource("1_dri5m")
+item_type = "Food"
+metadata/_custom_type_script = "uid://bm5i53gst3tyr"

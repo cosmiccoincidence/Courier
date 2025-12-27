@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="LootItem" load_steps=4 format=3 uid="uid://d3ix6fqiaba1c"]
+
+[ext_resource type="Texture2D" uid="uid://beb208oeohb52" path="res://Assets/2D/banana.png" id="1_t7ous"]
+[ext_resource type="PackedScene" uid="uid://camusfopfipf5" path="res://Assets/3D/Items/Wearables/pants1.tscn" id="2_t7ous"]
+[ext_resource type="Script" uid="uid://bm5i53gst3tyr" path="res://Systems/Loot/loot_item.gd" id="3_ttx6t"]
+
+[resource]
+script = ExtResource("3_ttx6t")
+item_name = "Pants1"
+item_scene = ExtResource("2_t7ous")
+icon = ExtResource("1_t7ous")
+item_type = "Pants"
+metadata/_custom_type_script = "uid://bm5i53gst3tyr"

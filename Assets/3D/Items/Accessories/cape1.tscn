@@ -1,0 +1,63 @@
+[gd_scene load_steps=7 format=4 uid="uid://4a656rmh6vji"]
+
+[ext_resource type="Script" uid="uid://bsi5m1q304kyn" path="res://Assets/3D/Items/base_item.gd" id="1_8t17u"]
+[ext_resource type="Texture2D" uid="uid://beb208oeohb52" path="res://Assets/2D/banana.png" id="2_ir246"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xan16"]
+resource_name = "Blue"
+cull_mode = 2
+albedo_color = Color(0.03431255, 0, 0.9064613, 1)
+roughness = 0.5
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_h8g4i"]
+_surfaces = [{
+"aabb": AABB(-0.3698309, -0.04452324, -0.099999994, 0.7396618, 0.08904648, 0.6190109),
+"format": 34359742465,
+"index_count": 60,
+"index_data": PackedByteArray("AAABAAIAAwACAAEABAADAAEAAAAEAAEABAAFAAMAAgAGAAAABAAHAAUABAAAAAcABQAIAAMAAwAIAAIABQAHAAgAAAAGAAkAAAAJAAcAAgAKAAYACAAKAAIACQAGAAoABwALAAgABwAJAAsACAALAAoACQAKAAsA"),
+"name": "Blue",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 12,
+"vertex_data": PackedByteArray("elq9vgBeNr3MzMw9zMzMvQBeNj3MzMy9elq9vgBeNj3MzMw9zMzMPQBeNj3MzMy9zMzMvQBeNr3MzMy9zMzMPQBeNr3MzMy9elq9vgBeNr3m3QQ/elq9PgBeNr3MzMw9elq9PgBeNj3MzMw9elq9PgBeNr3m3QQ/elq9vgBeNj3m3QQ/elq9PgBeNj3m3QQ/")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_8t17u"]
+resource_name = "Item_Cube_004"
+_surfaces = [{
+"aabb": AABB(-0.3698309, -0.04452324, -0.099999994, 0.7396618, 0.08904648, 0.6190109),
+"attribute_data": PackedByteArray("AADAPgAAgD8AACA/AABAPwAAID8AAIA/AADAPgAAQD8AAMA+AABAPwAAID8AAAA/AAAgPwAAQD8AAMA+AAAAPwAAwD4AAAA/AAAgPwAAgD4AACA/AAAAPwAAwD4AAIA+AAAgPwAAgD8AAMA+AACAPwAAwD4AAIA/AAAgPwAAgD8AAAA+AAAAPwAAwD4AAIA+AADAPgAAAD8AAAA+AACAPgAAwD4AAIA+AAAAPgAAgD4AACA/AAAAPwAAYD8AAIA+AABgPwAAAD8AACA/AACAPgAAYD8AAIA+AAAgPwAAgD4AAMA+AACAPgAAID8AAAAAAAAgPwAAgD4AAMA+AAAAAAAAwD4AAIA+AAAgPwAAgD4AACA/AACAPgAAwD4AAIA+"),
+"format": 34359742487,
+"index_count": 60,
+"index_data": PackedByteArray("AAABAAIAAAADAAEABAAFAAYABAAHAAUACAAJAAoACAALAAkADAANAA4ADAAPAA0AEAARABIAEAATABEAEwAUABEAEwAVABQAFgAXABgAFgAZABcAGQAaABcAGQAbABoAHAAdAB4AHAAfAB0AIAAhACIAIAAjACEA"),
+"material": SubResource("StandardMaterial3D_xan16"),
+"name": "Blue",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 36,
+"vertex_data": PackedByteArray("elq9vgBeNr3MzMw9zMzMvQBeNj3MzMy9elq9vgBeNj3MzMw9zMzMvQBeNr3MzMy9zMzMvQBeNr3MzMy9zMzMPQBeNj3MzMy9zMzMvQBeNj3MzMy9zMzMPQBeNr3MzMy9zMzMPQBeNr3MzMy9elq9PgBeNj3MzMw9zMzMPQBeNj3MzMy9elq9PgBeNr3MzMw9elq9vgBeNj3MzMw9elq9vgBeNr3m3QQ/elq9vgBeNr3MzMw9elq9vgBeNj3m3QQ/zMzMvQBeNr3MzMy9elq9PgBeNr3MzMw9zMzMPQBeNr3MzMy9elq9vgBeNr3MzMw9elq9PgBeNr3m3QQ/elq9vgBeNr3m3QQ/zMzMPQBeNj3MzMy9elq9vgBeNj3MzMw9zMzMvQBeNj3MzMy9elq9PgBeNj3MzMw9elq9vgBeNj3m3QQ/elq9PgBeNj3m3QQ/elq9PgBeNr3m3QQ/elq9vgBeNj3m3QQ/elq9PgBeNj3m3QQ/elq9vgBeNr3m3QQ/elq9PgBeNr3MzMw9elq9PgBeNj3m3QQ/elq9PgBeNj3MzMw9elq9PgBeNr3m3QQ/AACCyf9///8AAILJ/3///wAAgsn/f///AACCyf9//////////3//////////f/////////9//////////3//////gsn/f/////+Cyf9//////4LJ/3//////gsn/f///AAD/f////78AAP9/////vwAA/3////+/AAD/f////7//fwAA////v/9/AAD///+//38AAP///7//fwAA////v/9/AAD///+//38AAP///7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///////+//3///////7//f/9//3////9//3//f////3//f/9/////f/9//3///////3////+/////f////7////9/////v////3////+/")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_h8g4i")
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_ir246"]
+points = PackedVector3Array(-0.100059986, -0.04452324, -0.099999994, -0.3698309, -0.04452324, 0.09995459, -0.100059986, 0.04452324, -0.099999994, 0.09998757, -0.04452324, -0.099999994, -0.3698309, 0.04452324, 0.09995459, -0.3698309, -0.04452324, 0.5190109, 0.09998757, 0.04452324, -0.099999994, 0.3698309, -0.04452324, 0.09995459, -0.3698309, 0.04452324, 0.5190109, 0.3698309, -0.04452324, 0.5190109, 0.3698309, 0.04452324, 0.09995459, 0.3698309, 0.04452324, 0.5190109)
+
+[node name="Cape1" type="Node3D" groups=["item"]]
+script = ExtResource("1_8t17u")
+item_name = "Cape1"
+item_icon = ExtResource("2_ir246")
+item_type = "Cape"
+value = 20
+
+[node name="ItemCape1" type="MeshInstance3D" parent="."]
+mesh = SubResource("ArrayMesh_8t17u")
+skeleton = NodePath("")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+shape = SubResource("ConvexPolygonShape3D_ir246")
+
+[connection signal="mouse_entered" from="StaticBody3D" to="." method="_on_static_body_3d_mouse_entered"]

@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="LootItem" load_steps=4 format=3 uid="uid://dotfcvsjgokaa"]
+
+[ext_resource type="Texture2D" uid="uid://beb208oeohb52" path="res://Assets/2D/banana.png" id="1_fv5qq"]
+[ext_resource type="PackedScene" uid="uid://h27po3q7qe5e" path="res://Assets/3D/Items/Potions/potion_mana.tscn" id="2_fv5qq"]
+[ext_resource type="Script" uid="uid://bm5i53gst3tyr" path="res://Systems/Loot/loot_item.gd" id="3_sirox"]
+
+[resource]
+script = ExtResource("3_sirox")
+item_name = "Mana Potion"
+item_scene = ExtResource("2_fv5qq")
+icon = ExtResource("1_fv5qq")
+item_type = "Potion"
+metadata/_custom_type_script = "uid://bm5i53gst3tyr"

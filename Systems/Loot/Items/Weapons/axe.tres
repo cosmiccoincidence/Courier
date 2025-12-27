@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="LootItem" load_steps=4 format=3 uid="uid://cn7grv1jnvmir"]
+
+[ext_resource type="Texture2D" uid="uid://beb208oeohb52" path="res://Assets/2D/banana.png" id="1_2php6"]
+[ext_resource type="PackedScene" uid="uid://cifkwtbouywy0" path="res://Assets/3D/Items/Weapons/axe.tscn" id="2_6bd2j"]
+[ext_resource type="Script" uid="uid://bm5i53gst3tyr" path="res://Systems/Loot/loot_item.gd" id="3_vc07n"]
+
+[resource]
+script = ExtResource("3_vc07n")
+item_name = "Axe"
+item_scene = ExtResource("2_6bd2j")
+icon = ExtResource("1_2php6")
+item_type = "Weapon"
+metadata/_custom_type_script = "uid://bm5i53gst3tyr"

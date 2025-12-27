@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="LootItem" load_steps=4 format=3 uid="uid://ckbdkbab2em6t"]
+
+[ext_resource type="Texture2D" uid="uid://beb208oeohb52" path="res://Assets/2D/banana.png" id="1_fot4e"]
+[ext_resource type="PackedScene" uid="uid://cm103qiwr1bet" path="res://Assets/3D/Items/Other/charm.tscn" id="2_ht6ir"]
+[ext_resource type="Script" uid="uid://bm5i53gst3tyr" path="res://Systems/Loot/loot_item.gd" id="3_ij82h"]
+
+[resource]
+script = ExtResource("3_ij82h")
+item_name = "Charm"
+item_scene = ExtResource("2_ht6ir")
+icon = ExtResource("1_fot4e")
+item_type = "Charm"
+metadata/_custom_type_script = "uid://bm5i53gst3tyr"

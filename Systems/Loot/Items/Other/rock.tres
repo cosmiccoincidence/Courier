@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="LootItem" load_steps=4 format=3 uid="uid://c1q2cd0ekuokv"]
+
+[ext_resource type="Texture2D" uid="uid://beb208oeohb52" path="res://Assets/2D/banana.png" id="1_18r5f"]
+[ext_resource type="PackedScene" uid="uid://v1comgdbco8h" path="res://Assets/3D/Items/Other/rock.tscn" id="2_18r5f"]
+[ext_resource type="Script" uid="uid://bm5i53gst3tyr" path="res://Systems/Loot/loot_item.gd" id="3_42t3y"]
+
+[resource]
+script = ExtResource("3_42t3y")
+item_name = "Rock"
+item_scene = ExtResource("2_18r5f")
+icon = ExtResource("1_18r5f")
+item_type = "Gemstone"
+metadata/_custom_type_script = "uid://bm5i53gst3tyr"

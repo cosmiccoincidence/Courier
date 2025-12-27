@@ -1,17 +1,17 @@
-[gd_scene load_steps=7 format=4 uid="uid://c7hd6lqn64rax"]
+[gd_scene load_steps=7 format=4 uid="uid://8075sj8mk8ms"]
 
-[ext_resource type="Script" uid="uid://bsi5m1q304kyn" path="res://Assets/3D/Items/base_item.gd" id="1_ar7ek"]
-[ext_resource type="Texture2D" uid="uid://beb208oeohb52" path="res://Assets/2D/banana.png" id="2_ja1il"]
+[ext_resource type="Script" uid="uid://bsi5m1q304kyn" path="res://Assets/3D/Items/base_item.gd" id="1_crmt6"]
+[ext_resource type="Texture2D" uid="uid://beb208oeohb52" path="res://Assets/2D/banana.png" id="2_8kqsk"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1k2qd"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6bxjw"]
 resource_name = "Pink"
 cull_mode = 2
 albedo_color = Color(0.9081923, 0, 0.7500648, 1)
 roughness = 0.5
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_85q27"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_tq8w0"]
 _surfaces = [{
-"aabb": AABB(-0.099999994, -0.04452324, -0.099999994, 0.19999999, 0.08904648, 0.19999999),
+"aabb": AABB(-0.08545971, -0.08545971, -0.08545971, 0.17091942, 0.17091942, 0.17091942),
 "format": 34896613377,
 "index_count": 36,
 "index_data": PackedByteArray("AAABAAIAAAADAAEABAACAAEAAwAEAAEABQAAAAIAAwAAAAUABAAGAAIABQACAAYAAwAHAAQAAwAFAAcABwAGAAQABwAFAAYA"),
@@ -23,15 +23,15 @@ _surfaces = [{
 }]
 blend_shape_mode = 0
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_q8yh4"]
-resource_name = "Item_Cube_003"
+[sub_resource type="ArrayMesh" id="ArrayMesh_crmt6"]
+resource_name = "Item_Cube_033"
 _surfaces = [{
-"aabb": AABB(-0.099999994, -0.04452324, -0.099999994, 0.19999999, 0.08904648, 0.19999999),
+"aabb": AABB(-0.08545971, -0.08545971, -0.08545971, 0.17091942, 0.17091942, 0.17091942),
 "attribute_data": PackedByteArray("/1////+f/7//n////1//v/9f/7//n/9//5//v/9f/3//X/9//5//P/+f/3//X/8//1//P/+fAAD/n/8//18AAP8f/3//X/8//1//f/8f/z//n/9//9//P//f/3//n/8/"),
 "format": 34896613399,
 "index_count": 36,
 "index_data": PackedByteArray("AAABAAIAAAADAAEABAAFAAYABAAHAAUACAAJAAoACAALAAkADAANAA4ADAAPAA0AEAARABIAEAATABEAFAAVABYAFAAXABUA"),
-"material": SubResource("StandardMaterial3D_1k2qd"),
+"material": SubResource("StandardMaterial3D_6bxjw"),
 "name": "Pink",
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
@@ -39,29 +39,26 @@ _surfaces = [{
 "vertex_data": PackedByteArray("AAAAAP//VNUAAP//AABU1QAA/////1TVAAAAAAAAVNUAAAAAAAD///////8AAP//AAD//wAA/////wAAAAD/////AAAAAFTV////////VNX/////AABU1f//AAD//1TV//8AAP///78AAP//////v/////////+/AAAAAP///78AAAAAAAD/v///AAD///+///8AAAAA/78AAAAA////v/////8AAP//AAD///////8AAP//AAD/////////////VNVU1VTVVNVU1VTVVNVU1f+//7//v/+//7//v/+//7+qKqoqqiqqKqoqqiqqKqoq/////////////////////wAA/38AAP9/AAD/fwAA/3//f/+//3//v/9//7//f/+/")
 }]
 blend_shape_mode = 0
-shadow_mesh = SubResource("ArrayMesh_85q27")
+shadow_mesh = SubResource("ArrayMesh_tq8w0")
 
-[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_d6it0"]
-points = PackedVector3Array(-0.099999994, -0.04452324, -0.099999994, -0.099999994, 0.04452324, -0.099999994, 0.09998043, -0.04452324, -0.099999994, -0.099999994, -0.04452324, 0.09998043, -0.099999994, 0.04452324, 0.09998043, 0.09998043, 0.04452324, -0.099999994, 0.09998043, -0.04452324, 0.09998043, 0.09998043, 0.04452324, 0.09998043)
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_8kqsk"]
+points = PackedVector3Array(0.085459724, 0.085459724, 0.085459724, 0.085459724, 0.085459724, -0.08545971, -0.08545971, 0.085459724, 0.085459724, 0.085459724, -0.08545971, 0.085459724, 0.085459724, -0.08545971, -0.08545971, -0.08545971, 0.085459724, -0.08545971, -0.08545971, -0.08545971, 0.085459724, -0.08545971, -0.08545971, -0.08545971)
 
-[node name="Square" type="Node3D" groups=["item"]]
-script = ExtResource("1_ar7ek")
-item_name = "Square"
-item_icon = ExtResource("2_ja1il")
-item_type = "Helmet"
-mass = 3.0
-value = 3
+[node name="Gemstone1" type="Node3D" groups=["item"]]
+script = ExtResource("1_crmt6")
+item_name = "Gemstone1"
+item_icon = ExtResource("2_8kqsk")
+item_type = "Gemstone"
+mass = 0.5
+value = 30
 
-[node name="ItemSquare" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.045, 0)
-cast_shadow = 0
-mesh = SubResource("ArrayMesh_q8yh4")
+[node name="ItemGemstone" type="MeshInstance3D" parent="."]
+mesh = SubResource("ArrayMesh_crmt6")
 skeleton = NodePath("")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.045, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
-shape = SubResource("ConvexPolygonShape3D_d6it0")
+shape = SubResource("ConvexPolygonShape3D_8kqsk")
 
 [connection signal="mouse_entered" from="StaticBody3D" to="." method="_on_static_body_3d_mouse_entered"]

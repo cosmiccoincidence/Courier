@@ -1,0 +1,64 @@
+[gd_scene load_steps=7 format=4 uid="uid://cm77b3ucse2fb"]
+
+[ext_resource type="Script" uid="uid://bsi5m1q304kyn" path="res://Assets/3D/Items/base_item.gd" id="1_ubhmo"]
+[ext_resource type="Texture2D" uid="uid://beb208oeohb52" path="res://Assets/2D/banana.png" id="2_3kln7"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_20wdq"]
+resource_name = "Brown"
+cull_mode = 2
+albedo_color = Color(0.5442858, 0.42703164, 0.16837269, 1)
+roughness = 0.5
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_33fnb"]
+_surfaces = [{
+"aabb": AABB(-0.4181652, -0.048350874, -0.4181652, 0.8363304, 0.09670175, 0.8363304),
+"format": 34896613377,
+"index_count": 96,
+"index_data": PackedByteArray("AAABAAIAAAADAAEAAwAEAAEABAACAAEABQAAAAIAAwAGAAQAAwAAAAcAAwAHAAYAAAAIAAcAAAAFAAgABQACAAkACAAFAAkABAAKAAIACgAJAAIABgALAAQACwAKAAQABgAMAAsACgANAAkACAAJAA0ACwAOAAoADAAOAAsADgANAAoABgAPAAwADAAPAA4ABgAHAA8ADgAQAA0ADwAQAA4AEQAIAA0ABwAIABEAEQANABAABwARAA8ADwARABAA"),
+"name": "Brown",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 18,
+"vertex_data": PackedByteArray("AAAAAP9/AABrIP//ayAAAAAA////fwAAayAAAGsgAAD/f///AAAAAGsgAACT3wAA/38AAAAAAAD/fwAA/38AAP9/AAD//wAAayD//5PfAAD/f////38AAJPf//9rIAAAk98AAGsgAAD/f/////8AAP//////fwAA//8AAP9/AACT3///k98AAJPfAACT3wAA")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_ubhmo"]
+resource_name = "Item_Cube_021"
+_surfaces = [{
+"aabb": AABB(-0.4181652, -0.048350874, -0.4181652, 0.8363304, 0.09670175, 0.8363304),
+"attribute_data": PackedByteArray("/1//3/+f/7//n//f/1//v/9f/5//n/9//5//n/9f/3//X/9f/5//P/+f/1//X/8//1//H/+fAAD/n/8f/18AAP8//1//X/8//1//X/8//z//P/9//1//f/8f/3//H/9f/x//P/+//1//3/8//9//X/+//z//v/9//9//f/+f/3//n/9f/5//P/9f/z//n/8f/5//P/9f/x//X/+//5//n/+f/7//X/+f/1//f/+f/1//n/9//1//X/9f////n//f/5////9f/98="),
+"format": 34896613399,
+"index_count": 96,
+"index_data": PackedByteArray("AAABAAIAAAADAAEABAAFAAYABAAHAAUACAAJAAoACAALAAkADAANAA4ADAAPAA0AEAARABIAEAATABEAFAAQABIAFAASABUAFgAQABQAFgAXABAAFwATABAAFwAYABMAGQAaABsAGQAcABoAHQAZABsAHQAbAB4AHwAZAB0AHwAgABkAIAAcABkAIAAhABwAIgAjACQAIgAlACMAJgAnACgAJgApACcAKgArACwAKgAtACsALgAvADAALgAxAC8A"),
+"material": SubResource("StandardMaterial3D_20wdq"),
+"name": "Brown",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 50,
+"vertex_data": PackedByteArray("AAAAAP9/Zd1rIP//ayBl3QAA////f2XdayAAAGsgZd3/fwAAAACY9pPf//9rIJj2/3///wAAmPaT3wAAayCY9v//AAD/fxrOk9///5PfGs7//////38azpPfAACT3xrO/38AAP//E8FrIP//k98Twf9//////xPBayAAAJPfE8H/fwAA/38QwJPfAACT30TA//8AAP9/CMD/fwAA//8bwP9/AAAAABvAk98AAGsgE8FrIAAAayBEwAAAAAD/fwjAayAAAJPfE8H/f////3+o/Wsg//+T30n7AAD///9/Rv7/f//////5/P9///8AAPn8ayD//2sgmPaT3///ayBJ+///////f0b+k9///5PfmPaT3wAAk98Twf9//////xPBk9///5PfE8H/fwAA//8TwWsgAABrIJj2/3///wAAmPZrIP//ayCY9v9/AAAAAJj2k98AAGsgZd3//////39l3ZPf//9rIGXd//8AAP9/Zd1rIAAAk98azgAA////fxrOayD//5PfGs4AAAAA/38azuHQ4dDh0OHQ4dDh0OHQ4dAfOx87HzsfOx87HzsfOx87syWzJbMlsyWzJbMlsyWzJR7wHvAe8B7wHvAe8B7wHvCeCTB7BRL8dpsDNocoDOt5KAzreeAPwZ8FEvx2mwM2h+APwZ9FwYwChMIJBeGBDr+iwUUDosFFA8CJHruEwgkF4YEOv8CJHrvgD+AP4A/gD+AP4A/gD+AP38TfxN/E38TfxN/E38TfxB0vHS8dLx0vHS8dLx0vHS9L2kvaS9pL2kvaS9pL2kva")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_33fnb")
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_3kln7"]
+points = PackedVector3Array(-8.186698e-05, -0.048350874, -0.4181652, -0.31231406, -0.048350874, -0.31231406, -8.186698e-05, 0.048350874, -0.4181652, 0.3122322, -0.048350874, -0.31231406, -0.31231406, 0.048350874, -0.31231406, -0.4181652, -0.048350874, -8.186698e-05, 0.3122322, 0.048350874, -0.31231406, 0.4181652, -0.048350874, -8.186698e-05, -0.4181652, 0.048350874, -8.186698e-05, -0.31231406, -0.048350874, 0.3122322, 0.4181652, 0.048350874, -8.186698e-05, 0.3122322, -0.048350874, 0.3122322, -0.31231406, 0.048350874, 0.3122322, -8.186698e-05, -0.048350874, 0.4181652, 0.3122322, 0.048350874, 0.3122322, -8.186698e-05, 0.048350874, 0.4181652)
+
+[node name="RoundShield1" type="Node3D" groups=["item"]]
+script = ExtResource("1_ubhmo")
+item_name = "Round Shield1"
+item_icon = ExtResource("2_3kln7")
+item_type = "Shield"
+mass = 2.0
+value = 15
+
+[node name="ItemShieldRound" type="MeshInstance3D" parent="."]
+mesh = SubResource("ArrayMesh_ubhmo")
+skeleton = NodePath("")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+shape = SubResource("ConvexPolygonShape3D_3kln7")
+
+[connection signal="mouse_entered" from="StaticBody3D" to="." method="_on_static_body_3d_mouse_entered"]

@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="LootItem" load_steps=4 format=3 uid="uid://banoqtls4ipo4"]
+
+[ext_resource type="Texture2D" uid="uid://beb208oeohb52" path="res://Assets/2D/banana.png" id="1_opf5v"]
+[ext_resource type="PackedScene" uid="uid://b48m3f1h4xxif" path="res://Assets/3D/Items/Wearables/helmet2.tscn" id="2_opf5v"]
+[ext_resource type="Script" uid="uid://bm5i53gst3tyr" path="res://Systems/Loot/loot_item.gd" id="3_7iqoo"]
+
+[resource]
+script = ExtResource("3_7iqoo")
+item_name = "Helmet2"
+item_scene = ExtResource("2_opf5v")
+icon = ExtResource("1_opf5v")
+item_type = "Helmet"
+metadata/_custom_type_script = "uid://bm5i53gst3tyr"
