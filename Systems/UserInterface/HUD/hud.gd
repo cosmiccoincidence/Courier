@@ -24,7 +24,13 @@ func _ready():
 	TimeManager.time_changed.connect(_on_time_changed)
 	update_time_display()
 	
-	# Update map label
+	# Connect to map loaded signal
+	var map_generator = get_tree().get_first_node_in_group("map_generator")
+	if map_generator:
+		if map_generator.has_signal("map_loaded"):
+			map_generator.map_loaded.connect(_on_map_loaded)
+	
+	# Update map label initially
 	update_map_label()
 
 func update_health(current: int, maximum: int):
@@ -58,6 +64,11 @@ func _on_time_changed(hour: int, minute: int, day: int):
 
 func show_ending_message():
 	ending_label.visible = true
+
+func _on_map_loaded(act_num: int, map_num: int):
+	"""Called when a new map is loaded"""
+	if map_label:
+		map_label.text = "Map %d:%d" % [act_num, map_num]
 
 func update_map_label():
 	if not map_label:

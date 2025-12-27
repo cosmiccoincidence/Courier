@@ -2,11 +2,11 @@
 extends Node
 
 @export var starting_map: PackedScene
-@export var ending_map: PackedScene
 @export var level_1a: PackedScene
 @export var level_1b: PackedScene
 @export var level_1c: PackedScene
 @export var town_1: PackedScene
+@export var ending_map: PackedScene
 
 @onready var map_container: Node3D = get_node("../MapContainer")
 @onready var player: CharacterBody3D = get_node("../Player")
@@ -17,14 +17,12 @@ var current_map: Node3D = null
 var current_level_index: int = 0
 var level_sequence: Array[PackedScene] = []
 
-
 func _ready():
 	# Set up level sequence
 	level_sequence = [starting_map, level_1a, level_1b, level_1c, town_1, ending_map]
 	
 	if starting_map:
 		load_map(starting_map)
-
 
 func load_map(map_scene: PackedScene) -> void:
 	# Fade to black first
@@ -72,6 +70,9 @@ func load_map(map_scene: PackedScene) -> void:
 		
 		# Wait a frame to ensure position is fully updated
 		await get_tree().process_frame
+		
+		# Update HUD with map info
+		update_map_label(map_gen)
 	
 	if is_ending and player and player.hud:
 		player.hud.show_ending_message()
@@ -79,6 +80,25 @@ func load_map(map_scene: PackedScene) -> void:
 	# Finally fade back in
 	await fade_rect.fade_in_wait()
 
+func update_map_label(map_gen: Node):
+	"""Update the HUD map label with current map info"""
+	if not player or not player.hud:
+		return
+	
+	var act_num = 1  # Default
+	var map_num = 1  # Default
+	
+	# Get act_number if it exists
+	if map_gen.get("act_number") != null:
+		act_num = map_gen.get("act_number")
+	
+	# Get map_number if it exists
+	if map_gen.get("map_number") != null:
+		map_num = map_gen.get("map_number")
+	
+	# Update the HUD
+	if player.hud.has_method("_on_map_loaded"):
+		player.hud._on_map_loaded(act_num, map_num)
 
 func find_map_generator(map_root: Node) -> Node:
 	"""
@@ -118,13 +138,11 @@ func find_map_generator(map_root: Node) -> Node:
 	push_warning("GameManager: No map generator found in ", map_root.name)
 	return null
 
-
 func _on_player_reached_exit():
 	current_level_index += 1
 	
 	if current_level_index < level_sequence.size():
 		load_map(level_sequence[current_level_index])
-
 
 func clear_level_entities():
 	var world = get_parent()

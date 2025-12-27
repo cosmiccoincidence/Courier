@@ -22,11 +22,11 @@ script = ExtResource("1_tlwt5")
 [node name="GameManager" type="Node" parent="."]
 script = ExtResource("7_pkg7o")
 starting_map = ExtResource("6_2o6r5")
-ending_map = ExtResource("11_ic0uy")
 level_1a = ExtResource("4_gbfbk")
 level_1b = ExtResource("8_ic0uy")
 level_1c = ExtResource("9_k3n1d")
 town_1 = ExtResource("9_ioo17")
+ending_map = ExtResource("11_ic0uy")
 
 [node name="Player" parent="." instance=ExtResource("4_aqk2v")]
 
