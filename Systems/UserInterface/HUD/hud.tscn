@@ -107,7 +107,23 @@ theme_override_constants/line_spacing = 0
 theme_override_constants/outline_size = 3
 theme_override_font_sizes/font_size = 20
 text = "Day 1, 10:30"
-horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MapLabel" type="Label" parent="."]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -1712.0
+offset_top = 947.0
+offset_right = -1596.0
+offset_bottom = 977.0
+grow_horizontal = 0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 20
+text = "Map 1:1"
+horizontal_alignment = 2
 vertical_alignment = 1
 
 [node name="EncumberedLabel" type="Label" parent="."]
@@ -169,8 +185,9 @@ script = ExtResource("2_fsrcy")
 [node name="TooltipPanel" type="PanelContainer" parent="TooltipUI"]
 custom_minimum_size = Vector2(50, 25)
 layout_mode = 1
-offset_right = 40.0
-offset_bottom = 40.0
+offset_left = -134.0
+offset_right = -60.0
+offset_bottom = 61.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="TooltipUI/TooltipPanel"]
 layout_mode = 2

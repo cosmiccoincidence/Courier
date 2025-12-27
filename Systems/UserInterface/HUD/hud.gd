@@ -1,13 +1,13 @@
 extends CanvasLayer
 # HUD
-
 @onready var health_bar: ProgressBar = $StatBars/Health/HealthBar
 @onready var stamina_bar: ProgressBar = $StatBars/Stamina/StaminaBar
 @onready var health_label: Label = $StatBars/Health/HealthBar/HealthLabel
 @onready var stamina_label: Label = $StatBars/Stamina/StaminaBar/StaminaLabel
+@onready var time_label: Label = $TimeLabel
+@onready var map_label: Label = $MapLabel
 @onready var encumbered_label: Label = $EncumberedLabel
 @onready var death_label: Label = $DeathLabel
-@onready var time_label: Label = $TimeLabel
 @onready var ending_label: Label = $EndingLabel 
 
 @export var player: CharacterBody3D
@@ -23,6 +23,9 @@ func _ready():
 	# Connect to time changes
 	TimeManager.time_changed.connect(_on_time_changed)
 	update_time_display()
+	
+	# Update map label
+	update_map_label()
 
 func update_health(current: int, maximum: int):
 	health_bar.max_value = maximum
@@ -55,3 +58,26 @@ func _on_time_changed(hour: int, minute: int, day: int):
 
 func show_ending_message():
 	ending_label.visible = true
+
+func update_map_label():
+	if not map_label:
+		return
+	
+	# Find the map generator in the scene
+	var map_generator = get_tree().get_first_node_in_group("map_generator")
+	
+	if map_generator:
+		var act_num = 1  # Default
+		var map_num = 1  # Default
+		
+		# Get act_number if it exists
+		if map_generator.has_method("get") and map_generator.get("act_number") != null:
+			act_num = map_generator.get("act_number")
+		
+		# Get map_number if it exists
+		if map_generator.has_method("get") and map_generator.get("map_number") != null:
+			map_num = map_generator.get("map_number")
+		
+		map_label.text = "Map %d:%d" % [act_num, map_num]
+	else:
+		map_label.text = "Map 1:1"  # Fallback
