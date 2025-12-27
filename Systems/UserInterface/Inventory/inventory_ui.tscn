@@ -21,26 +21,12 @@ layout_mode = 0
 offset_top = 23.0
 offset_bottom = 23.0
 
-[node name="HeroNameLabel" type="Label" parent="EquipmentPanel"]
-layout_mode = 0
-offset_top = -5.0
-offset_right = 159.0
-offset_bottom = 23.0
-theme_override_font_sizes/font_size = 20
-text = "Hero Name"
-
-[node name="StatsPanel" type="Panel" parent="EquipmentPanel"]
-layout_mode = 0
-offset_left = 335.0
-offset_right = 602.0
-offset_bottom = 378.0
-
 [node name="InventoryPanel" type="Panel" parent="."]
 layout_mode = 0
 offset_left = 6.0
-offset_top = 391.0
+offset_top = 374.0
 offset_right = 46.0
-offset_bottom = 431.0
+offset_bottom = 414.0
 mouse_filter = 1
 
 [node name="InventoryGrid" type="GridContainer" parent="InventoryPanel"]
@@ -48,21 +34,37 @@ layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="MassLabel" type="Label" parent="InventoryPanel"]
+[node name="StatsPanel" type="Panel" parent="."]
 layout_mode = 0
-offset_top = -26.0
-offset_right = 132.0
-offset_bottom = -3.0
-text = "Mass: 0.0 / 10.0"
+offset_left = 354.0
+offset_top = 5.0
+offset_right = 558.0
+offset_bottom = 504.0
 
-[node name="GoldLabel" type="Label" parent="InventoryPanel"]
+[node name="HeroNameLabel" type="Label" parent="."]
+layout_mode = 0
+offset_left = 6.0
+offset_right = 165.0
+offset_bottom = 28.0
+theme_override_font_sizes/font_size = 20
+text = "Hero Name"
+
+[node name="GoldLabel" type="Label" parent="."]
 layout_mode = 1
-offset_left = 203.0
-offset_top = -26.0
-offset_right = 335.0
-offset_bottom = 8.0
+offset_left = 281.0
+offset_top = 5.0
+offset_right = 413.0
+offset_bottom = 39.0
 theme_override_colors/font_color = Color(1, 0.8666667, 0.33333334, 1)
 text = "Gold: 0"
+
+[node name="MassLabel" type="Label" parent="."]
+layout_mode = 0
+offset_left = 149.0
+offset_top = 5.0
+offset_right = 281.0
+offset_bottom = 28.0
+text = "Mass: 0.0 / 10.0"
 
 [node name="SlotTooltip" type="Control" parent="."]
 anchors_preset = 0

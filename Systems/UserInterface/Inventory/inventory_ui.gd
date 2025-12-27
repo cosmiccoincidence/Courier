@@ -2,10 +2,10 @@ extends Control
 
 @onready var grid_container: GridContainer = $InventoryPanel/InventoryGrid
 @onready var equipment_grid: GridContainer = $EquipmentPanel/EquipmentGrid
-@onready var mass_label: Label = $InventoryPanel/MassLabel
-@onready var gold_label: Label = $InventoryPanel/GoldLabel
+@onready var stats_panel: Panel = $StatsPanel
+@onready var mass_label: Label = $MassLabel
+@onready var gold_label: Label = $GoldLabel
 @onready var slot_tooltip: Control = $SlotTooltip  # Tooltip manager
-@onready var stats_panel: Panel = $EquipmentPanel/StatsPanel
 
 # Hardcoded path since export wasn't working
 const SLOT_SCENE_PATH = "res://Systems/UserInterface/Inventory/inventory_slot.tscn"
