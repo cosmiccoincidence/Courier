@@ -290,6 +290,7 @@ func _spawn_loot_item(item_data: Dictionary):
 	var item_level: int = item_data["item_level"]
 	var item_quality: int = item_data["item_quality"]
 	var item_value: int = item_data["item_value"]
+	var stack_size: int = item_data.get("stack_size", 1)  # Extract stack_size from dictionary, default to 1
 	
 	if not item.item_scene:
 		push_warning("No scene set for item: %s" % item.item_name)
@@ -311,6 +312,10 @@ func _spawn_loot_item(item_data: Dictionary):
 		loot_instance.item_level = item_level
 		loot_instance.item_quality = item_quality
 		loot_instance.value = item_value
+		
+		# Set stack size if stackable
+		if item.stackable:
+			loot_instance.stack_count = stack_size
 	
 	# Add to scene and position with dispersion
 	get_tree().current_scene.add_child(loot_instance)
