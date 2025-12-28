@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://b0cskr8viicis"]
+[gd_scene load_steps=18 format=3 uid="uid://b0cskr8viicis"]
 
 [ext_resource type="Script" uid="uid://w2sxg15vuu1m" path="res://World/world.gd" id="1_tlwt5"]
 [ext_resource type="PackedScene" uid="uid://ca1cn4h542dlw" path="res://Characters/Player/player.tscn" id="4_aqk2v"]
@@ -6,8 +6,10 @@
 [ext_resource type="PackedScene" uid="uid://docvfl8b2fe2f" path="res://Systems/UserInterface/HUD/hud.tscn" id="4_ioo17"]
 [ext_resource type="PackedScene" uid="uid://bsxhkntrbcu7d" path="res://Maps/start.tscn" id="6_2o6r5"]
 [ext_resource type="PackedScene" uid="uid://bl5kby8ys2uft" path="res://Systems/UserInterface/Inventory/inventory_ui.tscn" id="6_dwbse"]
+[ext_resource type="PackedScene" uid="uid://bbkhrejni6xic" path="res://Maps/MapGen/map_1d.tscn" id="7_5xkvv"]
 [ext_resource type="Script" uid="uid://bhftitjhl280t" path="res://Systems/game_manager.gd" id="7_pkg7o"]
 [ext_resource type="PackedScene" uid="uid://bdatgtymbk87c" path="res://Maps/MapGen/map_1b.tscn" id="8_ic0uy"]
+[ext_resource type="PackedScene" uid="uid://d08me3cebt53q" path="res://Maps/MapGen/map_1e.tscn" id="8_kcyjf"]
 [ext_resource type="PackedScene" uid="uid://de1e8ihkli4jp" path="res://Maps/town_1.tscn" id="9_ioo17"]
 [ext_resource type="PackedScene" uid="uid://dkyaty4hl4h2d" path="res://Maps/MapGen/map_1c.tscn" id="9_k3n1d"]
 [ext_resource type="PackedScene" uid="uid://bno3h4db5oos6" path="res://Maps/end.tscn" id="11_ic0uy"]
@@ -25,6 +27,8 @@ starting_map = ExtResource("6_2o6r5")
 level_1a = ExtResource("4_gbfbk")
 level_1b = ExtResource("8_ic0uy")
 level_1c = ExtResource("9_k3n1d")
+level_1d = ExtResource("7_5xkvv")
+level_1e = ExtResource("8_kcyjf")
 town_1 = ExtResource("9_ioo17")
 ending_map = ExtResource("11_ic0uy")
 
