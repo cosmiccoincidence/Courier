@@ -228,11 +228,7 @@ func _drop_on_slot():
 			_end_drag()
 			return
 		
-		# Check if the equipment item can go to inventory (if swapping)
-		if item_from_equipment and not Inventory.can_equip_item_in_slot(item_from_equipment, dragged_from_slot_index):
-			# Just allow it - inventory has no restrictions
-			pass
-		
+		# Equipment items can always go to inventory (no restrictions)
 		# Perform the swap
 		Equipment.set_item_at_slot(slot_index, item_from_inventory)
 		Inventory.items[dragged_from_slot_index] = item_from_equipment
