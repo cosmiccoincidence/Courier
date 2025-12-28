@@ -8,6 +8,7 @@ extends RefCounted
 # ============================================================================
 
 var map_generator: GridMap
+var parent_map_gen: CoreMapGen  # Reference to parent map generator for map_level
 var entrance_zone_tiles: Array
 var exit_zone_tiles: Array
 var road_tiles: Array
@@ -55,6 +56,7 @@ var wall_connector: AdvancedWallConnector = null  # Advanced wall mesh system
 
 func setup(generator: CoreMapGen):
 	map_generator = generator
+	parent_map_gen = generator  # Store reference to parent for map_level access
 	entrance_zone_tiles = generator.entrance_zone_tiles
 	exit_zone_tiles = generator.exit_zone_tiles
 	grass_tile_id = generator.grass_tile_id
@@ -70,6 +72,10 @@ func setup(generator: CoreMapGen):
 	# Setup furniture placer
 	furniture_placer = FurniturePlacer.new()
 	furniture_placer.setup(map_generator, map_generator.get_parent())
+	
+	# Pass map_level reference to furniture placer so it can set chest levels
+	if "parent_map_gen" in furniture_placer:
+		furniture_placer.parent_map_gen = parent_map_gen
 	
 	# Create and register furniture configs
 	var door_config = FurnitureSpawnConfig.new()
