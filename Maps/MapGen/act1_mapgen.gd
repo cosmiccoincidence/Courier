@@ -132,6 +132,7 @@ func generate_features():
 	sync_feature_settings()
 	
 	# Generate buildings
+	print("\n--- PHASE 7a: Building Generation ---")
 	buildings_generator.generate()
 
 func sync_feature_settings():

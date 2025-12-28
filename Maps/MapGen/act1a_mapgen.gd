@@ -20,11 +20,10 @@ func _ready():
 	# CORE SETTINGS (from CoreMapGen)
 	# ========================================
 	
-	# Level 1a - square map
 	min_chunks_width = 10
-	max_chunks_width = 10
+	max_chunks_width = 14
 	min_chunks_depth = 10
-	max_chunks_depth = 10
+	max_chunks_depth = 14
 	
 	protrusion_chance = 0.4
 	indentation_chance = 0.4
@@ -38,13 +37,20 @@ func _ready():
 	edge_variation_amount = 0.05
 	
 	# ========================================
-	# ACT 1 FEATURE SETTINGS (from Act1MapGen)
+	# ACT 1 SETTINGS (from Act1MapGen)
 	# ========================================
 	
 	# Road settings
 	road_width = 2
 	road_min_distance_from_exterior = 2
 	road_zone_proximity = 30
+	
+	# Enemy settings
+	enemy_spawn_chance = 0.002
+	
+	# ========================================
+	# FEATURE SETTINGS (from Act1MapGen)
+	# ========================================
 	
 	# Building settings
 	min_buildings = 1
@@ -66,8 +72,5 @@ func _ready():
 	building_road_buffer = 15
 	building_to_building_buffer = 20
 	building_zone_buffer = 25
-	
-	# Enemy settings
-	enemy_spawn_chance = 0.005
 	
 	super._ready()

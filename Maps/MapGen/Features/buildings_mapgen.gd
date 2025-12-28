@@ -92,10 +92,6 @@ func setup(generator: CoreMapGen):
 	
 	# Setup wall connector (if provided by generator)
 	wall_connector = generator.get("interior_wall_connector")
-	if wall_connector:
-		print("[BuildingsMapGen] Wall connector found, will apply advanced connections")
-	else:
-		print("[BuildingsMapGen] No wall connector, using simple walls")
 
 # ============================================================================
 # GENERATION
