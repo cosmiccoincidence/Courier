@@ -74,7 +74,7 @@ points = PackedVector3Array(-0.07761088, -0.04452324, -0.099999994, -0.46204692,
 
 [node name="Armor1" type="Node3D" groups=["item"]]
 script = ExtResource("1_ayt7t")
-item_name = "Armor1"
+item_name = "Bodyarmor1"
 item_icon = ExtResource("2_xavft")
 item_type = "Armor"
 item_subtype = "Bodyarmor"
