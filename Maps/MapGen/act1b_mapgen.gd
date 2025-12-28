@@ -8,11 +8,11 @@ extends Act1MapGen
 # ============================================================================
 
 @export var map_number: int = 2  # First map in Act 2
-var map_level: int  # Calculated: (act_number + map_number) * act_number
+var map_level: int  # Calculated below
 
 func _ready():
 	# Calculate map_level before calling super._ready()
-	map_level = (act_number + map_number) * act_number
+	map_level = (act_number + map_number) + (5 * (act_number - 1))
 	print("Map Level: ", map_level, " (Act ", act_number, ", Map ", map_number, ")")
 	
 	# ========================================

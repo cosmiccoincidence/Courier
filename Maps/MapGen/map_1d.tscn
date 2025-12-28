@@ -1,0 +1,33 @@
+[gd_scene load_steps=4 format=3 uid="uid://bbkhrejni6xic"]
+
+[ext_resource type="MeshLibrary" uid="uid://dycv0mgmu6mlo" path="res://Assets/3D/Tiles/tiles_library.tres" id="1_k280c"]
+[ext_resource type="Script" uid="uid://b65j0qepb57v" path="res://Maps/MapGen/act1d_mapgen.gd" id="2_k280c"]
+[ext_resource type="MeshLibrary" uid="uid://drskghn0p7pwn" path="res://Assets/3D/Tiles/Floors/floor_library.tres" id="3_1m8rj"]
+
+[node name="Map1d" type="Node3D"]
+
+[node name="PrimaryGridMap" type="GridMap" parent="."]
+mesh_library = ExtResource("1_k280c")
+cell_size = Vector3(1, 1, 1)
+script = ExtResource("2_k280c")
+metadata/_editor_floor_ = Vector3(0, 3, 0)
+
+[node name="FloorGridMap1" type="GridMap" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0, 0.5)
+mesh_library = ExtResource("3_1m8rj")
+cell_size = Vector3(1, 1, 1)
+
+[node name="FloorGridMap2" type="GridMap" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0, 0.5)
+mesh_library = ExtResource("3_1m8rj")
+cell_size = Vector3(1, 1, 1)
+
+[node name="FloorGridMap3" type="GridMap" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0, 0.5)
+mesh_library = ExtResource("3_1m8rj")
+cell_size = Vector3(1, 1, 1)
+
+[node name="FloorGridMap4" type="GridMap" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0, 0.5)
+mesh_library = ExtResource("3_1m8rj")
+cell_size = Vector3(1, 1, 1)

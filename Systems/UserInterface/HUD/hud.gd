@@ -65,10 +65,15 @@ func _on_time_changed(hour: int, minute: int, day: int):
 func show_ending_message():
 	ending_label.visible = true
 
-func _on_map_loaded(act_num: int, map_num: int):
+func _on_map_loaded(act_num: int, map_num: int, map_name: String = ""):
 	"""Called when a new map is loaded"""
 	if map_label:
-		map_label.text = "Map %d:%d" % [act_num, map_num]
+		if map_name != "":
+			# Show map name for special maps (towns, start, end)
+			map_label.text = map_name
+		else:
+			# Show act:map format for regular levels
+			map_label.text = "Map %d:%d" % [act_num, map_num]
 
 func update_map_label():
 	if not map_label:

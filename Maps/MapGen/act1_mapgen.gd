@@ -94,33 +94,48 @@ func initialize_features():
 	buildings_generator.building_zone_buffer = building_zone_buffer
 
 # ============================================================================
-# FEATURE GENERATION
+# ACT GENERATION (roads, enemies - core act elements)
 # ============================================================================
 
-func generate_features():
+func generate_act():
+	"""Generate act-level elements: roads and enemies"""
 	# Re-sync any inspector-set values before generating
 	# (In case they were set in Act1aMapGen or in the Inspector)
-	sync_feature_settings()
+	sync_act_settings()
 	
-	# Generate roads first (buildings need to know where roads are)
+	# Generate roads first (features need to know where roads are)
 	print("\n--- PHASE 6: Road Generation ---")
 	roads_generator.generate()
 	
-	# Generate buildings
-	print("\n--- PHASE 7: Building Generation ---")
-	buildings_generator.generate()
+	# Generate features (buildings, etc.)
+	print("\n--- PHASE 7: Feature Generation ---")
+	generate_features()
 	
 	# Spawn enemies AFTER all features are placed
 	print("\n--- PHASE 8: Enemy Spawning ---")
 	spawn_enemies()
 
-func sync_feature_settings():
-	"""Re-apply settings to feature generators (in case they were changed in Inspector or subclass)"""
+func sync_act_settings():
+	"""Re-apply settings to act generators (in case they were changed in Inspector or subclass)"""
 	# Roads
 	roads_generator.road_width = road_width
 	roads_generator.road_min_distance_from_exterior = road_min_distance_from_exterior
 	roads_generator.road_zone_proximity = road_zone_proximity
+
+# ============================================================================
+# FEATURE GENERATION (buildings and other map features)
+# ============================================================================
+
+func generate_features():
+	"""Generate map features: buildings, etc."""
+	# Sync feature-specific settings
+	sync_feature_settings()
 	
+	# Generate buildings
+	buildings_generator.generate()
+
+func sync_feature_settings():
+	"""Re-apply settings to feature generators (in case they were changed in Inspector or subclass)"""
 	# Buildings
 	buildings_generator.min_buildings = min_buildings
 	buildings_generator.max_buildings = max_buildings

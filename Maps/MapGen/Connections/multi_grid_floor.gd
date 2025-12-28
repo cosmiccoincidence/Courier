@@ -59,9 +59,7 @@ func register_door_tiles(tile_ids: Array) -> void:
 
 
 ## Clear all floor grids (for map regeneration)
-func clear_all_floors() -> void:
-	print("[MultiGridFloor] Clearing all floor grids...")
-	
+func clear_all_floors() -> void:	
 	for grid in floor_grids:
 		if grid:
 			grid.clear()
@@ -70,13 +68,10 @@ func clear_all_floors() -> void:
 	floor_type_map.clear()
 	door_positions.clear()
 	
-	print("[MultiGridFloor] All floor grids cleared")
 
 
 ## Main processing function
-func process_multi_grid_floors() -> void:
-	print("[MultiGridFloor] Starting multi-grid floor processing with %d GridMaps..." % floor_grids.size())
-	
+func process_multi_grid_floors() -> void:	
 	# Track which GridMap is used at each multi-grid cell
 	# Key: "x,z", Value: grid_layer (0-3)
 	var cell_usage: Dictionary = {}
@@ -364,8 +359,6 @@ func _clear_floor_tiles_from_primary() -> void:
 				cleared_count += 1
 	
 	print("[MultiGridFloor] Cleared %d floor/door tiles from primary grid" % cleared_count)
-	print("[MultiGridFloor] Preserved %d door positions" % door_positions.size())
-
 
 ## Get the floor type at a given position (for FOV/pathfinding systems)
 func get_floor_type_at(position: Vector3i) -> String:

@@ -5,6 +5,8 @@ extends Node
 @export var level_1a: PackedScene
 @export var level_1b: PackedScene
 @export var level_1c: PackedScene
+@export var level_1d: PackedScene
+@export var level_1e: PackedScene
 @export var town_1: PackedScene
 @export var ending_map: PackedScene
 
@@ -19,7 +21,7 @@ var level_sequence: Array[PackedScene] = []
 
 func _ready():
 	# Set up level sequence
-	level_sequence = [starting_map, level_1a, level_1b, level_1c, town_1, ending_map]
+	level_sequence = [starting_map, level_1a, level_1b, level_1c, level_1d, level_1e, town_1, ending_map]
 	
 	if starting_map:
 		load_map(starting_map)
@@ -83,10 +85,12 @@ func load_map(map_scene: PackedScene) -> void:
 func update_map_label(map_gen: Node):
 	"""Update the HUD map label with current map info"""
 	if not player or not player.hud:
+		print("GameManager: No player or HUD found")
 		return
 	
 	var act_num = 1  # Default
 	var map_num = 1  # Default
+	var map_name = ""  # Optional map name
 	
 	# Get act_number if it exists
 	if map_gen.get("act_number") != null:
@@ -96,9 +100,15 @@ func update_map_label(map_gen: Node):
 	if map_gen.get("map_number") != null:
 		map_num = map_gen.get("map_number")
 	
+	# Get map_name if it exists (for manual maps like towns, start, end)
+	if map_gen.get("map_name") != null:
+		map_name = map_gen.get("map_name")
+	
+	print("GameManager: Updating HUD to Map ", act_num, ":", map_num, " - ", map_name)
+	
 	# Update the HUD
 	if player.hud.has_method("_on_map_loaded"):
-		player.hud._on_map_loaded(act_num, map_num)
+		player.hud._on_map_loaded(act_num, map_num, map_name)
 
 func find_map_generator(map_root: Node) -> Node:
 	"""

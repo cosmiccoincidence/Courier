@@ -242,19 +242,18 @@ func _generate_map_internal():
 	place_entrance_zone()
 	place_exit_zone()
 	
-	# PHASE 6: FEATURES (handled by subclasses)
-	print("\n--- PHASE 6: Features ---")
-	generate_features()
+	# PHASE 6-8: ACT GENERATION (handled by subclasses - roads, features, enemies)
+	generate_act()
 	
-	# PHASE 7: MULTI-GRID FLOOR PROCESSING
+	# PHASE 9: MULTI-GRID FLOOR PROCESSING
 	if enable_multi_grid_floors:
-		print("\n--- PHASE 7: Multi-Grid Floor Processing ---")
+		print("\n--- PHASE 9: Multi-Grid Floor Processing ---")
 		process_multi_grid_floors()
 	
 	print("\n=== Map Generation Complete ===")
 
-# Override this in subclasses to add features (roads, buildings, etc.)
-func generate_features():
+# Override this in act subclasses to add act-specific elements (roads, features, enemies)
+func generate_act():
 	pass
 
 func validate_map() -> bool:
