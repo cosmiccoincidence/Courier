@@ -163,7 +163,11 @@ func _spawn_loot_item(item_data: Dictionary):
 			loot_instance.weapon_damage = weapon_damage
 		print("  Rolled weapon damage: ", weapon_damage, " (base: ", item.min_weapon_damage, "-", item.max_weapon_damage, ")")
 	
-	elif item.item_type.to_lower() == "armor" and item.base_armor_defense > 0:
+	# Roll armor defense for armor OR shields (weapon type with shield subtype)
+	var is_armor = item.item_type.to_lower() == "armor"
+	var is_shield = item.item_type.to_lower() == "weapon" and item.item_subtype.to_lower() == "shield"
+	
+	if (is_armor or is_shield) and item.base_armor_defense > 0:
 		var armor_defense = ArmorStatRoller.roll_armor_defense(
 			item.base_armor_defense,
 			item_level,

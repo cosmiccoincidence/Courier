@@ -52,3 +52,24 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.0934763, 0.5079384, 0.1905
 
 [node name="Door" parent="." instance=ExtResource("7_v8w7h")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -3.5, 0.5, 1.5)
+
+[node name="Chest3" parent="." instance=ExtResource("6_l4ox0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.7002425, 0.50805664, 4.1552696)
+
+[node name="Chest4" parent="." instance=ExtResource("6_l4ox0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.699469, 0.50805664, 4.483105)
+
+[node name="Chest5" parent="." instance=ExtResource("6_l4ox0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.762795, 0.50805664, 3.5932655)
+
+[node name="Chest6" parent="." instance=ExtResource("6_l4ox0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.021156, 0.50805664, 4.1552696)
+
+[node name="Chest7" parent="." instance=ExtResource("6_l4ox0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.7939105, 0.50805664, 1.4623358)
+
+[node name="Chest8" parent="." instance=ExtResource("6_l4ox0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0940547, 0.50805664, 1.696504)
+
+[node name="Chest9" parent="." instance=ExtResource("6_l4ox0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7896361, 0.50805664, -1.2305973)
