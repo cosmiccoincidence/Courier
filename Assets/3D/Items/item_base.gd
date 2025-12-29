@@ -252,10 +252,6 @@ func pickup():
 	# Pass the scene reference AND all item properties including level and quality
 	var item_scene = load(scene_file_path) if scene_file_path else null
 	
-	print("=== PICKUP DEBUG ===")
-	print("Item: ", item_name)
-	print("weapon_hand value: ", weapon_hand)
-	
 	if Inventory.add_item(
 		item_name, 
 		item_icon, 

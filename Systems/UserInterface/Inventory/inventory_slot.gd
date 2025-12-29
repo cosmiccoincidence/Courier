@@ -122,7 +122,27 @@ func set_item(item):
 func clear_item():
 	item_data = null
 	icon.hide()
+	icon.modulate = Color(1, 1, 1, 1)  # Reset to normal color
 	label.hide()
+	label.modulate = Color(1, 1, 1, 1)  # Reset label color
+
+func show_twohand_placeholder(primary_slot_index: int):
+	"""Show that this slot is occupied by a two-handed weapon"""
+	# Get the actual weapon from the primary slot
+	var primary_item = Equipment.get_item_at_slot(primary_slot_index)
+	
+	if primary_item and primary_item.has("icon"):
+		# Show the weapon icon but grayed out
+		icon.texture = primary_item.icon
+		icon.modulate = Color(0.5, 0.5, 0.5, 0.7)  # Gray and semi-transparent
+		icon.show()
+		
+		# Show label indicating it's two-handed
+		label.text = "[2H]"
+		label.modulate = Color(1, 1, 0, 1)  # Yellow color
+		label.show()
+	else:
+		clear_item()
 
 func _input(event):
 	if not visible or not is_visible_in_tree():
@@ -296,21 +316,3 @@ static func _get_slot_by_index(index: int) -> Panel:
 			if node.slot_index == index:
 				return node
 	return null
-
-func show_twohand_placeholder(primary_slot_index: int):
-	"""Show that this slot is occupied by a two-handed weapon"""
-	# Get the actual weapon from the primary slot
-	var primary_item = Equipment.get_item_at_slot(primary_slot_index)
-	
-	if primary_item and primary_item.has("icon"):
-		# Show the weapon icon but grayed out
-		icon.texture = primary_item.icon
-		icon.modulate = Color(0.5, 0.5, 0.5, 0.7)  # Gray and semi-transparent
-		icon.show()
-		
-		# Show label indicating it's two-handed
-		label.text = "[2H]"
-		label.modulate = Color(1, 1, 0.5)  # Yellowish tint
-		label.show()
-	else:
-		clear_item()

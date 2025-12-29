@@ -131,14 +131,7 @@ func _spawn_loot_item(item_data: Dictionary):
 		
 		# Copy weapon hand restriction if weapon
 		if item.item_type.to_lower() == "weapon":
-			print("  Item is weapon, checking weapon_hand...")
-			print("  LootItem weapon_hand value: ", item.weapon_hand)
-			print("  LootItem get weapon_hand: ", item.get("weapon_hand"))
-			if item.get("weapon_hand") != null:
-				loot_instance.weapon_hand = item.weapon_hand
-				print("  Copied weapon_hand: ", item.weapon_hand)
-			else:
-				print("  WARNING: weapon_hand is null, not copying")
+			loot_instance.weapon_hand = item.weapon_hand
 		
 		# Set rolled properties (level, quality, value)
 		loot_instance.item_level = item_level
