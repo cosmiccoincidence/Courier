@@ -151,12 +151,12 @@ func highlight(is_valid: bool):
 		style = StyleBoxFlat.new()
 	
 	if is_valid:
-		# Green border for valid slots
-		style.border_color = Color(0, 1, 0, 1)  # Bright green
+		# White border for valid slots
+		style.border_color = Color(1, 1, 1, 1)  # Bright white
 		style.set_border_width_all(3)
 	else:
-		# Red/dimmed border for invalid slots
-		style.border_color = Color(1, 0, 0, 0.5)  # Semi-transparent red
+		# Dark grey border for invalid slots
+		style.border_color = Color(0.2, 0.2, 0.2, 0.8)  # Dark grey
 		style.set_border_width_all(2)
 	
 	add_theme_stylebox_override("panel", style)
