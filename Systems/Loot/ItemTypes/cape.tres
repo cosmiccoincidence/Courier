@@ -1,9 +1,0 @@
-[gd_resource type="Resource" script_class="LootItemType" load_steps=2 format=3 uid="uid://dmgfu7rfrasqa"]
-
-[ext_resource type="Script" uid="uid://47oxr4cv0gf0" path="res://Systems/Loot/loot_item_type.gd" id="1_7ngfm"]
-
-[resource]
-script = ExtResource("1_7ngfm")
-type_name = "cape"
-display_name = "Cape"
-metadata/_custom_type_script = "uid://47oxr4cv0gf0"

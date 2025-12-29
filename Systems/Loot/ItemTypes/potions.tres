@@ -4,6 +4,6 @@
 
 [resource]
 script = ExtResource("1_cnpcw")
-type_name = "potions"
+type_name = "Potions"
 display_name = "Potions"
 metadata/_custom_type_script = "uid://47oxr4cv0gf0"

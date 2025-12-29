@@ -4,6 +4,6 @@
 
 [resource]
 script = ExtResource("1_sv4l3")
-type_name = "weapon"
+type_name = "Weapon"
 display_name = "Weapon"
 metadata/_custom_type_script = "uid://47oxr4cv0gf0"

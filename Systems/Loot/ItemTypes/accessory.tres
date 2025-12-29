@@ -4,6 +4,6 @@
 
 [resource]
 script = ExtResource("1_1smkk")
-type_name = "belt"
-display_name = "Belt"
+type_name = "Accessory"
+display_name = "Accessory"
 metadata/_custom_type_script = "uid://47oxr4cv0gf0"

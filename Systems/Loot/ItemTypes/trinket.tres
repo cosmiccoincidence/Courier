@@ -4,6 +4,6 @@
 
 [resource]
 script = ExtResource("1_jsccy")
-type_name = "charm"
-display_name = "Charm"
+type_name = "Trinket"
+display_name = "Trinket"
 metadata/_custom_type_script = "uid://47oxr4cv0gf0"

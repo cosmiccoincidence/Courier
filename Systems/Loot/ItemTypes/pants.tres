@@ -1,9 +1,0 @@
-[gd_resource type="Resource" script_class="LootItemType" load_steps=2 format=3 uid="uid://m5p3k2tsg1sa"]
-
-[ext_resource type="Script" uid="uid://47oxr4cv0gf0" path="res://Systems/Loot/loot_item_type.gd" id="1_hmmat"]
-
-[resource]
-script = ExtResource("1_hmmat")
-type_name = "pants"
-display_name = "Pants"
-metadata/_custom_type_script = "uid://47oxr4cv0gf0"

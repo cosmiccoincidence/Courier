@@ -4,6 +4,6 @@
 
 [resource]
 script = ExtResource("1_hp40l")
-type_name = "gemstones"
+type_name = "Gemstones"
 display_name = "Gemstones"
 metadata/_custom_type_script = "uid://47oxr4cv0gf0"

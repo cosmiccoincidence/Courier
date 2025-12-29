@@ -4,6 +4,6 @@
 
 [resource]
 script = ExtResource("1_86f7d")
-type_name = "bag"
+type_name = "Bag"
 display_name = "Bag"
 metadata/_custom_type_script = "uid://47oxr4cv0gf0"
