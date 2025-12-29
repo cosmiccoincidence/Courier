@@ -144,6 +144,31 @@ func show_twohand_placeholder(primary_slot_index: int):
 	else:
 		clear_item()
 
+func highlight(is_valid: bool):
+	"""Highlight slot based on whether it can accept the dragged item"""
+	var style = get_theme_stylebox("panel")
+	if not style:
+		style = StyleBoxFlat.new()
+	
+	if is_valid:
+		# Green border for valid slots
+		style.border_color = Color(0, 1, 0, 1)  # Bright green
+		style.set_border_width_all(3)
+	else:
+		# Red/dimmed border for invalid slots
+		style.border_color = Color(1, 0, 0, 0.5)  # Semi-transparent red
+		style.set_border_width_all(2)
+	
+	add_theme_stylebox_override("panel", style)
+
+func clear_highlight():
+	"""Clear highlight and return to normal appearance"""
+	var style = StyleBoxFlat.new()
+	style.bg_color = Color(0.2, 0.2, 0.2, 0.8)
+	style.border_color = Color(0.5, 0.5, 0.5, 1.0)
+	style.set_border_width_all(2)
+	add_theme_stylebox_override("panel", style)
+
 func _input(event):
 	if not visible or not is_visible_in_tree():
 		return
@@ -191,6 +216,16 @@ func _start_drag():
 	
 	# Make this slot semi-transparent to show it's being dragged
 	modulate = Color(1, 1, 1, 0.5)
+	
+	# Highlight valid equipment slots if this item is from inventory
+	var is_equipment = get_meta("is_equipment_slot", false)
+	if not is_equipment:
+		# Get the equipment UI and highlight valid slots
+		var inventory_ui = get_tree().get_first_node_in_group("inventory_ui")
+		if inventory_ui and inventory_ui.has_node("EquipmentPanel"):
+			var equipment_ui = inventory_ui.get_node("EquipmentPanel")
+			if equipment_ui and equipment_ui.has_method("highlight_valid_slots"):
+				equipment_ui.highlight_valid_slots(item_data)
 
 func _drop_on_slot():
 	"""Drop the dragged item on this slot"""
@@ -300,6 +335,13 @@ func _create_drag_preview():
 
 static func _end_drag():
 	"""Clean up drag state"""
+	# Clear equipment slot highlights
+	var inventory_ui = Engine.get_main_loop().root.get_tree().get_first_node_in_group("inventory_ui")
+	if inventory_ui and inventory_ui.has_node("EquipmentPanel"):
+		var equipment_ui = inventory_ui.get_node("EquipmentPanel")
+		if equipment_ui and equipment_ui.has_method("clear_slot_highlights"):
+			equipment_ui.clear_slot_highlights()
+	
 	dragged_item_data = null
 	dragged_from_slot_index = -1
 	dragged_from_slot = null

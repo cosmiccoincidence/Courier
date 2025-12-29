@@ -15,7 +15,7 @@ const SLOT_SCENE_PATH = "res://Systems/UserInterface/Inventory/inventory_slot.ts
 # ===== GRID CONFIGURATION =====
 var slot_size: int = 64
 var rows: int = 0  # Calculated from Inventory.max_slots
-var columns: int = 4 # Fixed number of columns
+var columns: int = 5 # Fixed number of columns
 
 # ===== STATE =====
 var player_ref: CharacterBody3D = null
@@ -24,6 +24,9 @@ var player_ref: CharacterBody3D = null
 # ===== INITIALIZATION =====
 
 func _ready():
+	# Add to group for easy access
+	add_to_group("inventory_ui")
+	
 	# Calculate columns based on Inventory.max_slots
 	rows = Inventory.max_slots / columns
 	

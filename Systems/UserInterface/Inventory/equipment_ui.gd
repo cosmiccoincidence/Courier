@@ -149,14 +149,37 @@ func _update_equipment():
 		if item != null:
 			# Check if this is a two-handed weapon placeholder
 			if typeof(item) == TYPE_DICTIONARY and item.has("_twohand_occupant"):
-				# This is a placeholder for a two-handed weapon
-				# Show a grayed-out version or special indicator
 				slot.show_twohand_placeholder(item.primary_slot)
 			else:
-				# Normal item
 				slot.set_item(item)
 		else:
 			slot.clear_item()
+
+func highlight_valid_slots(item_data):
+	"""Highlight equipment slots that can accept this item"""
+	if not item_data:
+		return
+	
+	var equipment_slots = equipment_grid.get_children()
+	
+	for i in range(equipment_slots.size()):
+		var slot = equipment_slots[i]
+		if Equipment.can_equip_item_in_slot(item_data, i):
+			# This slot can accept the item - highlight it
+			if slot.has_method("highlight"):
+				slot.highlight(true)
+		else:
+			# This slot cannot accept the item - dim it
+			if slot.has_method("highlight"):
+				slot.highlight(false)
+
+func clear_slot_highlights():
+	"""Clear all slot highlights"""
+	var equipment_slots = equipment_grid.get_children()
+	
+	for slot in equipment_slots:
+		if slot.has_method("clear_highlight"):
+			slot.clear_highlight()
 
 # ===== DROP HANDLING =====
 
