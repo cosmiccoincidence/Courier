@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=4 uid="uid://4a656rmh6vji"]
 
-[ext_resource type="Script" uid="uid://bsi5m1q304kyn" path="res://Assets/3D/Items/base_item.gd" id="1_8t17u"]
+[ext_resource type="Script" uid="uid://bsi5m1q304kyn" path="res://Assets/3D/Items/item_base.gd" id="1_8t17u"]
 [ext_resource type="Texture2D" uid="uid://beb208oeohb52" path="res://Assets/2D/banana.png" id="2_ir246"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xan16"]
