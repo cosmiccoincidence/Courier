@@ -103,10 +103,11 @@ static func _find_valid_spawn_position(origin: Vector3, parent_node: Node) -> Ve
 	- At least MIN_SPACING tiles from origin (source)
 	- At least MIN_SPACING tiles from player
 	- At least MIN_SPACING tiles from other items
+	- Slightly above the ground (Y = 0.55)
 	"""
 	const MIN_SPACING = 0.3
-	const MAX_ATTEMPTS = 20
 	const MAX_RADIUS = 1.25
+	const MAX_ATTEMPTS = 20
 	
 	# Get player position
 	var player = parent_node.get_tree().get_first_node_in_group("player")
@@ -120,9 +121,11 @@ static func _find_valid_spawn_position(origin: Vector3, parent_node: Node) -> Ve
 		var angle = randf() * TAU
 		var radius = randf_range(MIN_SPACING, MAX_RADIUS)
 		var offset = Vector3(cos(angle) * radius, 0.0, sin(angle) * radius)
-		var candidate_pos = origin + offset
 		
-		# Check spacing from origin
+		# Use origin's X and Z, but set Y above ground level (0.55)
+		var candidate_pos = Vector3(origin.x + offset.x, 0.55, origin.z + offset.z)
+		
+		# Check spacing from origin (2D distance)
 		var dist_from_origin = Vector2(candidate_pos.x - origin.x, candidate_pos.z - origin.z).length()
 		if dist_from_origin < MIN_SPACING:
 			continue
@@ -147,10 +150,10 @@ static func _find_valid_spawn_position(origin: Vector3, parent_node: Node) -> Ve
 			# Found a valid position!
 			return candidate_pos
 	
-	# If we couldn't find a valid position after MAX_ATTEMPTS, just return a position at MIN_SPACING
+	# Fallback: place at minimum spacing on ground level
 	var fallback_angle = randf() * TAU
 	var fallback_offset = Vector3(cos(fallback_angle) * MIN_SPACING, 0.0, sin(fallback_angle) * MIN_SPACING)
-	return origin + fallback_offset
+	return Vector3(origin.x + fallback_offset.x, 0.5, origin.z + fallback_offset.z)
 
 
 static func spawn_all_loot(loot_profile: LootProfile, enemy_level: int, spawn_position: Vector3, parent_node: Node, player: Node = null) -> void:
