@@ -26,6 +26,7 @@ mesh_library = ExtResource("1_x6ul5")
 cell_size = Vector3(1, 1, 1)
 script = ExtResource("2_i07pk")
 enemy_spawn_list = Array[ExtResource("3_q86o1")]([SubResource("Resource_l4a7r"), SubResource("Resource_3kewl")])
+floor_mesh_library = ExtResource("7_nlslb")
 interior_wall_connector = ExtResource("6_x6ul5")
 metadata/_editor_floor_ = Vector3(0, 0, 0)
 

@@ -1,8 +1,23 @@
-[gd_scene load_steps=4 format=3 uid="uid://bbkhrejni6xic"]
+[gd_scene load_steps=10 format=3 uid="uid://bbkhrejni6xic"]
 
 [ext_resource type="MeshLibrary" uid="uid://dycv0mgmu6mlo" path="res://Assets/3D/Tiles/tiles_library.tres" id="1_k280c"]
 [ext_resource type="Script" uid="uid://b65j0qepb57v" path="res://Maps/MapGen/act1d_mapgen.gd" id="2_k280c"]
 [ext_resource type="MeshLibrary" uid="uid://drskghn0p7pwn" path="res://Assets/3D/Tiles/Floors/floor_library.tres" id="3_1m8rj"]
+[ext_resource type="Script" uid="uid://rc6qhmcd5qi6" path="res://Characters/Enemies/enemy_spawn_data.gd" id="3_eplav"]
+[ext_resource type="Resource" uid="uid://cwn4875vg684d" path="res://Maps/MapGen/Connections/interior_wall_connector.tres" id="3_ut85y"]
+[ext_resource type="PackedScene" uid="uid://mahss0budjch" path="res://Characters/Enemies/enemy1.tscn" id="4_gg0ok"]
+[ext_resource type="PackedScene" uid="uid://ddi31cpnmidio" path="res://Characters/Enemies/enemy2.tscn" id="5_xg3km"]
+
+[sub_resource type="Resource" id="Resource_yjvu0"]
+script = ExtResource("3_eplav")
+enemy_scene = ExtResource("4_gg0ok")
+metadata/_custom_type_script = "uid://rc6qhmcd5qi6"
+
+[sub_resource type="Resource" id="Resource_5ymos"]
+script = ExtResource("3_eplav")
+enemy_scene = ExtResource("5_xg3km")
+spawn_weight = 0.2
+metadata/_custom_type_script = "uid://rc6qhmcd5qi6"
 
 [node name="Map1d" type="Node3D"]
 
@@ -10,6 +25,9 @@
 mesh_library = ExtResource("1_k280c")
 cell_size = Vector3(1, 1, 1)
 script = ExtResource("2_k280c")
+enemy_spawn_list = Array[ExtResource("3_eplav")]([SubResource("Resource_yjvu0"), SubResource("Resource_5ymos")])
+floor_mesh_library = ExtResource("3_1m8rj")
+interior_wall_connector = ExtResource("3_ut85y")
 metadata/_editor_floor_ = Vector3(0, 3, 0)
 
 [node name="FloorGridMap1" type="GridMap" parent="."]
