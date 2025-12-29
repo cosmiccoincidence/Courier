@@ -86,7 +86,7 @@ func _process(delta):
 		visible = true
 		return
 	
-	# Manual hover detection via raycast - REQUIRES ALT KEY
+	# Manual hover detection via raycast - NO KEY REQUIRED
 	if not visible:
 		# Item hidden by FOV, hide label
 		if is_hovered:
@@ -95,18 +95,7 @@ func _process(delta):
 			get_meta("background").hide()
 		return
 	
-	# Check if ALT key is pressed
-	var alt_pressed = Input.is_physical_key_pressed(KEY_ALT)
-	
-	# If ALT not pressed, hide tooltip and skip raycast
-	if not alt_pressed:
-		if is_hovered:
-			is_hovered = false
-			label_3d.hide()
-			get_meta("background").hide()
-		return
-	
-	# ALT is pressed - do raycast to check hover
+	# Do raycast to check hover
 	var camera = get_viewport().get_camera_3d()
 	if not camera:
 		return
