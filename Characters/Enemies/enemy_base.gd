@@ -309,6 +309,12 @@ func _spawn_loot_item(item_data: Dictionary):
 		loot_instance.stackable = item.stackable
 		loot_instance.max_stack_size = item.max_stack_size
 		
+		# Copy weapon hand restriction if weapon
+		if item.item_type.to_lower() == "weapon":
+			if item.get("weapon_hand") != null:
+				loot_instance.weapon_hand = item.weapon_hand
+				print("  Copied weapon_hand: ", item.weapon_hand)
+		
 		# Set rolled properties (level, quality, value)
 		loot_instance.item_level = item_level
 		loot_instance.item_quality = item_quality

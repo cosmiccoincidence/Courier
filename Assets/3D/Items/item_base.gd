@@ -19,6 +19,7 @@ var rolled_stats: Dictionary = {}  # Future: store randomized stats based on ite
 # Weapon and Armor stats (rolled when spawned)
 var weapon_damage: int = 0  # Only for weapons
 var armor_defense: int = 0  # Only for armor
+var weapon_hand: int = 0  # Weapon hand restriction (0=ANY, 1=PRIMARY, 2=OFFHAND, 3=TWOHAND)
 
 # Internal state
 var is_hovered: bool = false
@@ -251,6 +252,10 @@ func pickup():
 	# Pass the scene reference AND all item properties including level and quality
 	var item_scene = load(scene_file_path) if scene_file_path else null
 	
+	print("=== PICKUP DEBUG ===")
+	print("Item: ", item_name)
+	print("weapon_hand value: ", weapon_hand)
+	
 	if Inventory.add_item(
 		item_name, 
 		item_icon, 
@@ -265,7 +270,8 @@ func pickup():
 		item_quality,  # Pass item quality
 		item_subtype,  # Pass item subtype
 		weapon_damage,  # Pass weapon damage
-		armor_defense  # Pass armor defense
+		armor_defense,  # Pass armor defense
+		weapon_hand  # Pass weapon hand restriction
 	):
 		queue_free()
 	else:

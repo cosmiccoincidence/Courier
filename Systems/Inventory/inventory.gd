@@ -50,7 +50,7 @@ func _update_mass_signals():
 	mass_changed.emit(current_mass, soft_max_mass)
 	encumbered_status_changed.emit(is_encumbered())
 
-func add_item(item_name: String, icon: Texture2D = null, item_scene: PackedScene = null, item_mass: float = 1.0, item_value: int = 10, is_stackable: bool = false, max_stack: int = 99, amount: int = 1, item_type: String = "", item_level: int = 1, item_quality: int = 1, item_subtype: String = "", weapon_damage: int = 0, armor_defense: int = 0) -> bool:
+func add_item(item_name: String, icon: Texture2D = null, item_scene: PackedScene = null, item_mass: float = 1.0, item_value: int = 10, is_stackable: bool = false, max_stack: int = 99, amount: int = 1, item_type: String = "", item_level: int = 1, item_quality: int = 1, item_subtype: String = "", weapon_damage: int = 0, armor_defense: int = 0, weapon_hand: int = 0) -> bool:
 	# Special handling for gold - add directly to gold counter
 	if item_name.to_lower() == "gold" or item_name.to_lower() == "coin":
 		add_gold(amount)
@@ -103,17 +103,18 @@ func add_item(item_name: String, icon: Texture2D = null, item_scene: PackedScene
 			"name": item_name,
 			"icon": icon,
 			"scene": item_scene,
-			"mass": item_mass,  # Changed from 'weight' to 'mass'
+			"mass": item_mass,
 			"value": item_value,
 			"stackable": is_stackable,
 			"max_stack_size": max_stack,
 			"stack_count": stack_size,
 			"item_type": item_type,
-			"item_level": item_level,  # Store item level
-			"item_quality": item_quality,  # Store item quality
-			"item_subtype": item_subtype,  # Store item subtype
-			"weapon_damage": weapon_damage,  # Store weapon damage
-			"armor_defense": armor_defense   # Store armor defense
+			"item_level": item_level,
+			"item_quality": item_quality,
+			"item_subtype": item_subtype,
+			"weapon_damage": weapon_damage,
+			"armor_defense": armor_defense,
+			"weapon_hand": weapon_hand  
 		}
 		
 		amount -= stack_size
