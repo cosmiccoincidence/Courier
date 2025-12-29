@@ -75,6 +75,7 @@ points = PackedVector3Array(-8.186698e-05, -0.048350874, -0.4181652, -0.31231406
 script = ExtResource("1_evvwa")
 
 [node name="ItemShieldRound2" type="MeshInstance3D" parent="."]
+cast_shadow = 0
 mesh = SubResource("ArrayMesh_evvwa")
 skeleton = NodePath("")
 

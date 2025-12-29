@@ -47,6 +47,7 @@ points = PackedVector3Array(0.23006977, 0.04452324, 0.5190109, 0.23006977, -0.04
 script = ExtResource("1_ksctg")
 
 [node name="ItemCape2" type="MeshInstance3D" parent="."]
+cast_shadow = 0
 mesh = SubResource("ArrayMesh_ksctg")
 skeleton = NodePath("")
 

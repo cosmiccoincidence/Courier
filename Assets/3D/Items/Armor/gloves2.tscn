@@ -49,6 +49,7 @@ points = PackedVector3Array(-0.062358797, -0.011158057, -0.10757963, -0.13504264
 script = ExtResource("1_rot7o")
 
 [node name="ItemGlove2" type="MeshInstance3D" parent="."]
+cast_shadow = 0
 mesh = SubResource("ArrayMesh_rot7o")
 skeleton = NodePath("")
 

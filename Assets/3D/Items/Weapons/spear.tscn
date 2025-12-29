@@ -75,6 +75,7 @@ points = PackedVector3Array(0.04590052, 0.0417875, 1.1312456, -0.04590052, 0.041
 script = ExtResource("1_d800s")
 
 [node name="ItemSpear" type="MeshInstance3D" parent="."]
+cast_shadow = 0
 mesh = SubResource("ArrayMesh_d800s")
 skeleton = NodePath("")
 

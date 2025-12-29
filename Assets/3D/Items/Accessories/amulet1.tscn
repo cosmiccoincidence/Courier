@@ -131,6 +131,7 @@ points = PackedVector3Array(0.28359777, 0.008057307, -0.23080385, 0.28126585, 0.
 script = ExtResource("1_ov3u0")
 
 [node name="ItemAmulet" type="MeshInstance3D" parent="."]
+cast_shadow = 0
 mesh = SubResource("ArrayMesh_ov3u0")
 skeleton = NodePath("")
 

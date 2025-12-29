@@ -75,6 +75,7 @@ points = PackedVector3Array(0.3423553, 0.048350874, 0.49841183, 0.3423553, -0.04
 script = ExtResource("1_odwm2")
 
 [node name="ItemShieldTower2" type="MeshInstance3D" parent="."]
+cast_shadow = 0
 mesh = SubResource("ArrayMesh_odwm2")
 skeleton = NodePath("")
 

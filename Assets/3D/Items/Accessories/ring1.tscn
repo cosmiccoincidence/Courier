@@ -75,6 +75,7 @@ points = PackedVector3Array(-2.347678e-05, -0.020898363, -0.11943162, -0.0457105
 script = ExtResource("1_x07y4")
 
 [node name="ItemRing1" type="MeshInstance3D" parent="."]
+cast_shadow = 0
 mesh = SubResource("ArrayMesh_jdp0n")
 skeleton = NodePath("")
 

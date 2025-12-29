@@ -183,16 +183,19 @@ points = PackedVector3Array(-2.5868416e-05, -0.020898363, -0.13208595, -0.050553
 script = ExtResource("1_6w5xx")
 
 [node name="ItemGold" type="MeshInstance3D" parent="."]
+cast_shadow = 0
 mesh = SubResource("ArrayMesh_6w5xx")
 skeleton = NodePath("")
 
 [node name="ItemGold2" type="MeshInstance3D" parent="."]
 visible = false
+cast_shadow = 0
 mesh = SubResource("ArrayMesh_khxwe")
 skeleton = NodePath("")
 
 [node name="ItemGold3" type="MeshInstance3D" parent="."]
 visible = false
+cast_shadow = 0
 mesh = SubResource("ArrayMesh_0wd68")
 skeleton = NodePath("")
 

@@ -75,6 +75,7 @@ points = PackedVector3Array(-8.279085e-05, -0.020898363, -0.12402662, -0.1611991
 script = ExtResource("1_cnado")
 
 [node name="ItemBelt1" type="MeshInstance3D" parent="."]
+cast_shadow = 0
 mesh = SubResource("ArrayMesh_cnado")
 skeleton = NodePath("")
 

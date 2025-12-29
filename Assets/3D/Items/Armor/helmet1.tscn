@@ -47,6 +47,7 @@ points = PackedVector3Array(-0.10002276, -0.04452324, -0.099999994, -0.21658172,
 script = ExtResource("1_7fj0j")
 
 [node name="ItemHelmet" type="MeshInstance3D" parent="."]
+cast_shadow = 0
 mesh = SubResource("ArrayMesh_34ha8")
 skeleton = NodePath("")
 

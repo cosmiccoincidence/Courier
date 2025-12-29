@@ -47,6 +47,7 @@ points = PackedVector3Array(0.085459724, 0.085459724, 0.085459724, 0.085459724, 
 script = ExtResource("1_j1uet")
 
 [node name="ItemGemstone2" type="MeshInstance3D" parent="."]
+cast_shadow = 0
 mesh = SubResource("ArrayMesh_j1uet")
 skeleton = NodePath("")
 

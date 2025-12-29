@@ -75,6 +75,7 @@ points = PackedVector3Array(0.37784782, 0.040070914, 0.674711, -0.37784782, 0.04
 script = ExtResource("1_wiula")
 
 [node name="ItemPants1" type="MeshInstance3D" parent="."]
+cast_shadow = 0
 mesh = SubResource("ArrayMesh_wiula")
 skeleton = NodePath("")
 

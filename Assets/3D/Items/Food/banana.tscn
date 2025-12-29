@@ -47,6 +47,7 @@ points = PackedVector3Array(-0.16188994, -0.08545971, -0.16188994, -0.16188994, 
 script = ExtResource("1_sqog5")
 
 [node name="ItemBanana" type="MeshInstance3D" parent="."]
+cast_shadow = 0
 mesh = SubResource("ArrayMesh_pamig")
 skeleton = NodePath("")
 

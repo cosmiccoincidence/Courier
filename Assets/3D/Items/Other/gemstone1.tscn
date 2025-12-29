@@ -47,6 +47,7 @@ points = PackedVector3Array(0.085459724, 0.085459724, 0.085459724, 0.085459724, 
 script = ExtResource("1_crmt6")
 
 [node name="ItemGemstone" type="MeshInstance3D" parent="."]
+cast_shadow = 0
 mesh = SubResource("ArrayMesh_crmt6")
 skeleton = NodePath("")
 

@@ -75,6 +75,7 @@ points = PackedVector3Array(0.09186623, 0.041787505, 0.79415804, -0.09186625, 0.
 script = ExtResource("1_gw008")
 
 [node name="ItemDagger" type="MeshInstance3D" parent="."]
+cast_shadow = 0
 mesh = SubResource("ArrayMesh_gw008")
 skeleton = NodePath("")
 

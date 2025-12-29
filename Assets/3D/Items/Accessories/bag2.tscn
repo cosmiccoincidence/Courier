@@ -105,6 +105,7 @@ points = PackedVector3Array(0.4825232, -0.02179873, 0.40133715, 0.48148853, -0.0
 script = ExtResource("1_sh8o0")
 
 [node name="ItemRuggedSack2" type="MeshInstance3D" parent="."]
+cast_shadow = 0
 mesh = SubResource("ArrayMesh_sh8o0")
 skeleton = NodePath("")
 
