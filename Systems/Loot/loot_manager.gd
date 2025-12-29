@@ -173,13 +173,13 @@ func _should_skip_level_quality(item_type: String) -> bool:
 	Determine if an item type should skip level and quality rolls.
 	
 	These item types are not affected by level or quality:
-	- bag: Inventory expansion items
-	- food: Consumable food items
-	- potion: Healing/buff potions
-	- gold: Currency
-	- gemstone: Crafting gems/materials
+	- Bag: Inventory expansion items
+	- Food: Consumable food items
+	- Potions: Healing/buff potions
+	- Gold: Currency
+	- Gemstones: Crafting gems/materials
 	"""
-	var skip_types = ["bag", "food", "potion", "gold", "gemstone"]
+	var skip_types = ["Bag", "Food", "Potions", "Gold", "Gemstones"]
 	return item_type.to_lower() in skip_types
 
 

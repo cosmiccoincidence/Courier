@@ -109,12 +109,11 @@ static func spawn_all_loot(loot_profile: LootProfile, enemy_level: int, spawn_po
 	if not loot_profile:
 		return
 	
-	var loot_manager = Engine.get_singleton("LootManager")
-	if not loot_manager:
-		loot_manager = parent_node.get_node_or_null("/root/LootManager")
+	# Get LootManager autoload singleton
+	var loot_manager = parent_node.get_node_or_null("/root/LootManager")
 	
 	if not loot_manager:
-		push_error("LootSpawner: LootManager not found!")
+		push_error("LootSpawner: LootManager not found at /root/LootManager!")
 		return
 	
 	# Get player luck stat
