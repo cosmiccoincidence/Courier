@@ -441,44 +441,6 @@ func _on_area_3d_body_exited(body: Node3D) -> void:
 # ===== INPUT HANDLING =====
 
 func _input(event):
-	# Toggle God Mode with L
-	if event is InputEventKey and event.pressed and event.keycode == KEY_L:
-		god_mode = !god_mode
-		_update_combat_stats()  # Recalculate stats
-		
-		if god_mode:
-			print("=== GOD MODE ENABLED ===")
-			print("  Speed: x", GOD_SPEED_MULT)
-			print("  Crit Chance: 100%")
-			print("  Crit Mult: x", GOD_CRIT_MULT)
-			print("  Max Zoom: ", god_zoom_max)
-			print("  Encumbered penalties: DISABLED")
-		else:
-			print("=== GOD MODE DISABLED ===")
-			if zoom_target > zoom_max:
-				zoom_target = zoom_max
-				print("  Zoom clamped to ", zoom_max)
-		
-		# Refresh encumbered status when god mode changes
-		if hud and hud.has_method("update_encumbered_status"):
-			var effects_active = is_encumbered and not god_mode
-			hud.update_encumbered_status(is_encumbered, effects_active)
-	
-	# Debug: Skip level with semicolon key
-	if event is InputEventKey and event.pressed and event.keycode == KEY_SEMICOLON:
-		var world = get_tree().get_first_node_in_group("world")
-		if world:
-			var current_map = world.get_node_or_null("CurrentMap")
-			if current_map and current_map.has_method("is_generation_in_progress"):
-				if current_map.is_generation_in_progress():
-					print("=== DEBUG: Cannot skip - map generation in progress ===")
-					return
-			
-			print("=== DEBUG: Skipping to next level ===")
-			var game_manager = world.get_node_or_null("GameManager")
-			if game_manager and game_manager.has_method("_on_player_reached_exit"):
-				game_manager._on_player_reached_exit()
-	
 	# Camera zoom (works even when dead)
 	if event is InputEventMouseButton and event.pressed:
 		if event.button_index == MOUSE_BUTTON_WHEEL_UP:
@@ -488,16 +450,6 @@ func _input(event):
 		
 		var current_max = god_zoom_max if god_mode else zoom_max
 		zoom_target = clamp(zoom_target, zoom_min, current_max)
-	
-	# Self-heal with [ key
-	if event is InputEventKey and event.pressed and event.keycode == KEY_BRACKETLEFT:
-		if current_health < max_health:
-			current_health = max_health
-			if hud:
-				hud.update_health(current_health, max_health)
-			print("DEBUG: Player fully healed! HP: ", current_health, "/", max_health)
-		else:
-			print("DEBUG: Already at full health")
 	
 	# Block other inputs if dead
 	if is_dying:
@@ -529,11 +481,6 @@ func _input(event):
 	# Pickup items
 	if event.is_action_pressed("pickup"):
 		_try_pickup_item()
-	
-	# Debug: Test damage with P key
-	if event.is_action_pressed("ui_text_backspace") or (event is InputEventKey and event.pressed and event.keycode == KEY_P):
-		take_damage(1)
-		print("Player took 1 damage. HP: ", current_health, "/", max_health)
 
 
 # ===== INVENTORY =====
