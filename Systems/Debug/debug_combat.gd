@@ -40,9 +40,13 @@ func heal_player():
 	var old_health = player.current_health
 	player.current_health = player.max_health
 	
-	# Update HUD
-	if player.has_method("get_node") and player.has_node("../../UI/HUD"):
-		var hud = player.get_node("../../UI/HUD")
+	# Update HUD - use the same method as player script
+	var hud = player.get("hud")
+	if hud and hud.has_method("update_health"):
+		hud.update_health(player.current_health, player.max_health)
+	else:
+		# Fallback: try to find HUD in scene
+		hud = get_node_or_null("/root/World/UI/HUD")
 		if hud and hud.has_method("update_health"):
 			hud.update_health(player.current_health, player.max_health)
 	

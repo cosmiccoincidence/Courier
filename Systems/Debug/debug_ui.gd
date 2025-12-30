@@ -27,15 +27,15 @@ func _create_god_mode_indicator():
 	god_mode_label.add_theme_font_size_override("font_size", 14)
 	god_mode_label.visible = false
 	
-	# Position in top right, left of debug enabled
+	# Position in top right, BELOW debug enabled indicator
 	god_mode_label.anchor_left = 1.0
 	god_mode_label.anchor_right = 1.0
 	god_mode_label.anchor_top = 0.0
 	god_mode_label.anchor_bottom = 0.0
-	god_mode_label.offset_left = -550
-	god_mode_label.offset_right = -260
-	god_mode_label.offset_top = 10
-	god_mode_label.offset_bottom = 150
+	god_mode_label.offset_left = -290
+	god_mode_label.offset_right = -10
+	god_mode_label.offset_top = 40  # Below debug enabled (which is at 10)
+	god_mode_label.offset_bottom = 190
 	god_mode_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	
 	add_child(god_mode_label)
@@ -67,15 +67,15 @@ func _create_keybind_panel():
 	keybind_panel.custom_minimum_size = Vector2(350, 480)
 	keybind_panel.visible = false
 	
-	# Position in top right, below enabled indicator
+	# Position in top right, below god mode indicator (which can appear)
 	keybind_panel.anchor_left = 1.0
 	keybind_panel.anchor_right = 1.0
 	keybind_panel.anchor_top = 0.0
 	keybind_panel.anchor_bottom = 0.0
 	keybind_panel.offset_left = -370
 	keybind_panel.offset_right = -10
-	keybind_panel.offset_top = 50
-	keybind_panel.offset_bottom = 550
+	keybind_panel.offset_top = 400  # Below god mode display
+	keybind_panel.offset_bottom = 700
 	
 	# Style the panel
 	var style = StyleBoxFlat.new()
