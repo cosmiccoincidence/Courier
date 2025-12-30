@@ -1,8 +1,13 @@
 # loot_spawner.gd
 # Shared utility for spawning loot items in the world
 # Used by both enemies and chests to avoid code duplication
+
 class_name LootSpawner
 extends RefCounted
+
+# Preload stat rollers
+const WeaponStatRoller = preload("res://Systems/Loot/StatRollers/weapon_stat_roller.gd")
+const ArmorStatRoller = preload("res://Systems/Loot/StatRollers/armor_stat_roller.gd")
 
 static func spawn_loot_item(item_data: Dictionary, spawn_position: Vector3, parent_node: Node) -> void:
 	"""
@@ -44,6 +49,7 @@ static func spawn_loot_item(item_data: Dictionary, spawn_position: Vector3, pare
 		loot_instance.item_type = item.item_type
 		loot_instance.item_subtype = item.item_subtype
 		loot_instance.mass = item.mass
+		loot_instance.durability = item.durability
 		loot_instance.stackable = item.stackable
 		loot_instance.max_stack_size = item.max_stack_size
 		
@@ -52,7 +58,7 @@ static func spawn_loot_item(item_data: Dictionary, spawn_position: Vector3, pare
 			loot_instance.weapon_hand = item.weapon_hand
 			loot_instance.weapon_range = item.weapon_range
 			loot_instance.weapon_speed = item.weapon_speed
-			loot_instance.weapon_block_window = item.weapon_block_window
+			loot_instance.weapon_block_rating = item.weapon_block_rating
 			loot_instance.weapon_parry_window = item.weapon_parry_window
 			loot_instance.weapon_crit_chance = item.weapon_crit_chance
 			loot_instance.weapon_crit_multiplier = item.weapon_crit_multiplier
@@ -86,28 +92,28 @@ static func spawn_loot_item(item_data: Dictionary, spawn_position: Vector3, pare
 	var is_armor = item.item_type.to_lower() == "armor"
 	var is_shield = item.item_type.to_lower() == "weapon" and item.item_subtype.to_lower() == "shield"
 	
-	if (is_armor or is_shield) and item.base_base_armor_rating > 0:
-		var base_armor_rating = ArmorStatRoller.roll_base_armor_rating(
-			item.base_base_armor_rating,
+	if (is_armor or is_shield) and item.base_armor_rating > 0:
+		var armor_rating = ArmorStatRoller.roll_base_armor_rating(
+			item.base_armor_rating,
 			item_level,
 			item_quality
 		)
-		if "base_armor_rating" in loot_instance:
-			loot_instance.base_armor_rating = base_armor_rating
-		print("  Rolled armor defense: ", base_armor_rating, " (base: ", item.base_base_armor_rating, ")")
+		if "armor_rating" in loot_instance:
+			loot_instance.armor_rating = armor_rating
+		print("  Rolled armor defense: ", armor_rating, " (base: ", item.base_armor_rating, ")")
 
 
 static func _find_valid_spawn_position(origin: Vector3, parent_node: Node) -> Vector3:
 	"""
 	Find a valid spawn position that is:
-	- At least MIN_SPACING tiles from origin (source)
-	- At least MIN_SPACING tiles from player
-	- At least MIN_SPACING tiles from other items
-	- Slightly above the ground (Y = 0.55)
+	- At least 0.15 tiles from origin (source)
+	- At least 0.15 tiles from player
+	- At least 0.15 tiles from other items
+	- On the ground (Y = 0.5)
 	"""
-	const MIN_SPACING = 0.3
-	const MAX_RADIUS = 1.25
+	const MIN_SPACING = 0.15
 	const MAX_ATTEMPTS = 20
+	const MAX_RADIUS = 1.5
 	
 	# Get player position
 	var player = parent_node.get_tree().get_first_node_in_group("player")
@@ -122,8 +128,8 @@ static func _find_valid_spawn_position(origin: Vector3, parent_node: Node) -> Ve
 		var radius = randf_range(MIN_SPACING, MAX_RADIUS)
 		var offset = Vector3(cos(angle) * radius, 0.0, sin(angle) * radius)
 		
-		# Use origin's X and Z, but set Y above ground level (0.55)
-		var candidate_pos = Vector3(origin.x + offset.x, 0.55, origin.z + offset.z)
+		# Use origin's X and Z, but set Y to ground level (0.5)
+		var candidate_pos = Vector3(origin.x + offset.x, 0.5, origin.z + offset.z)
 		
 		# Check spacing from origin (2D distance)
 		var dist_from_origin = Vector2(candidate_pos.x - origin.x, candidate_pos.z - origin.z).length()

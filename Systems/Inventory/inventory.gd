@@ -68,9 +68,9 @@ func add_item(item_data: Dictionary) -> bool:
 	
 	Optional weapon/armor keys:
 	- item_type, item_level, item_quality, item_subtype
-	- weapon_damage, base_armor_rating, weapon_hand
+	- weapon_damage, armor_rating, weapon_hand
 	- weapon_range, weapon_speed
-	- weapon_block_window, weapon_parry_window
+	- weapon_block_rating, weapon_parry_window
 	- weapon_crit_chance, weapon_crit_multiplier
 	"""
 	var item_name = item_data.get("name", "Unknown Item")
@@ -131,6 +131,7 @@ func add_item(item_data: Dictionary) -> bool:
 			"icon": item_data.get("icon"),
 			"scene": item_data.get("scene"),
 			"mass": item_mass,
+			"durability": item_data.get("durability", 100),
 			"value": item_data.get("value", 0),
 			"stackable": is_stackable,
 			"max_stack_size": max_stack,
@@ -140,11 +141,11 @@ func add_item(item_data: Dictionary) -> bool:
 			"item_quality": item_data.get("item_quality", 1),
 			"item_subtype": item_data.get("item_subtype", ""),
 			"weapon_damage": item_data.get("weapon_damage", 0),
-			"base_armor_rating": item_data.get("base_armor_rating", 0),
+			"armor_rating": item_data.get("armor_rating", 0),
 			"weapon_hand": item_data.get("weapon_hand", 0),
 			"weapon_range": item_data.get("weapon_range", 2.0),
 			"weapon_speed": item_data.get("weapon_speed", 1.0),
-			"weapon_block_window": item_data.get("weapon_block_window", 0.0),
+			"weapon_block_rating": item_data.get("weapon_block_rating", 0.0),
 			"weapon_parry_window": item_data.get("weapon_parry_window", 0.0),
 			"weapon_crit_chance": item_data.get("weapon_crit_chance", 0.0),
 			"weapon_crit_multiplier": item_data.get("weapon_crit_multiplier", 1.0)
@@ -186,7 +187,7 @@ func drop_item_at_slot(slot_index: int):
 		if player_ref:
 			# Drop in front of player slightly above ground
 			var forward = -player_ref.global_transform.basis.z
-			var drop_position = player_ref.global_position + forward * 1 + Vector3(0, 0.35, 0)
+			var drop_position = player_ref.global_position + forward * 1 + Vector3(0, 0.3, 0)
 			
 			# Actually spawn the item in the world if we have a scene reference
 			if item.has("scene") and item.scene:
@@ -211,6 +212,8 @@ func drop_item_at_slot(slot_index: int):
 							item_instance.item_subtype = item.item_subtype
 						if item.has("mass"):
 							item_instance.mass = item.mass
+						if item.has("durability"):
+							item_instance.durability = item.durability
 						if item.has("value"):
 							item_instance.value = item.value
 						if item.has("stackable"):
@@ -227,16 +230,16 @@ func drop_item_at_slot(slot_index: int):
 						# Restore weapon/armor stats
 						if item.has("weapon_damage"):
 							item_instance.weapon_damage = item.weapon_damage
-						if item.has("base_armor_rating"):
-							item_instance.base_armor_rating = item.base_armor_rating
+						if item.has("armor_rating"):
+							item_instance.armor_rating = item.armor_rating
 						if item.has("weapon_hand"):
 							item_instance.weapon_hand = item.weapon_hand
 						if item.has("weapon_range"):
 							item_instance.weapon_range = item.weapon_range
 						if item.has("weapon_speed"):
 							item_instance.weapon_speed = item.weapon_speed
-						if item.has("weapon_block_window"):
-							item_instance.weapon_block_window = item.weapon_block_window
+						if item.has("weapon_block_rating"):
+							item_instance.weapon_block_rating = item.weapon_block_rating
 						if item.has("weapon_parry_window"):
 							item_instance.weapon_parry_window = item.weapon_parry_window
 						if item.has("weapon_crit_chance"):

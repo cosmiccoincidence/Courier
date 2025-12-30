@@ -13,7 +13,7 @@ static func calculate_total_stats(equipped_items: Array) -> Dictionary:
 		"base_armor_rating": 0,
 		"weapon_range": 0.0,
 		"weapon_speed": 0.0,
-		"weapon_block_window": 0.0,
+		"weapon_block_rating": 0.0,
 		"weapon_parry_window": 0.0,
 		"weapon_crit_chance": 0.0,
 		"weapon_crit_multiplier": 1.0,
@@ -56,8 +56,8 @@ static func calculate_total_stats(equipped_items: Array) -> Dictionary:
 			stats.weapon_speed = primary_weapon.weapon_speed
 		
 		# Weapon block window
-		if primary_weapon.has("weapon_block_window"):
-			stats.weapon_block_window = primary_weapon.weapon_block_window
+		if primary_weapon.has("weapon_block_rating"):
+			stats.weapon_block_rating = primary_weapon.weapon_block_rating
 		
 		# Weapon parry window
 		if primary_weapon.has("weapon_parry_window"):

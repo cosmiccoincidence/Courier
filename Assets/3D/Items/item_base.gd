@@ -7,6 +7,7 @@ var item_icon: Texture2D
 var item_type: String = ""  # Type: helmet, weapon, armor, ring, etc.
 var item_subtype: String = ""  # Subtype: sword, axe, chest, boots, health_potion, etc.
 var mass: float = 1.0
+var durability: int = 100  # Item durability (100 = new, 0 = broken)
 var value: int = 10
 var stackable: bool = false
 var max_stack_size: int = 99
@@ -18,11 +19,11 @@ var rolled_stats: Dictionary = {}  # Future: store randomized stats based on ite
 
 # Weapon and Armor stats (rolled when spawned)
 var weapon_damage: int = 0  # Only for weapons
-var base_armor_rating: int = 0  # Only for armor
+var armor_rating: int = 0  # Only for armor
 var weapon_hand: int = 0  # Weapon hand restriction (0=ANY, 1=PRIMARY, 2=OFFHAND, 3=TWOHAND)
 var weapon_range: float = 2.0  # Attack range in meters (default 2.0)
 var weapon_speed: float = 1.0  # Attack speed multiplier (default 1.0 = normal speed)
-var weapon_block_window: float = 0.0  # Time window to successfully block (seconds)
+var weapon_block_rating: float = 0.0  # Time window to successfully block (seconds)
 var weapon_parry_window: float = 0.0  # Time window to successfully parry (seconds)
 var weapon_crit_chance: float = 0.0  # Critical hit chance (0.0 to 1.0)
 var weapon_crit_multiplier: float = 1.0  # Critical hit damage multiplier
@@ -287,11 +288,11 @@ func pickup():
 		"item_quality": item_quality,
 		"item_subtype": item_subtype,
 		"weapon_damage": weapon_damage,
-		"base_armor_rating": base_armor_rating,
+		"armor_rating": armor_rating,
 		"weapon_hand": weapon_hand,
 		"weapon_range": weapon_range,
 		"weapon_speed": weapon_speed,
-		"weapon_block_window": weapon_block_window,
+		"weapon_block_rating": weapon_block_rating,
 		"weapon_parry_window": weapon_parry_window,
 		"weapon_crit_chance": weapon_crit_chance,
 		"weapon_crit_multiplier": weapon_crit_multiplier

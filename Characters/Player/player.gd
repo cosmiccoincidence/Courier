@@ -48,7 +48,7 @@ const ENCUMBERED_ROTATION_MULT: float = 0.75  # 75% rotation speed
 @export var base_attack_speed := 1.0  # Base attack speed multiplier (1.0 = normal)
 @export var base_crit_chance := 0.1  # 10% base crit chance
 @export var base_crit_multiplier: float = 1.0  # 1x damage on crit
-@export var base_block_window := 1.0  # Base block window length
+@export var base_block_rating := 1.0  # Base block window length
 @export var base_parry_window := 1.0  # Base parry window length
 
 # Calculated combat stats (modified by gear/buffs/god mode)
@@ -58,7 +58,7 @@ var attack_range: float = 1.5
 var attack_speed: float = 1.0
 var crit_chance: float = 0.1
 var crit_multiplier: float = 1.0
-var block_window: float = 1.0
+var block_rating: float = 1.0
 var parry_window: float = 1.0
 
 # ===== MOVEMENT =====
@@ -164,12 +164,12 @@ func _update_combat_stats():
 		if equip_stats.has_weapon:
 			attack_range = equip_stats.weapon_range
 			attack_speed = equip_stats.weapon_speed
-			block_window = equip_stats.weapon_block_window
+			block_rating = equip_stats.weapon_block_rating
 			parry_window = equip_stats.weapon_parry_window
 		else:
 			attack_range = base_attack_range
 			attack_speed = base_attack_speed
-			block_window = base_block_window
+			block_rating = base_block_rating
 			parry_window = base_parry_window
 	else:
 		# Normal mode - apply equipment bonuses
@@ -180,14 +180,14 @@ func _update_combat_stats():
 		if equip_stats.has_weapon:
 			attack_range = equip_stats.weapon_range
 			attack_speed = equip_stats.weapon_speed
-			block_window = equip_stats.weapon_block_window
+			block_rating = equip_stats.weapon_block_rating
 			parry_window = equip_stats.weapon_parry_window
 			crit_chance = equip_stats.weapon_crit_chance
 			crit_multiplier = equip_stats.weapon_crit_multiplier
 		else:
 			attack_range = base_attack_range
 			attack_speed = base_attack_speed
-			block_window = base_block_window
+			block_rating = base_block_rating
 			parry_window = base_parry_window
 			crit_chance = base_crit_chance
 			crit_multiplier = base_crit_multiplier
@@ -200,7 +200,7 @@ func _update_combat_stats():
 	# print("  Armor: %d (base: %d + armor: %d)" % [armor, base_armor, equip_stats.base_armor_rating])
 	# print("  Range: %.1f" % attack_range)
 	# print("  Speed: %.1fx" % attack_speed)
-	# print("  Block Window: %.1fs" % block_window)
+	# print("  Block Window: %.1fs" % block_rating)
 	# print("  Parry Window: %.1fs" % parry_window)
 	# print("  Crit: %.0f%% (x%.1f)" % [crit_chance * 100, crit_multiplier])
 

@@ -106,7 +106,7 @@ func show_combat_stats():
 	print("  Chance: %.1f%% (base) → %.1f%% (total)" % [player.base_crit_chance * 100, player.crit_chance * 100])
 	print("  Multiplier: %.1fx (base) → %.1fx (total)" % [player.base_crit_multiplier, player.crit_multiplier])
 	print("\nDefensive:")
-	print("  Block Window: %.2fs (base) → %.2fs (total)" % [player.base_block_window, player.block_window])
+	print("  Block Window: %.2fs (base) → %.2fs (total)" % [player.base_block_rating, player.block_rating])
 	print("  Parry Window: %.2fs (base) → %.2fs (total)" % [player.base_parry_window, player.parry_window])
 	print("\nStatus:")
 	print("  God Mode: %s" % ("ENABLED" if player.get("god_mode") else "Disabled"))

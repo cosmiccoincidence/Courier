@@ -156,8 +156,8 @@ func show_tooltip(slot: Control, item_data: Dictionary):
 		lines.append("[center][color=#ffff77]Speed: %s[/color][/center]" % speed_text)
 	
 	# Weapon block window - cyan color (only for weapons with block window)
-	if item_data.has("weapon_block_window") and item_data.get("weapon_damage", 0) > 0 and item_data.weapon_block_window > 0.0:
-		lines.append("[center][color=#77ffff]Block Window: %.1fs[/color][/center]" % item_data.weapon_block_window)
+	if item_data.has("weapon_block_rating") and item_data.get("weapon_damage", 0) > 0 and item_data.weapon_block_rating > 0.0:
+		lines.append("[center][color=#77ffff]Block Rating: %.0f%%[/color][/center]" % (item_data.weapon_block_rating * 100))
 	
 	# Weapon parry window - light green color (only for weapons with parry window)
 	if item_data.has("weapon_parry_window") and item_data.get("weapon_damage", 0) > 0 and item_data.weapon_parry_window > 0.0:
@@ -172,13 +172,26 @@ func show_tooltip(slot: Control, item_data: Dictionary):
 	if item_data.has("weapon_crit_multiplier") and item_data.get("weapon_damage", 0) > 0 and item_data.weapon_crit_multiplier > 1.0:
 		lines.append("[center][color=#ff55ff]Crit Multiplier: %.1fx[/color][/center]" % item_data.weapon_crit_multiplier)
 	
-	# Armor rating - blue color (only for armor)
-	if item_data.has("base_armor_rating") and item_data.base_armor_rating > 0:
-		lines.append("[center][color=#6bb6ff]Armor: %d[/color][/center]" % item_data.base_armor_rating)
+	# Armor defense - blue color (only for armor)
+	if item_data.has("armor_rating") and item_data.armor_rating > 0:
+		lines.append("[center][color=#6bb6ff]Defense: %d[/color][/center]" % item_data.armor_rating)
 	
 	# Value - gold color
 	var value = item_data.get("value", 0)
 	lines.append("[center][color=gold]Value: %d[/color][/center]" % value)
+	
+	# Durability - color based on condition (only show if not stackable or if < 100)
+	if item_data.has("durability") and not item_data.get("stackable", false):
+		var durability_val = item_data.get("durability", 100)
+		var durability_color = Color.GREEN
+		if durability_val < 75:
+			durability_color = Color.YELLOW
+		if durability_val < 50:
+			durability_color = Color.ORANGE
+		if durability_val < 25:
+			durability_color = Color.RED
+		var durability_hex = durability_color.to_html(false)
+		lines.append("[center][color=#%s]Durability: %d/100[/color][/center]" % [durability_hex, durability_val])
 		
 	# Mass - gray color
 	var mass = item_data.get("mass", 0.0)
