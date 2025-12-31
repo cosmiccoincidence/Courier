@@ -80,28 +80,24 @@ func generate_loot(enemy_level: int, loot_profile: LootProfile, player_luck: flo
 	print("[LOOT MANAGER] Total items generated: %d" % dropped_items.size())
 	return dropped_items
 
-
 func _roll_single_item(enemy_level: int, profile: LootProfile, player_luck: float) -> Dictionary:
 	"""
 	Roll a single item drop.
 	
 	Sub-steps:
-	a. Roll item type (from item_type_pool)
-	b. Get eligible items of that type
-	c. Select specific item (weighted random)
-	d. Roll item level (enemy_level ± variance) - SKIPPED for certain types
-	e. Roll item quality (based on luck) - SKIPPED for certain types
-	f. Roll stack size (if stackable)
-	g. Calculate final value
+	a. Get eligible items (from item_pool or filtered all_items)
+	b. Select specific item (weighted random)
+	c. Roll item level (enemy_level ± variance)
+	d. Roll item quality (based on luck)
+	e. Roll stack size (if stackable)
+	f. Calculate final value
 	"""
 	
-	# STEP 3a: Roll item type
-	var selected_type = _roll_item_type(profile)
-	
-	# STEP 3b: Get eligible items based on type and filters
-	var eligible_items = _filter_eligible_items(profile, selected_type)
+	# STEP 3a & 3b: Get eligible items and select one
+	var eligible_items = _filter_eligible_items(profile)
 	
 	if eligible_items.is_empty():
+		print("[LOOT MANAGER] No eligible items to drop")
 		return {}
 	
 	# STEP 3c: Weighted random selection of specific item
@@ -115,7 +111,7 @@ func _roll_single_item(enemy_level: int, profile: LootProfile, player_luck: floa
 	
 	# STEP 3d: Calculate item level (enemy_level ± variance)
 	var item_level = 1  # Default level for items that skip this step
-	if not skip_level_quality:  # FIXED: Roll level if NOT skipping
+	if not skip_level_quality:  # Roll level if NOT skipping
 		item_level = enemy_level
 		if profile.level_variance > 0:
 			item_level += randi_range(-profile.level_variance, profile.level_variance)
@@ -123,7 +119,7 @@ func _roll_single_item(enemy_level: int, profile: LootProfile, player_luck: floa
 	
 	# STEP 3e: Roll item quality based on player luck
 	var item_quality = ItemQuality.Quality.NORMAL  # Default quality for items that skip this step
-	if not skip_level_quality:  # FIXED: Roll quality if NOT skipping
+	if not skip_level_quality:  # Roll quality if NOT skipping
 		item_quality = ItemQuality.roll_quality(player_luck)
 	
 	# STEP 3f: Calculate stack size if stackable
@@ -167,7 +163,6 @@ func _roll_single_item(enemy_level: int, profile: LootProfile, player_luck: floa
 		"stack_size": stack_size
 	}
 
-
 func _should_skip_level_quality(item_type: String) -> bool:
 	"""
 	Determine if an item type should skip level and quality rolls.
@@ -183,44 +178,39 @@ func _should_skip_level_quality(item_type: String) -> bool:
 	return item_type.to_lower() in skip_types
 
 
-func _roll_item_type(profile: LootProfile) -> String:
-	"""Roll an item type from the profile's item_type_pool using weighted random selection"""
-	
-	# If no type pool defined, return empty string (use legacy filtering)
-	if profile.item_type_pool.is_empty():
-		return ""
-	
-	# Calculate total weight
-	var total_weight = 0.0
-	for item_type in profile.item_type_pool:
-		total_weight += item_type.item_type_drop_weight
-	
-	# Weighted random selection
-	var roll = randf() * total_weight
-	var cumulative = 0.0
-	
-	for item_type in profile.item_type_pool:
-		cumulative += item_type.item_type_drop_weight
-		if roll <= cumulative:
-			return item_type.type_name
-	
-	# Fallback (shouldn't happen)
-	return profile.item_type_pool[0].type_name if profile.item_type_pool.size() > 0 else ""
-
 
 func _filter_eligible_items(profile: LootProfile, selected_type: String = "") -> Array[LootItem]:
+	"""
+	Filter items based on profile settings.
+	Priority:
+	1. If item_pool exists, use only those items
+	2. Otherwise, use all_items and filter by type/tags
+	"""
 	var eligible: Array[LootItem] = []
+	var source_items: Array[LootItem] = []
 	
-	for item in all_items:
-		# Check item type filtering
-		if not profile.allowed_item_types.is_empty():
-			if not item.item_type in profile.allowed_item_types:
+	# Determine source of items
+	if not profile.item_pool.is_empty():
+		# Use specific item pool
+		print("[LOOT MANAGER] Using item_pool with %d items" % profile.item_pool.size())
+		source_items = profile.item_pool
+	else:
+		# Use all items from loot manager
+		print("[LOOT MANAGER] Using all_items from LootManager")
+		source_items = all_items
+	
+	# Now filter the source items
+	for item in source_items:
+		# Check item type filtering (if using all_items)
+		if profile.item_pool.is_empty():  # Only apply type filtering if not using item_pool
+			if not profile.allowed_item_types.is_empty():
+				if not item.item_type in profile.allowed_item_types:
+					continue
+			
+			if item.item_type in profile.excluded_item_types:
 				continue
 		
-		if item.item_type in profile.excluded_item_types:
-			continue
-		
-		# Check required tags
+		# Check required tags (always apply)
 		if not profile.required_tags.is_empty():
 			var has_required = false
 			for tag in profile.required_tags:
@@ -230,7 +220,7 @@ func _filter_eligible_items(profile: LootProfile, selected_type: String = "") ->
 			if not has_required:
 				continue
 		
-		# Check excluded tags
+		# Check excluded tags (always apply)
 		var has_excluded = false
 		for tag in profile.excluded_tags:
 			if tag in item.item_tags:
@@ -241,8 +231,8 @@ func _filter_eligible_items(profile: LootProfile, selected_type: String = "") ->
 		
 		eligible.append(item)
 	
+	print("[LOOT MANAGER] Filtered to %d eligible items" % eligible.size())
 	return eligible
-
 
 func _weighted_select(items: Array[LootItem], profile: LootProfile) -> LootItem:
 	if items.is_empty():
