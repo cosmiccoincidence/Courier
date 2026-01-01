@@ -3,8 +3,8 @@ extends Control
 
 # ===== NODE REFERENCES =====
 @onready var grid_container: GridContainer = $InventoryPanel/InventoryGrid
-@onready var equipment_ui: Panel = $EquipmentPanel  # Now handled by equipment_ui.gd
-@onready var stats_panel: Panel = $StatsPanel
+@onready var equipment_ui: Panel = $EquipmentPanel
+@onready var stats_panel = $StatsPanel
 @onready var mass_label: Label = $MassLabel
 @onready var gold_label: Label = $GoldLabel
 @onready var slot_tooltip: Control = $SlotTooltip
@@ -34,13 +34,12 @@ func _ready():
 	_setup_tooltip_manager()
 	
 	# Find and share tooltip with ShopUI
-	var shop = get_node_or_null("../ShopUI")  # Adjust path
+	var shop = get_node_or_null("../ShopUI")
 	if not shop:
-		shop = get_tree().get_first_node_in_group("shop_ui")  # If you add shop to group
+		shop = get_tree().get_first_node_in_group("shop_ui")
 	
 	if shop and shop.has_method("set_tooltip_manager"):
 		shop.set_tooltip_manager(slot_tooltip)
-		print("[InventoryUI] Shared tooltip manager with ShopUI")
 	
 	# Pass tooltip to equipment UI
 	if equipment_ui and equipment_ui.has_method("set_tooltip_manager"):
@@ -61,7 +60,7 @@ func _ready():
 	# Connect signals
 	_connect_signals()
 	
-	# Get player reference and setup stats
+	# Get player reference and setup
 	_setup_player_reference()
 	
 	# Initial updates
@@ -125,7 +124,7 @@ func _connect_signals():
 	Inventory.gold_changed.connect(_update_gold_display)
 
 func _setup_player_reference():
-	"""Get player reference and setup stats panel"""
+	"""Get player reference and pass to other components"""
 	player_ref = get_tree().get_first_node_in_group("player")
 	if not player_ref:
 		push_warning("Player not found - stats panel will not update")
@@ -135,137 +134,9 @@ func _setup_player_reference():
 	if equipment_ui and "player_ref" in equipment_ui:
 		equipment_ui.player_ref = player_ref
 	
-	if stats_panel:
-		_setup_stats_panel()
-		_update_stats_display()
-
-
-# ===== STATS PANEL =====
-
-func _setup_stats_panel():
-	"""Create labels in the stats panel"""
-	if not stats_panel:
-		return
-	
-	# Clear existing children
-	for child in stats_panel.get_children():
-		child.queue_free()
-	
-	var vbox = VBoxContainer.new()
-	vbox.name = "StatsVBox"
-	stats_panel.add_child(vbox)
-	
-	# Title
-	var title = RichTextLabel.new()
-	title.bbcode_enabled = true
-	title.text = "[center][color=gold][u]Player Stats[/u][/color][/center]"
-	title.fit_content = true
-	title.scroll_active = false
-	title.add_theme_font_size_override("normal_font_size", 18)
-	vbox.add_child(title)
-	
-	# Core Stats Section
-	_create_section_label(vbox, "Core Stats")
-	_create_stat_label(vbox, "StrengthLabel", "Strength: 0", 16, Color.GRAY)
-	_create_stat_label(vbox, "DexterityLabel", "Dexterity: 0", 16, Color.GRAY)
-	_create_stat_label(vbox, "LuckLabel", "Luck: 0", 16, Color(0.5, 1.0, 0.5))
-	
-	_create_spacer(vbox, 10)
-	
-	# Combat Stats Section
-	_create_section_label(vbox, "Combat")
-	_create_stat_label(vbox, "DamageLabel", "Damage: 0", 14)
-	_create_stat_label(vbox, "ArmorLabel", "Armor: 0", 14)
-	_create_stat_label(vbox, "AttackRangeLabel", "Attack Range: 0", 14)
-	_create_stat_label(vbox, "AttackSpeedLabel", "Attack Speed: 0", 14)
-	_create_stat_label(vbox, "CritChanceLabel", "Crit Chance: 0%", 14)
-	_create_stat_label(vbox, "CritDamageLabel", "Crit Damage: 0x", 14)
-	
-	_create_spacer(vbox, 10)
-	
-	# Health & Stamina Section
-	_create_section_label(vbox, "Health & Stamina")
-	_create_stat_label(vbox, "MaxHealthLabel", "Max Health: 0", 14)
-	_create_stat_label(vbox, "HealthRegenLabel", "Health Regen: 0 / 0s", 14)
-	_create_stat_label(vbox, "MaxStaminaLabel", "Max Stamina: 0", 14)
-	_create_stat_label(vbox, "StaminaRegenLabel", "Stamina Regen: 0 / 0s", 14)
-
-func _create_section_label(parent: VBoxContainer, text: String):
-	"""Create a section header label"""
-	var label = RichTextLabel.new()
-	label.bbcode_enabled = true
-	label.text = "[center][color=orange][b]%s[/b][/color][/center]" % text
-	label.fit_content = true
-	label.scroll_active = false
-	label.add_theme_font_size_override("normal_font_size", 14)
-	parent.add_child(label)
-
-func _create_stat_label(parent: VBoxContainer, label_name: String, text: String, font_size: int = 14, color: Color = Color.WHITE):
-	"""Create a stat label"""
-	var label = Label.new()
-	label.name = label_name
-	label.text = text
-	label.add_theme_font_size_override("font_size", font_size)
-	label.add_theme_color_override("font_color", color)
-	parent.add_child(label)
-
-func _create_spacer(parent: VBoxContainer, height: int):
-	"""Create vertical spacer"""
-	var spacer = Control.new()
-	spacer.custom_minimum_size = Vector2(0, height)
-	parent.add_child(spacer)
-
-func _update_stats_display():
-	"""Update the stats panel with current player stats"""
-	if not stats_panel or not player_ref:
-		return
-	
-	var vbox = stats_panel.get_node_or_null("StatsVBox")
-	if not vbox:
-		return
-	
-	# Core Stats
-	_update_label(vbox, "StrengthLabel", "Strength: %d" % player_ref.strength)
-	_update_label(vbox, "DexterityLabel", "Dexterity: %d" % player_ref.dexterity)
-	_update_luck_label(vbox)
-	
-	# Combat Stats
-	_update_label(vbox, "DamageLabel", "Damage: %d" % player_ref.damage)
-	_update_label(vbox, "ArmorLabel", "Armor: %d" % player_ref.armor)
-	_update_label(vbox, "AttackRangeLabel", "Attack Range: %.1f" % player_ref.attack_range)
-	_update_label(vbox, "AttackSpeedLabel", "Attack Speed: %.1fx" % player_ref.attack_speed)
-	_update_label(vbox, "CritChanceLabel", "Crit Chance: %.1f%%" % (player_ref.crit_chance * 100))
-	_update_label(vbox, "CritDamageLabel", "Crit Damage: %.1fx" % player_ref.crit_multiplier)
-	
-	# Health & Stamina
-	_update_label(vbox, "MaxHealthLabel", "Max Health: %d" % player_ref.max_health)
-	_update_label(vbox, "HealthRegenLabel", "Health Regen: %.0f / %.0fs" % [player_ref.health_regen, player_ref.health_regen_interval])
-	_update_label(vbox, "MaxStaminaLabel", "Max Stamina: %d" % int(player_ref.max_stamina))
-	_update_label(vbox, "StaminaRegenLabel", "Stamina Regen: %.1f / %.1fs" % [player_ref.stamina_regen, player_ref.stamina_regen_interval])
-
-func _update_label(vbox: VBoxContainer, label_name: String, text: String):
-	"""Helper to update a label's text"""
-	var label = vbox.get_node_or_null(label_name)
-	if label:
-		label.text = text
-
-func _update_luck_label(vbox: VBoxContainer):
-	"""Update luck label with color based on value"""
-	var luck_label = vbox.get_node_or_null("LuckLabel")
-	if not luck_label:
-		return
-	
-	var luck_value = player_ref.luck
-	
-	# Color based on positive/negative luck
-	if luck_value > 0:
-		luck_label.add_theme_color_override("font_color", Color(0.5, 1.0, 0.5))  # Green
-	elif luck_value < 0:
-		luck_label.add_theme_color_override("font_color", Color(1.0, 0.5, 0.5))  # Red
-	else:
-		luck_label.add_theme_color_override("font_color", Color.WHITE)  # White
-	
-	luck_label.text = "Luck: %.1f" % luck_value
+	# Pass player reference to stats panel
+	if stats_panel and stats_panel.has_method("set_player_reference"):
+		stats_panel.set_player_reference(player_ref)
 
 
 # ===== UPDATE FUNCTIONS =====
@@ -314,7 +185,7 @@ func _input(event):
 		# If shop is open, don't toggle - let shop handle it
 		var shop_ui = get_tree().get_first_node_in_group("shop_ui")
 		if shop_ui and shop_ui.visible:
-			return  # Shop will handle closing both
+			return
 		
 		visible = !visible
 		
@@ -374,14 +245,6 @@ func _drop_item_in_world(dragged_slot: Control):
 	
 	if slot_idx != null:
 		Inventory.drop_item_at_slot(slot_idx)
-
-
-# ===== CONTINUOUS UPDATE =====
-
-func _process(_delta):
-	"""Update stats every frame when inventory is visible"""
-	if visible and player_ref:
-		_update_stats_display()
 
 
 # ===== UTILITY =====

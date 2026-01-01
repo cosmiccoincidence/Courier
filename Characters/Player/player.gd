@@ -19,6 +19,9 @@ const ENCUMBERED_ROTATION_MULT: float = 0.75  # 75% rotation speed
 @onready var cam: Camera3D = $Camera3D
 @onready var hud: CanvasLayer = get_node("/root/World/UI/HUD")
 
+# ===== CHARACTER TRAITS =====
+@export var hero_name: String = "Hero Name"
+
 # ===== CORE STATS =====
 @export_group("Core Stats")
 @export var strength := 5

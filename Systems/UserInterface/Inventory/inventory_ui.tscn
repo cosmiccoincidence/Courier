@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://bl5kby8ys2uft"]
+[gd_scene load_steps=5 format=3 uid="uid://bl5kby8ys2uft"]
 
 [ext_resource type="Script" uid="uid://dhchpcnrapibx" path="res://Systems/UserInterface/Inventory/inventory_ui.gd" id="1_sp84r"]
 [ext_resource type="Script" uid="uid://dey2rbwsybyuo" path="res://Systems/UserInterface/Inventory/equipment_ui.gd" id="2_l76kd"]
 [ext_resource type="Script" uid="uid://blpcw14f670oa" path="res://Systems/UserInterface/Hover/inventory_slot_tooltip.gd" id="2_o2au4"]
+[ext_resource type="Script" uid="uid://b6inlwi1vbqty" path="res://Systems/UserInterface/Inventory/stats_panel.gd" id="3_5wtj6"]
 
 [node name="InventoryUi" type="Control"]
 layout_mode = 3
@@ -36,23 +37,6 @@ layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="StatsPanel" type="Panel" parent="."]
-layout_mode = 0
-offset_left = 310.0
-offset_top = 39.0
-offset_right = 490.0
-offset_bottom = 538.0
-
-[node name="HeroNameLabel" type="Label" parent="."]
-layout_mode = 0
-offset_left = 320.0
-offset_top = 5.0
-offset_right = 479.0
-offset_bottom = 33.0
-theme_override_font_sizes/font_size = 20
-text = "Hero Name"
-horizontal_alignment = 1
-
 [node name="GoldLabel" type="Label" parent="."]
 layout_mode = 1
 offset_left = 154.0
@@ -70,6 +54,26 @@ offset_top = 5.0
 offset_right = 150.0
 offset_bottom = 28.0
 text = "Mass: 0.0 / 10.0"
+
+[node name="StatsPanel" type="PanelContainer" parent="."]
+layout_mode = 0
+offset_left = 310.0
+offset_top = 39.0
+offset_right = 339.0
+offset_bottom = 69.0
+script = ExtResource("3_5wtj6")
+
+[node name="HeroNameLabel" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 23.0
+grow_horizontal = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+text = "Hero Name"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="SlotTooltip" type="Control" parent="."]
 anchors_preset = 0
