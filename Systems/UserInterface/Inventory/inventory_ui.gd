@@ -311,6 +311,11 @@ func _input(event):
 	"""Handle inventory toggle and drops outside grids"""
 	# Toggle inventory visibility
 	if event.is_action_pressed("toggle_inventory"):
+		# If shop is open, don't toggle - let shop handle it
+		var shop_ui = get_tree().get_first_node_in_group("shop_ui")
+		if shop_ui and shop_ui.visible:
+			return  # Shop will handle closing both
+		
 		visible = !visible
 		
 		if visible:

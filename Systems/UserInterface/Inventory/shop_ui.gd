@@ -136,14 +136,20 @@ func _on_shop_closed():
 	_clear_shop_inventory()
 	hide()
 	
-	# Close inventory UI when shop closes - but keep cursor visible
+	# Hide tooltip when shop closes
+	if slot_tooltip and slot_tooltip.has_method("hide_tooltip"):
+		slot_tooltip.hide_tooltip()
+		print("[ShopUI] Hid tooltip")
+	
+	# Always close inventory when shop closes
 	var inv_ui = get_tree().get_first_node_in_group("inventory_ui")
 	if inv_ui:
+		# Force close (don't use toggle)
 		if inv_ui.has_method("close_without_hiding_cursor"):
 			inv_ui.close_without_hiding_cursor()
 		else:
-			inv_ui.hide()
-		print("[ShopUI] Closed inventory UI (cursor stays visible)")
+			inv_ui.visible = false  # Force hide, don't toggle
+		print("[ShopUI] Closed inventory UI")
 	
 	print("[ShopUI] Shop closed - mouse mode AFTER: %d" % Input.mouse_mode)
 	print("[ShopUI] Mouse mode 0=VISIBLE, 2=CAPTURED, 3=CONFINED, 4=HIDDEN")
@@ -241,12 +247,24 @@ func _input(event):
 		return
 	
 	if event.is_action_pressed("ui_cancel") or event.is_action_pressed("toggle_inventory"):
+		# Close shop (which will also close inventory)
 		ShopManager.close_shop()
+		get_viewport().set_input_as_handled()  # Prevent inventory from also processing this
 		# Don't hide mouse - let inventory UI handle that
 
 func _process(_delta):
 	"""Check distance from merchant while shop is open"""
-	if not visible or not ShopManager.current_merchant:
+	if not visible:
+		return
+	
+	# If shop is open but inventory is closed, close the shop too
+	var inv_ui = get_tree().get_first_node_in_group("inventory_ui")
+	if inv_ui and not inv_ui.visible:
+		print("[ShopUI] Inventory was closed - closing shop too")
+		ShopManager.close_shop()
+		return
+	
+	if not ShopManager.current_merchant:
 		return
 	
 	# Get player
