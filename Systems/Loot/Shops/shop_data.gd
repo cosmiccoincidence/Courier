@@ -59,19 +59,15 @@ func _initialize_stock():
 	# Clear existing stock
 	item_stock.clear()
 	
-	print("[ShopData] Initializing stock for shop: %s" % shop_name)
-	
 	# Determine source pool
 	var source_pool: Array[LootItem] = []
 	
 	if not item_pool.is_empty():
-		print("[ShopData] Using item_pool with %d item types" % item_pool.size())
 		source_pool = item_pool
 	else:
 		# Use all items from LootManager, filtered by type
 		if LootManager and "all_items" in LootManager:
 			source_pool = _filter_items_by_type(LootManager.all_items)
-			print("[ShopData] Using filtered LootManager items: %d types" % source_pool.size())
 		else:
 			push_warning("ShopData: LootManager not found or has no all_items")
 			return
@@ -80,9 +76,8 @@ func _initialize_stock():
 		push_warning("ShopData: No items available for shop!")
 		return
 	
-	# Roll random number of items to stock (like LootSpawner does)
+	# Roll random number of items to stock
 	var num_items_to_stock = randi_range(default_stock_min, default_stock_max)
-	print("[ShopData] Rolling %d items from pool..." % num_items_to_stock)
 	
 	# Randomly select items from pool (can select same item multiple times)
 	var item_index = 0
@@ -94,12 +89,11 @@ func _initialize_stock():
 		var item_key = "%s_%d" % [random_item.resource_path, item_index]
 		
 		# Determine stock count for this specific item
-		var stock_amount = 1  # Each slot has 1 item
+		var stock_amount = 1
 		
 		# For stackable items, the stock represents quantity in that slot
 		if random_item.stackable:
-			# Stackable items can have multiple in one slot
-			stock_amount = randi_range(1, 5)  # 1-5 per slot
+			stock_amount = randi_range(1, 5)
 		
 		# Add to item_stock
 		item_stock[item_key] = {
@@ -108,11 +102,7 @@ func _initialize_stock():
 			"index": item_index
 		}
 		
-		print("[ShopData]   Slot %d: %s (stock: %d, stackable: %s)" % [item_index, random_item.item_name, stock_amount, random_item.stackable])
-		
 		item_index += 1
-	
-	print("[ShopData] Shop initialized with %d item slots" % item_stock.size())
 
 func _filter_items_by_type(all_items: Array) -> Array[LootItem]:
 	"""Filter items by allowed/excluded types"""
@@ -223,7 +213,7 @@ func can_afford_to_buy_from_player(price: int) -> bool:
 	return shop_gold >= price
 
 func is_item_level_valid(item_level: int) -> bool:
-	"""Check if item level is within shop's range"""
+	"""Check if item level is within shop's range""" 
 	return item_level >= min_item_level and item_level <= max_item_level
 
 func get_all_shop_items() -> Array:

@@ -70,7 +70,7 @@ func _process(_delta):
 	if mouse_filter != Control.MOUSE_FILTER_STOP:
 		mouse_filter = Control.MOUSE_FILTER_STOP
 	
-	# Manual tooltip handling (same as inventory_slot)
+	# Manual tooltip handling
 	if visible and is_visible_in_tree():
 		var mouse_pos = get_local_mouse_position()
 		var rect = Rect2(Vector2.ZERO, size)
@@ -78,19 +78,12 @@ func _process(_delta):
 		
 		if mouse_over and not item_data.is_empty():
 			if not get_meta("tooltip_showing", false):
-				if tooltip_manager:
-					if tooltip_manager.has_method("show_tooltip"):
-						print("[ShopSlot %d] Showing tooltip for %s" % [slot_index, item_data.get("name", "Unknown")])
-						tooltip_manager.show_tooltip(self, item_data)
-						set_meta("tooltip_showing", true)
-					else:
-						print("[ShopSlot %d] ERROR: tooltip_manager has no show_tooltip method!" % slot_index)
-				else:
-					print("[ShopSlot %d] ERROR: tooltip_manager is null!" % slot_index)
+				if tooltip_manager and tooltip_manager.has_method("show_tooltip"):
+					tooltip_manager.show_tooltip(self, item_data)
+					set_meta("tooltip_showing", true)
 		else:
 			if get_meta("tooltip_showing", false):
 				if tooltip_manager and tooltip_manager.has_method("hide_tooltip"):
-					print("[ShopSlot %d] Hiding tooltip" % slot_index)
 					tooltip_manager.hide_tooltip()
 				set_meta("tooltip_showing", false)
 
@@ -150,10 +143,6 @@ func clear_item():
 func set_tooltip_manager(manager: Control):
 	"""Set the tooltip manager"""
 	tooltip_manager = manager
-	if manager:
-		print("[ShopSlot %d] Tooltip manager set successfully" % slot_index)
-	else:
-		print("[ShopSlot %d] WARNING: Tooltip manager is null!" % slot_index)
 
 func _input(event):
 	"""Handle buying with click"""
