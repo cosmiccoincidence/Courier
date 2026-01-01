@@ -97,7 +97,8 @@ func sell_item(slot_index: int, player_inventory: Node) -> bool:
 		return false
 	
 	# Calculate sell price with markup/markdown matching
-	var item_name = item_data.get("name", "")
+	# Use base_name if available, otherwise use full name (quality prefix will be stripped)
+	var item_name = item_data.get("base_name", item_data.get("name", ""))
 	var item_value = item_data.get("value", 0)
 	var price = current_shop.get_sell_price_for_item(item_name, item_value)
 	

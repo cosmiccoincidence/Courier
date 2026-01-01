@@ -301,31 +301,37 @@ func show_tooltip(slot: Control, item_data: Dictionary):
 				# Shop item - show buy price with color coding
 				var buy_price = item_data.get("buy_price", 0)
 				var base_value = item_data.get("value", 0)
+				var item_name = item_data.get("name", "Unknown")
 				
-				# Determine color based on price vs value
+				# Calculate what the standard price would be (1.25x)
+				var standard_price = int(base_value * 1.25)
+				
+				# Compare actual price vs standard price
 				var price_color = "#ffd700"  # Gold (default)
-				if buy_price < base_value:
-					price_color = "#90EE90"  # Green (cheaper than base value)
-				elif buy_price > base_value * 1.2:
-					price_color = "#FF6B6B"  # Red (expensive, 20%+ markup)
+				if buy_price < standard_price * 0.95:
+					price_color = "#90EE90"  # Green (5%+ below standard)
+				elif buy_price > standard_price * 1.05:
+					price_color = "#FF6B6B"  # Red (5%+ above standard)
+				
+				print("[Tooltip] %s: value=%d, standard=%d, buy_price=%d, color=%s" % [item_name, base_value, standard_price, buy_price, "GREEN" if price_color == "#90EE90" else ("RED" if price_color == "#FF6B6B" else "GOLD")])
 				
 				price_label.text = "[center]Buy Price: [color=%s]%d gold[/color][/center]" % [price_color, buy_price]
 				price_panel.visible = true
 			elif ShopManager.is_shop_open() and not item_data.get("is_shop_item", false):
 				# Player item when shop open - show sell price with markup/markdown
-				var item_name = item_data.get("name", "")
+				var item_name = item_data.get("base_name", item_data.get("name", ""))
 				var item_value = item_data.get("value", 0)
 				
 				# Get actual sell price (may have markup/markdown applied)
 				var sell_price = ShopManager.current_shop.get_sell_price_for_item(item_name, item_value)
-				var base_sell_price = int(item_value * 0.75)  # Standard 75%
+				var base_sell_price = int(item_value * 0.75)
 				
 				# Determine color based on comparison to base sell price
-				var price_color = "#ffd700"  # Gold (default)
+				var price_color = "#ffd700"
 				if sell_price > base_sell_price * 1.05:
-					price_color = "#90EE90"  # Green (shop paying more than standard)
+					price_color = "#90EE90"
 				elif sell_price < base_sell_price * 0.95:
-					price_color = "#FF6B6B"  # Red (shop paying less than standard)
+					price_color = "#FF6B6B"
 				
 				price_label.text = "[center]Sell Price: [color=%s]%d gold[/color][/center]" % [price_color, sell_price]
 				price_panel.visible = true

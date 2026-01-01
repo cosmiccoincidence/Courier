@@ -144,29 +144,35 @@ func _filter_items_by_type(all_items: Array) -> Array[LootItem]:
 	return filtered
 
 func _apply_price_variations():
-	"""Randomly mark up or mark down some items by name"""
-	# Track which item names we've already processed
+	"""Randomly mark up or mark down some items by base name"""
+	# Track which base names we've already processed
 	var processed_names: Array[String] = []
+	
+	print("[ShopData] Applying price variations...")
 	
 	for item_key in item_stock.keys():
 		var item = item_stock[item_key].item
-		var item_name = item.get("name", "")
+		var base_name = item.get("base_name", item.get("name", ""))
 		
-		# Skip if we already set a price for this item name
-		if item_name in processed_names:
+		# Skip if we already set a price for this base name
+		if base_name in processed_names:
 			continue
 		
-		processed_names.append(item_name)
+		processed_names.append(base_name)
 		
 		# Roll for price variation
 		if randf() < price_variation_chance:
 			# Randomly choose markup or markdown
 			if randf() < 0.5:
 				# Markup
-				special_prices[item_name] = randf_range(markup_range.x, markup_range.y)
+				special_prices[base_name] = randf_range(markup_range.x, markup_range.y)
+				print("[ShopData]   '%s' MARKUP: %.2fx" % [base_name, special_prices[base_name]])
 			else:
 				# Markdown
-				special_prices[item_name] = randf_range(markdown_range.x, markdown_range.y)
+				special_prices[base_name] = randf_range(markdown_range.x, markdown_range.y)
+				print("[ShopData]   '%s' MARKDOWN: %.2fx" % [base_name, special_prices[base_name]])
+		else:
+			print("[ShopData]   '%s' no variation (standard 1.25x)" % base_name)
 
 func get_buy_price(item_key: String) -> int:
 	"""Get the price the player pays to buy this item"""
@@ -175,15 +181,19 @@ func get_buy_price(item_key: String) -> int:
 	
 	var item = item_stock[item_key].item
 	var base_price = item.get("value", 0)
-	var item_name = item.get("name", "")
+	var base_name = item.get("base_name", item.get("name", ""))
 	
 	var multiplier = buy_price_multiplier
 	
-	# Check for special pricing by item name (not key)
-	if special_prices.has(item_name):
-		multiplier = special_prices[item_name]
+	# Check for special pricing by base name (not display name)
+	if special_prices.has(base_name):
+		multiplier = special_prices[base_name]
 	
-	return int(base_price * multiplier)
+	var final_price = int(base_price * multiplier)
+	
+	print("[ShopData] get_buy_price - base_name: '%s', base_price: %d, multiplier: %.2f, final: %d" % [base_name, base_price, multiplier, final_price])
+	
+	return final_price
 
 func get_sell_price(item_value: int) -> int:
 	"""Get the price the shop pays when player sells an item (base rate, no markup matching)"""
@@ -192,19 +202,35 @@ func get_sell_price(item_value: int) -> int:
 func get_sell_price_for_item(item_name: String, item_value: int) -> int:
 	"""
 	Get the price the shop pays when player sells a specific item.
-	Matches the markup/markdown of items with the same name in the shop.
+	Matches the markup/markdown of items with the same base name in the shop.
 	"""
 	# Base sell price (75% of value)
 	var base_sell_price = int(item_value * sell_price_multiplier)
 	
-	# Check if this item name has special pricing
-	if special_prices.has(item_name):
-		var price_multiplier = special_prices[item_name]
-		# Apply the same multiplier to the sell price
-		return int(base_sell_price * price_multiplier)
+	# Extract base name by removing quality prefixes
+	var base_name = _extract_base_name(item_name)
+	
+	print("[ShopData] get_sell_price_for_item - item_name: '%s', base_name: '%s', value: %d" % [item_name, base_name, item_value])
+	
+	# Check if this base name has special pricing
+	if special_prices.has(base_name):
+		var price_multiplier = special_prices[base_name]
+		var final_price = int(base_sell_price * price_multiplier)
+		print("[ShopData]   Found special price %.2fx -> %d gold" % [price_multiplier, final_price])
+		return final_price
 	else:
 		# No special pricing, use buy_price_multiplier
-		return int(base_sell_price * buy_price_multiplier)
+		var final_price = int(base_sell_price * buy_price_multiplier)
+		print("[ShopData]   No special price, using standard %.2fx -> %d gold" % [buy_price_multiplier, final_price])
+		return final_price
+
+func _extract_base_name(full_name: String) -> String:
+	"""Remove quality prefix from item name to get base name"""
+	var quality_prefixes = ["Damaged ", "Fine ", "Superior ", "Epic ", "Legendary "]
+	for prefix in quality_prefixes:
+		if full_name.begins_with(prefix):
+			return full_name.substr(prefix.length())
+	return full_name
 
 func has_stock(item_key: String) -> bool:
 	"""Check if item is in stock"""
@@ -263,7 +289,7 @@ func add_sold_item(sold_item_data: Dictionary):
 	# Create a unique key for this sold item
 	var item_key = "sold_item_%d" % next_index
 	
-	# Add to shop stock
+	# Add to shop stock (store as-is)
 	item_stock[item_key] = {
 		"item": sold_item_data,  # Store the full item data
 		"count": 1,  # Sold items have quantity of 1
@@ -346,11 +372,12 @@ func _roll_shop_item(item: LootItem) -> Dictionary:
 	# Base item data
 	var item_data = {
 		"name": item.item_name,
+		"base_name": item.item_name,  # Base name without quality prefix (for pricing)
 		"icon": item.icon,
 		"item_type": item.item_type,
 		"item_subtype": item.item_subtype,
 		"item_level": 1,
-		"item_quality": item_quality,  # Use rolled quality
+		"item_quality": item_quality,
 		"value": item.base_value,
 		"mass": item.mass,
 		"durability": item.durability,
