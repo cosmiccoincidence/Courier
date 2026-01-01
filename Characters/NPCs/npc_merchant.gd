@@ -43,15 +43,12 @@ func open_shop():
 		print("[NPCMerchant] No shop data configured!")
 		return
 	
-	print("[NPCMerchant] Opening shop: %s" % shop_data.shop_name)
 	ShopManager.open_shop(shop_data, self)
 
 func show_interaction_prompt():
-	"""Show 'Press E to Shop' prompt - implement your UI here"""
 	interaction_prompt_shown = true
 	# TODO: Show UI prompt above merchant
 	# Example: $InteractionPrompt.visible = true
-	print("[NPCMerchant] Press E to shop")
 
 func hide_interaction_prompt():
 	"""Hide interaction prompt"""

@@ -268,6 +268,11 @@ func show_tooltip(slot: Control, item_data: Dictionary):
 	# === BREAK 3 ===
 	_add_spacer(vbox, 5)
 	
+	# === MASS + LEVEL (SAME LINE) ===
+	var mass = item_data.get("mass", 0.0)
+	var item_level = item_data.get("item_level", 1)
+	_add_two_column_row(vbox, "Mass: %.1f" % mass, Color.GRAY, "Level: %d" % item_level, Color.WHITE)
+	
 	# === VALUE + DURABILITY (SAME LINE) ===
 	var value = item_data.get("value", 0)
 	if item_data.has("durability") and not item_data.get("stackable", false):
@@ -280,11 +285,6 @@ func show_tooltip(slot: Control, item_data: Dictionary):
 		_add_two_column_row(vbox, "Value: %d" % value, Color.GOLD, "Dur: %d/100" % durability_val, durability_color)
 	else:
 		_add_label(vbox, "Value: %d" % value, 14, Color.GOLD, HORIZONTAL_ALIGNMENT_CENTER)
-	
-	# === MASS + LEVEL (SAME LINE) ===
-	var mass = item_data.get("mass", 0.0)
-	var item_level = item_data.get("item_level", 1)
-	_add_two_column_row(vbox, "Mass: %.1f" % mass, Color.GRAY, "Level: %d" % item_level, Color.WHITE)
 	
 	# Show main tooltip
 	tooltip_panel.visible = true
