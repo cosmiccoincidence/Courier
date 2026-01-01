@@ -3,9 +3,10 @@
 class_name EquipmentStatsCalculator
 extends RefCounted
 
-static func calculate_total_stats(equipped_items: Array) -> Dictionary:
+static func calculate_total_stats(equipped_items: Array, active_weapon_set: int = 0) -> Dictionary:
 	"""
 	Calculate total stats from all equipped items.
+	Only weapons from the active set contribute to stats.
 	Returns a dictionary with all calculated stats.
 	"""
 	var stats = {
@@ -20,13 +21,17 @@ static func calculate_total_stats(equipped_items: Array) -> Dictionary:
 		"has_weapon": false
 	}
 	
-	# Weapon slots: 10, 11, 14, 15
-	var weapon_slots = [10, 11, 14, 15]
+	# Determine active weapon slots based on set
+	var active_weapon_slots: Array[int] = []
+	if active_weapon_set == 0:
+		active_weapon_slots = [10, 11]  # L Hand 1, R Hand 1
+	else:
+		active_weapon_slots = [14, 15]  # L Hand 2, R Hand 2
 	
-	# Track equipped weapons
+	# Track equipped weapons (only from active set)
 	var equipped_weapons = []
 	
-	for slot_idx in weapon_slots:
+	for slot_idx in active_weapon_slots:
 		if slot_idx < equipped_items.size():
 			var item = equipped_items[slot_idx]
 			if item and not _is_twohand_placeholder(item):
@@ -38,7 +43,7 @@ static func calculate_total_stats(equipped_items: Array) -> Dictionary:
 			if item.has("base_armor_rating") and item.base_armor_rating > 0:
 				stats.base_armor_rating += item.base_armor_rating
 	
-	# Weapon stats - use primary weapon (first equipped weapon found)
+	# Weapon stats - use primary weapon (first equipped weapon found in active set)
 	if equipped_weapons.size() > 0:
 		var primary_weapon = equipped_weapons[0]
 		stats.has_weapon = true

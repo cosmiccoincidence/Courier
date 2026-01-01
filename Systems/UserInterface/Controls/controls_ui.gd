@@ -101,10 +101,12 @@ func _create_controls_panel():
 	_add_control("Tab", "Toggle Inventory", Color(1.0, 0.9, 0.7))
 	_add_control("LMB", "Pick Up Item", Color(1.0, 0.9, 0.7))
 	_add_control("RMB", "Drop Item", Color(1.0, 0.9, 0.7))
+	_add_control("CTRL+LMB", "Buy/Sell Item", Color(1.0, 0.9, 0.7))
 	_add_control("Hover", "Item Info Tooltip", Color(0.9, 0.8, 0.6))
 	
 	# COMBAT section
 	_add_section_header("COMBAT", Color(1.0, 0.5, 0.5))
+	_add_control("X", "Swap Weapon", Color(1.0, 0.6, 0.6))
 	_add_control("F", "Attack", Color(1.0, 0.6, 0.6))
 
 func _add_section_header(section_name: String, color: Color):

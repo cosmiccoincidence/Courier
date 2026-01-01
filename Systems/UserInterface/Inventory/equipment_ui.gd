@@ -58,12 +58,24 @@ func _ready():
 	
 	# Connect signals
 	Equipment.equipment_changed.connect(_update_equipment)
+	Equipment.weapon_set_changed.connect(_on_weapon_set_changed)
 	
 	# Get player reference
 	player_ref = get_tree().get_first_node_in_group("player")
 	
 	# Initial update
 	_update_equipment()
+	_update_inactive_weapon_slots()
+
+func _input(event):
+	"""Handle weapon set swapping with X key"""
+	if event.is_action_pressed("swap_weapon_sets"):  # You'll need to add this input action
+		Equipment.swap_weapon_sets()
+
+func _on_weapon_set_changed(new_set: int):
+	"""Called when weapon set changes"""
+	_update_inactive_weapon_slots()
+	print("Swapped to weapon set %d" % (new_set + 1))
 
 # ===== SETUP FUNCTIONS =====
 
@@ -155,6 +167,22 @@ func _update_equipment():
 		else:
 			slot.clear_item()
 
+func _update_inactive_weapon_slots():
+	"""Dim the inactive weapon set slots"""
+	var equipment_slots = equipment_grid.get_children()
+	var weapon_slot_indices = [10, 11, 14, 15]  # All weapon slots
+	
+	for slot_idx in weapon_slot_indices:
+		if slot_idx < equipment_slots.size():
+			var slot = equipment_slots[slot_idx]
+			var is_active = Equipment.is_weapon_slot_active(slot_idx)
+			
+			# Dim inactive slots
+			if is_active:
+				slot.modulate = Color(1, 1, 1, 1)  # Full brightness
+			else:
+				slot.modulate = Color(0.5, 0.5, 0.5, 0.6)  # Dimmed
+
 func highlight_valid_slots(item_data):
 	"""Highlight equipment slots that can accept this item"""
 	if not item_data:
@@ -215,9 +243,9 @@ func _spawn_item_in_world(item: Dictionary):
 	get_tree().current_scene.add_child(item_instance)
 	item_instance.global_position = drop_position
 	
-	# Restore item properties from equipment data
+	# Restore ALL item properties from equipment data
 	if item_instance is BaseItem:
-		# Restore level and quality
+		# Restore basic properties
 		if item.has("item_level"):
 			item_instance.item_level = item.item_level
 		if item.has("item_quality"):
@@ -226,6 +254,42 @@ func _spawn_item_in_world(item: Dictionary):
 			item_instance.value = item.value
 		if item.has("item_subtype"):
 			item_instance.item_subtype = item.item_subtype
+		if item.has("durability"):
+			item_instance.durability = item.durability
+		if item.has("mass"):
+			item_instance.mass = item.mass
+		
+		# Restore weapon stats
+		if item.has("weapon_damage"):
+			item_instance.weapon_damage = item.weapon_damage
+		if item.has("weapon_class"):
+			item_instance.weapon_class = item.weapon_class
+		if item.has("weapon_hand"):
+			item_instance.weapon_hand = item.weapon_hand
+		if item.has("weapon_range"):
+			item_instance.weapon_range = item.weapon_range
+		if item.has("weapon_speed"):
+			item_instance.weapon_speed = item.weapon_speed
+		if item.has("weapon_block_rating"):
+			item_instance.weapon_block_rating = item.weapon_block_rating
+		if item.has("weapon_parry_window"):
+			item_instance.weapon_parry_window = item.weapon_parry_window
+		if item.has("weapon_crit_chance"):
+			item_instance.weapon_crit_chance = item.weapon_crit_chance
+		if item.has("weapon_crit_multiplier"):
+			item_instance.weapon_crit_multiplier = item.weapon_crit_multiplier
+		
+		# Restore armor stats
+		if item.has("base_armor_rating"):
+			item_instance.base_armor_rating = item.base_armor_rating
+		if item.has("armor_class"):
+			item_instance.armor_class = item.armor_class
+		
+		# Restore stat requirements
+		if item.has("required_strength"):
+			item_instance.required_strength = item.required_strength
+		if item.has("required_dexterity"):
+			item_instance.required_dexterity = item.required_dexterity
 		
 		# Set stack count if item is stackable
 		if item.get("stackable", false) and item.get("stack_count", 1) > 1:

@@ -3,6 +3,7 @@ extends Node
 
 var equipped_items: Array = []
 var max_equipment_slots: int = 16  # 16 equipment slots for 4x4 grid
+var active_weapon_set: int = 0  # 0 = slots 10-11 (L/R Hand 1), 1 = slots 14-15 (L/R Hand 2)
 
 # Define what type and subtype each slot accepts
 # Format: {"type": "armor", "subtype": "helmet"}
@@ -27,6 +28,7 @@ var slot_restrictions: Array = [
 ]
 
 signal equipment_changed
+signal weapon_set_changed(new_set: int)
 
 func _ready():
 	# Initialize equipment array with nulls for all slots
@@ -34,9 +36,30 @@ func _ready():
 	for i in range(max_equipment_slots):
 		equipped_items[i] = null
 
+func swap_weapon_sets():
+	"""Toggle between weapon set 0 (slots 10-11) and set 1 (slots 14-15)"""
+	active_weapon_set = 1 if active_weapon_set == 0 else 0
+	weapon_set_changed.emit(active_weapon_set)
+	equipment_changed.emit()
+
+func get_active_weapon_slots() -> Array[int]:
+	"""Get the slot indices for the currently active weapon set"""
+	if active_weapon_set == 0:
+		return [10, 11]  # L Hand 1, R Hand 1
+	else:
+		return [14, 15]  # L Hand 2, R Hand 2
+
+func is_weapon_slot_active(slot_index: int) -> bool:
+	"""Check if a weapon slot is part of the active set"""
+	var weapon_slots = [10, 11, 14, 15]
+	if slot_index not in weapon_slots:
+		return true  # Non-weapon slots are always active
+	
+	return slot_index in get_active_weapon_slots()
+
 func get_equipment_stats() -> Dictionary:
 	"""Get calculated stats from all equipped items"""
-	return EquipmentStatsCalculator.calculate_total_stats(equipped_items)
+	return EquipmentStatsCalculator.calculate_total_stats(equipped_items, active_weapon_set)
 
 func can_equip_item_in_slot(item_data, slot_index: int) -> bool:
 	"""Check if an item can be equipped in a specific slot based on type, subtype, hand restrictions, and stat requirements"""
