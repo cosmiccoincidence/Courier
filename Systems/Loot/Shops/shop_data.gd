@@ -239,7 +239,7 @@ func is_item_level_valid(item_level: int) -> bool:
 	return item_level >= min_item_level and item_level <= max_item_level
 
 func get_all_shop_items() -> Array:
-	"""Get all item keys and their data for display"""
+	"""Get all item keys and their data for display, sorted by type > subtype > name > level"""
 	var items = []
 	for item_key in item_stock.keys():
 		items.append({
@@ -248,6 +248,39 @@ func get_all_shop_items() -> Array:
 			"stock": item_stock[item_key].count,
 			"is_sold_item": item_stock[item_key].get("is_sold_item", false)
 		})
+	
+	# Sort by item_type, then item_subtype, then name, then level (all alphabetically/numerically)
+	items.sort_custom(func(a, b):
+		var item_a = a.item
+		var item_b = b.item
+		
+		var type_a = item_a.get("item_type", "")
+		var type_b = item_b.get("item_type", "")
+		
+		# First compare types
+		if type_a != type_b:
+			return type_a < type_b
+		
+		# If same type, compare subtypes
+		var subtype_a = item_a.get("item_subtype", "")
+		var subtype_b = item_b.get("item_subtype", "")
+		
+		if subtype_a != subtype_b:
+			return subtype_a < subtype_b
+		
+		# If same type and subtype, compare names
+		var name_a = item_a.get("name", "")
+		var name_b = item_b.get("name", "")
+		
+		if name_a != name_b:
+			return name_a < name_b
+		
+		# If same type, subtype, and name, compare levels (ascending)
+		var level_a = item_a.get("item_level", 1)
+		var level_b = item_b.get("item_level", 1)
+		return level_a < level_b
+	)
+	
 	return items
 
 func _roll_shop_item(item: LootItem) -> Dictionary:
