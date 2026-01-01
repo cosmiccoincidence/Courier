@@ -34,10 +34,10 @@ columns = 4
 
 [node name="ShopNameLabel" type="Label" parent="."]
 layout_mode = 0
-offset_left = 42.0
-offset_top = -55.0
-offset_right = 224.0
-offset_bottom = -24.0
+offset_left = 41.0
+offset_top = -67.0
+offset_right = 223.0
+offset_bottom = -36.0
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 3
 theme_override_font_sizes/font_size = 22
@@ -46,9 +46,9 @@ horizontal_alignment = 1
 
 [node name="ShopGoldLabel" type="Label" parent="."]
 layout_mode = 0
-offset_top = -25.0
+offset_top = -35.0
 offset_right = 54.0
-offset_bottom = -2.0
+offset_bottom = -12.0
 theme_override_colors/font_color = Color(1, 0.85490197, 0, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 2

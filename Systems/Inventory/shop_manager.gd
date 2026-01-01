@@ -104,6 +104,10 @@ func sell_item(slot_index: int, player_inventory: Node) -> bool:
 	if not current_shop.can_afford_to_buy_from_player(price):
 		return false
 	
+	# Check if shop has space for the item
+	if not current_shop.has_space_for_sold_item():
+		return false
+	
 	# Perform transaction
 	current_shop.shop_gold -= price
 	player_inventory.add_gold(price)

@@ -31,6 +31,15 @@ extends Resource
 @export var default_stock_max: int = 5  # Maximum stock per item
 @export var infinite_stock_items: Array[String] = []  # Item names that never run out (e.g., ["Bread", "Water"])
 
+# Shop UI configuration
+@export_group("Shop Display")
+@export var grid_rows: int = 6  # Number of rows in shop grid (columns are always 4)
+
+# Calculated maximum slots (don't modify directly)
+var max_slots: int:
+	get:
+		return 4 * grid_rows  # 4 columns * rows
+
 # Item level restrictions
 @export_group("Level Restrictions")
 @export var max_item_level: int = 99  # Don't show items above this level
@@ -233,6 +242,16 @@ func add_sold_item(sold_item_data: Dictionary):
 func can_afford_to_buy_from_player(price: int) -> bool:
 	"""Check if shop has enough gold to buy from player"""
 	return shop_gold >= price
+
+func has_space_for_sold_item() -> bool:
+	"""Check if shop has space to accept a sold item"""
+	# Count number of non-zero stock items
+	var occupied_slots = 0
+	for item_key in item_stock.keys():
+		if item_stock[item_key].count > 0:
+			occupied_slots += 1
+	
+	return occupied_slots < max_slots
 
 func is_item_level_valid(item_level: int) -> bool:
 	"""Check if item level is within shop's range"""

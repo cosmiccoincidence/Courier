@@ -8,5 +8,6 @@ script = ExtResource("1_r04aw")
 allowed_item_types = Array[String](["Weapon"])
 default_stock_min = 5
 default_stock_max = 20
+grid_rows = 8
 max_item_level = 10
 metadata/_custom_type_script = "uid://dyirb8ruypcjx"

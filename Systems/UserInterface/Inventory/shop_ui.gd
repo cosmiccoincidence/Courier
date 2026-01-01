@@ -15,7 +15,7 @@ const SHOP_SLOT_SCENE_PATH = "res://Systems/UserInterface/Inventory/shop_slot.ts
 # Grid configuration
 var slot_size: int = 64
 var columns: int = 4
-var rows: int = 6  # 24 slots for shop inventory
+var rows: int = 6  # Default, overridden by shop_data.grid_rows
 
 # Current shop data
 var current_shop_data: ShopData = null
@@ -33,8 +33,7 @@ func _ready():
 	ShopManager.shop_gold_changed.connect(_on_shop_gold_changed)
 	ShopManager.shop_inventory_changed.connect(_on_shop_inventory_changed)
 	
-	# Setup shop grid
-	_setup_shop_grid()
+	# Don't setup grid here - wait for shop to open with correct size
 
 func _setup_shop_grid():
 	"""Create shop inventory slots"""
@@ -63,6 +62,35 @@ func _setup_shop_grid():
 		if slot.has_signal("item_purchased"):
 			slot.item_purchased.connect(_on_item_purchased)
 
+func _rebuild_shop_grid():
+	"""Rebuild shop grid with the correct number of rows from shop_data"""
+	# Clear existing slots immediately (not queue_free which delays)
+	for child in shop_grid.get_children():
+		shop_grid.remove_child(child)
+		child.free()
+	
+	# Create new slots with correct row count
+	var slot_scene: PackedScene = load(SHOP_SLOT_SCENE_PATH)
+	if not slot_scene:
+		push_error("Could not load shop slot scene from: ", SHOP_SLOT_SCENE_PATH)
+		return
+	
+	shop_grid.columns = columns
+	
+	for i in range(columns * rows):
+		var slot = slot_scene.instantiate()
+		if not slot:
+			continue
+		
+		slot.custom_minimum_size = Vector2(slot_size, slot_size)
+		slot.slot_index = i
+		slot.add_to_group("shop_slots")
+		shop_grid.add_child(slot)
+		
+		# Connect buy signal
+		if slot.has_signal("item_purchased"):
+			slot.item_purchased.connect(_on_item_purchased)
+
 func set_tooltip_manager(tooltip: Control):
 	"""Set the tooltip manager from inventory UI"""
 	slot_tooltip = tooltip
@@ -77,9 +105,18 @@ func _on_shop_opened(shop_data: ShopData):
 	"""Called when a shop is opened"""
 	current_shop_data = shop_data
 	
+	print("[ShopUI] Opening shop: %s" % shop_data.shop_name)
+	print("[ShopUI] Grid rows: %d, max slots: %d" % [shop_data.grid_rows, shop_data.max_slots])
+	
 	# Update UI
 	shop_name_label.text = shop_data.shop_name
 	shop_gold_label.text = "Gold: %d" % shop_data.shop_gold
+	
+	# Set rows from shop data and rebuild grid
+	rows = shop_data.grid_rows
+	print("[ShopUI] Setting rows to: %d" % rows)
+	_rebuild_shop_grid()
+	print("[ShopUI] Grid rebuilt with %d slots" % shop_grid.get_child_count())
 	
 	# Populate shop inventory
 	_populate_shop_inventory()
@@ -138,10 +175,13 @@ func _on_shop_inventory_changed():
 func _populate_shop_inventory():
 	"""Fill shop slots with items from shop data"""
 	if not current_shop_data:
+		print("[ShopUI] ERROR: No shop data!")
 		return
 	
 	var slots = shop_grid.get_children()
 	var slot_index = 0
+	
+	print("[ShopUI] Populating shop with %d slots available" % slots.size())
 	
 	# Clear all slots first
 	for slot in slots:
@@ -150,18 +190,23 @@ func _populate_shop_inventory():
 	
 	# Get all items this shop sells (now returns dictionaries with keys)
 	var shop_items = current_shop_data.get_all_shop_items()
+	print("[ShopUI] Shop has %d items to display" % shop_items.size())
 	
 	# Add shop items to slots
 	for item_data in shop_items:
 		if slot_index >= slots.size():
+			print("[ShopUI] Ran out of slots at index %d" % slot_index)
 			break
 		
 		var item_key = item_data.key
 		var item = item_data.item  # Always a dictionary now
 		var stock = item_data.stock
 		
+		print("[ShopUI]   Item %d: %s (stock: %d)" % [slot_index, item.get("name", "Unknown"), stock])
+		
 		# Skip out of stock items
 		if stock <= 0:
+			print("[ShopUI]     Skipping - out of stock")
 			continue
 		
 		# Item is already a full dictionary with all stats rolled
