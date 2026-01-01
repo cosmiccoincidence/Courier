@@ -233,8 +233,17 @@ func _spawn_item_in_world(item: Dictionary):
 	if not item.has("scene") or not item.scene or not player_ref:
 		return
 	
+	print("[Equipment Drop Debug] Item data keys: ", item.keys())
+	if item.has("icon"):
+		print("[Equipment Drop Debug] Icon type: ", typeof(item.icon))
+		print("[Equipment Drop Debug] Icon value: ", item.icon)
+	if item.has("weapon_damage"):
+		print("[Equipment Drop Debug] Item weapon_damage in dict: ", item.weapon_damage)
+	if item.has("item_quality"):
+		print("[Equipment Drop Debug] Item quality in dict: ", item.item_quality)
+	
 	var forward = -player_ref.global_transform.basis.z
-	var drop_position = player_ref.global_position + forward * 1 + Vector3(0, 0.3, 0)
+	var drop_position = player_ref.global_position + forward * 1 + Vector3(0, 0.35, 0)
 	
 	var item_instance = item.scene.instantiate()
 	if not item_instance is Node3D:
@@ -245,7 +254,23 @@ func _spawn_item_in_world(item: Dictionary):
 	
 	# Restore ALL item properties from equipment data
 	if item_instance is BaseItem:
+		print("[Equipment Drop Debug] Item instance is BaseItem")
+		
+		# First update properties (this may set defaults)
+		if item_instance.has_method("set_item_properties"):
+			print("[Equipment Drop Debug] Calling set_item_properties")
+			item_instance.set_item_properties(
+				item.get("item_level", 1),
+				item.get("item_quality", ItemQuality.Quality.NORMAL),
+				item.get("value", 10)
+			)
+		
+		# NOW restore all the specific stats (these will override defaults)
 		# Restore basic properties
+		if item.has("name"):
+			item_instance.item_name = item.name  # Dictionary uses "name", BaseItem uses "item_name"
+		if item.has("icon"):
+			item_instance.item_icon = item.icon  # Dictionary uses "icon", BaseItem uses "item_icon"
 		if item.has("item_level"):
 			item_instance.item_level = item.item_level
 		if item.has("item_quality"):
@@ -262,6 +287,7 @@ func _spawn_item_in_world(item: Dictionary):
 		# Restore weapon stats
 		if item.has("weapon_damage"):
 			item_instance.weapon_damage = item.weapon_damage
+			print("[Equipment Drop Debug] Set weapon_damage to: ", item_instance.weapon_damage)
 		if item.has("weapon_class"):
 			item_instance.weapon_class = item.weapon_class
 		if item.has("weapon_hand"):
@@ -295,15 +321,13 @@ func _spawn_item_in_world(item: Dictionary):
 		if item.get("stackable", false) and item.get("stack_count", 1) > 1:
 			item_instance.stack_count = item.stack_count
 		
-		# Update properties after setting everything
-		if item_instance.has_method("set_item_properties"):
-			item_instance.set_item_properties(
-				item.get("item_level", 1),
-				item.get("item_quality", ItemQuality.Quality.NORMAL),
-				item.get("value", 10)
-			)
-		elif item_instance.has_method("update_label_text"):
+		# Finally update label text
+		if item_instance.has_method("update_label_text"):
+			print("[Equipment Drop Debug] Calling update_label_text")
 			item_instance.update_label_text()
+		
+		print("[Equipment Drop Debug] Final weapon_damage: ", item_instance.weapon_damage)
+		print("[Equipment Drop Debug] Final item_quality: ", item_instance.item_quality)
 	
 	# Mark as just spawned so FOV doesn't hide it immediately
 	if item_instance.has_method("set"):
